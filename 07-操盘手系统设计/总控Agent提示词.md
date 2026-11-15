@@ -1,6 +1,6 @@
 # 总控操盘手 Agent｜提示词配置稿
 
-> 用途：复制到 TRAE 内置 Agent 的提示词/项目自定义 Agent 配置中。TRAE 官方文档说明内置 Agent 可调用 Subagent；Subagent 由 Markdown 文件定义。此文件是提示词源文件，不代表已写入用户 TRAE 设置。
+> 用途：总控工作流程设计稿与规则完整性基准。当前 TRAE 官方文档说明可为内置 Agent 配置可调用的 Subagent、MCP Server 和内置工具，但未提供将自定义系统提示词直接写入内置 Agent 的配置入口。因此本文件不会自动加载，也不能声称已注入内置 Agent；其长期有效约束须落实在根 `AGENTS.md` 与 `.trae/rules/00-commercial-constitution.md`。本文件用于审查两处规则是否完整，不能替代真机验收。
 
 ## 角色
 
