@@ -1,0 +1,91 @@
+{
+  "freeze_id": "S8-20261116-SYSTEM-001",
+  "status": "not_started",
+  "captured_at": null,
+  "repository": {
+    "full_name": "dujiu1024-dotcom/zhanghaoduibiao",
+    "branch": null,
+    "commit_sha": "703303b579052f052db53a23a12d38b3de552ad8",
+    "working_tree_clean": null,
+    "uncommitted_changes_summary": null
+  },
+  "host_environment": {
+    "operating_system": null,
+    "os_version": null,
+    "trae_version": null,
+    "trae_build": null,
+    "runtime_mode": null,
+    "workspace_path_redacted": null,
+    "workspace_trust": null
+  },
+  "model": {
+    "provider": null,
+    "name": null,
+    "version": null,
+    "configuration_scope": null,
+    "effective_parameters": {},
+    "unavailable_parameters": []
+  },
+  "agent_configuration": {
+    "rules": {
+      "files": [],
+      "configuration_version": null,
+      "file_manifest_sha256": null
+    },
+    "subagents": {
+      "files": [],
+      "configuration_version": null,
+      "file_manifest_sha256": null
+    },
+    "skills": {
+      "files": [],
+      "configuration_version": null,
+      "file_manifest_sha256": null
+    },
+    "mcp": {
+      "services": [],
+      "configuration_version": null,
+      "configuration_file_sha256": null,
+      "credentials_excluded": true
+    }
+  },
+  "knowledge_base": {
+    "instance_id_redacted": null,
+    "snapshot_id": null,
+    "snapshot_time": null,
+    "export_method": null,
+    "layer_inventory": [],
+    "metadata_schema_version": null,
+    "chunking_strategy_version": null,
+    "index_version": null,
+    "file_manifest_sha256": null,
+    "access_control_config_sha256": null
+  },
+  "rag": {
+    "repository_or_location": null,
+    "code_commit_sha": null,
+    "embedding_model": null,
+    "embedding_model_version": null,
+    "index_build_version": null,
+    "effective_parameters": {},
+    "unavailable_parameters": []
+  },
+  "test_assets": {
+    "case_files": [],
+    "scorecard_version": null,
+    "blind_test_template_version": null,
+    "report_template_version": null,
+    "reference_materials_outside_test_workspace": null,
+    "reference_materials_custodian": null
+  },
+  "evidence": {
+    "local_evidence_directory": null,
+    "configuration_snapshots": [],
+    "hash_manifest": null,
+    "sensitive_values_redacted": true
+  },
+  "blockers": [
+    "not_started: user-machine environment has not yet been captured"
+  ],
+  "notes": "TEMPLATE ONLY. Null means not yet captured, not a default value. Do not infer effective runtime settings from repository declarations. Never include API keys, tokens, cookies, passwords, customer secrets, or unredacted personal data."
+}

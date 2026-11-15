@@ -8,7 +8,7 @@
     "stage": {"const": 8},
     "run_type": {"enum": ["case", "system", "rag", "migration"]},
     "case_id": {"enum": ["CASE-01", "CASE-02", "CASE-03", "CASE-04", "CASE-05"]},
-    "started_at": {"type": "string", "format": "date-time"},
+    "started_at": {"type": ["string", "null"], "format": "date-time"},
     "finished_at": {"type": ["string", "null"], "format": "date-time"},
     "status": {"enum": ["not_started", "blocked_local_environment", "running", "passed", "failed", "not_applicable"]},
     "repository_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
