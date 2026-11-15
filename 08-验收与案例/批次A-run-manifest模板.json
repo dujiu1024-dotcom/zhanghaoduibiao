@@ -1,0 +1,32 @@
+{
+  "run_id": "S8-20261116-SYSTEM-001",
+  "stage": 8,
+  "run_type": "system",
+  "started_at": null,
+  "finished_at": null,
+  "status": "not_started",
+  "repository_commit": "703303b579052f052db53a23a12d38b3de552ad8",
+  "environment": {
+    "trae_version": null,
+    "model": null,
+    "model_parameters": {},
+    "workspace_trust": null,
+    "rules_version": null,
+    "subagent_version": null,
+    "skills_version": null,
+    "mcp_configuration_version": null,
+    "knowledge_snapshot": null,
+    "rag_code_sha": null,
+    "rag_parameters": {}
+  },
+  "input_artifacts": [],
+  "artifacts": [],
+  "scores": {
+    "expert_scores": {},
+    "controller_score": null,
+    "veto_count": null,
+    "decision": "pending"
+  },
+  "defect_issue_urls": [],
+  "notes": "TEMPLATE ONLY. Batch A has not been executed. Replace repository_commit with the actual main HEAD at freeze time; fill environment fields only from user-machine evidence. Keep status not_started until the environment snapshot and hashes are captured. Do not commit secrets or raw sensitive evidence."
+}
