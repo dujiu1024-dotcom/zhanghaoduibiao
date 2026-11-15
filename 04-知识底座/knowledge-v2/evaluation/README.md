@@ -1,6 +1,6 @@
 # RAG 评测数据集说明
 
-当前 `question-template.jsonl` 只有格式示例，不属于正式评测集，不计入任何指标。
+当前 `question-template.jsonl` 只有两条格式示例，不属于正式评测集，不计入任何指标。当前目录尚未包含已人工标注并冻结版本的正式训练集或独立保留集。
 
 正式数据集至少分为：
 - `positive-train.jsonl`：可用于开发与调参的正向集；
