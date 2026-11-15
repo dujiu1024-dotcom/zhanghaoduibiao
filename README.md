@@ -78,4 +78,4 @@
 
 ## 项目状态
 
-阶段 1–4 文档和阶段 5 配置文件建设已完成；阶段 5 的运行验证延后。后续继续建设商业操盘 Skills、知识治理和案例验收。
+阶段 1–7 的文档、配置草案、Skills 和知识治理建设已完成；阶段 8 的五类案例测试集、评分量表和统一真机验收手册已准备。TRAE 运行、RAG 实测和案例压力测试统一待项目建设完成后执行。当前实施分支：`build/commercial-operator-system`；[Draft PR #13](https://github.com/dujiu1024-dotcom/zhanghaoduibiao/pull/13)。
