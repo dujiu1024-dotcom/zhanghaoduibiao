@@ -1,0 +1,7 @@
+[
+  {"name":"时点","type":"text"},
+  {"name":"动作","type":"text"},
+  {"name":"产出","type":"text"},
+  {"name":"谁来做","type":"text"},
+  {"name":"备注","type":"text"}
+]

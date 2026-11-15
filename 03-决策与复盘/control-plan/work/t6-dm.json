@@ -1,0 +1,10 @@
+[
+  {"name":"日期","type":"datetime","style":{"format":"yyyy/MM/dd"}},
+  {"name":"来源内容","type":"text"},
+  {"name":"对方原话","type":"text"},
+  {"name":"类型","type":"select","multiple":false,"options":[{"name":"问价"},{"name":"问做法"},{"name":"闲聊"},{"name":"同行"}]},
+  {"name":"是否有效","type":"select","multiple":false,"options":[{"name":"有效"},{"name":"无效"},{"name":"待判断"}]},
+  {"name":"跟进动作","type":"text"},
+  {"name":"成交金额","type":"number","style":{"type":"plain","precision":0}},
+  {"name":"备注","type":"text"}
+]

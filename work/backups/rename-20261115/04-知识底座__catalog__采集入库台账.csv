@@ -1,0 +1,18 @@
+﻿批次号,开始时间,结束时间,采集条数,入库条数,待入库条数,渠道,卡住原因,操作人
+B01,未记录,未记录,7,7,0,douyin.com/rule/policy、mp.weixin.qq.com、github.com(yuwen-cool),—,TraeCode
+B02,2026-11-14 21:40,2026-11-14 21:45,3,3,0,samr.gov.cn、gov.cn 国务院公报,—,TraeCode
+B03,2026-11-14 21:20,2026-11-14 21:22,1,1,0,第三方 PDF（faiusr.com）,—,TraeCode
+B04,2026-11-14 21:58,2026-11-14 21:59,1,1,0,classics.mit.edu（公版英译）,—,TraeCode
+B05,未记录,未记录,0,95,0,历史批次，重建前已入库,采集时间无记录；入库时间为 kbase.db 重建时间,未记录
+B06,2026-11-14 22:05,2026-11-14 22:10,0,0,0,第 4 批采集未开始,—,TraeCode
+B07,2026-11-14 23:34,2026-11-14 23:45,0,8,0,本地已在盘文件补登记（定价页/平台规范/技术博客/OA 论文/法规）,本批未联网抓新正文；15 份中 7 份此前已入库但未登记，仅补登记并回填入库时间,TraeCode
+B08,2026-11-15 00:01,2026-11-15 00:27,107,108,0,booksforagents.com MCP;GitHub(jsDelivr) 三个二手仓库,含 60 份摘要+47 份笔记；入库 108 条文档,操盘手
+B09,2026-11-15 00:36,2026-11-15 00:46,4,4,0,christenseninstitute.org;strategyn.com;quarto 教材站点(huggingface未用),JTBD 替代 2 份+营销教材 1 份+诈骗库说明 1 份,操盘手
+B10,2026-11-15 00:08,2026-11-15 00:30,0,34,0,本地已在盘 OA 论文补入库（papers/ 目录 34 篇，此前因文本形态白名单漏扫）,本批只做入库未联网采新正文；检索校准未做——语料正被另一会话扩库（B08/B09），不宜在移动语料上调阈值,操盘手会话
+B11,2026-11-15 00:32,2026-11-15 00:44,0,1,0,本地修缺陷（无联网采集）,扫描件转文字后重入（06-46 养号 PDF 550 段乱码→160 段正文；删旧文档重入，净文档数不变）,操盘手会话
+B12,2026-11-15 01:10,2026-11-15 02:05,7,7,0,w3.org、scrumguides.org、meddicc.com、cac.gov.cn、a16z.com、库内复用挂载×2,—,TraeCode
+B13,2026-11-15 00:14,2026-11-15 02:09,32,47,0,DOAB/OAPEN（Springer Open 11+Logos 1）、Project Gutenberg 11、Gallica OCR 1、Open Textbook Library/OpenStax 7+ds4psy 16章,"本批 47 文档/87,194 段（31 书 86,332 段＋ds4psy 16 件 862 段；Tarde 02:09 降档重入，段数不变）。核实会话逐本对账：文件 32/32 在盘、库内 31/31+16 件在库、metadata 32 行登记齐；修 3 处——① DOAB-10 行文案错标可引用（实为 Logos 保留所有权利，库内本就仅参考）已改正；② Tarde OCR 违反「扫描件不进可引用」硬规则，已降档为仅参考并 force 重入（02:09:11，1130 段不变）；③ 飞书入库时间列 32 行＋最后更新时间 34 行按 docs.ingested_at 回填；GAP-05/08 采集人按规则清空",TraeCode 核实会话
+B14,2026-11-15 02:05,2026-11-15 02:55,9,9,0,bbc.github.io(WebFetch缓存)、mckinsey.com、semrush.com、blog.hubspot.com、gemconsortium.org、investopedia.com、cnnic.net.cn(PDF+pdftotext)、samr.gov.cn、open.work.weixin.qq.com(浏览器)；另题名对齐3条(05-38 metadata、06-26/08-55 data源),专利6条免费匿名通道全堵（Google墙/EPO CF循环/WIPO人机验证/天眼查爱企查登录/CNIPA超时）；千川DOU+(P0)与巨量算数口径官方帮助正文为飞书docx懒加载匿名不可得；抖音系4条登录墙；5条新入库条目问句被闸门口径拦,TraeCode
+B15,2026-11-15 09:52,2026-11-15 13:36:08,51,51,0,OAPEN（library.oapen.org，oapen.py 经本地代理下载）,—,TraeCode
+B16,2026-11-15 12:32,2026-11-15 14:26,10,10,0,gh-proxy.com（GitHub 反向代理）；api.github.com 取 tree 校验字节数,牛津仓 DeSociologue/Oxford-Sociology-Texts 11 份大文件补采：10 份落盘并入库，1 份《Mostly Harmless Econometrics》已有全文并已入库(09:45:59)未重复下；7 份 PDF 原生文字层转 txt(4213/6204/3282/9436/1582/1056/108 段)，3 份纯图像扫描件 OCR 未校(2761/4557/3600 段)按不可引用入，检索不吐原句；第 10 份建议文件名 259 字节超 APFS 255 上限，尾部截断保留哈希后缀；通道 gh-proxy.com（GitHub 反向代理，raw.githubusercontent 与 jsDelivr 均被连接重置）,TraeCode
+B17,2026-11-15 12:05:55,2026-11-15 15:21:24,77,77,16,OAPEN（library.oapen.org；经 Clash Verge 代理，出口节点🇭🇰香港01；Anubis PoW 解盾）,剩余 16 本 md 待入（入库进程曾因 database is locked 中断一次，已重启续跑）；另有 47 本 PDF 未转 txt，排转换队列作 B18,TraeCode

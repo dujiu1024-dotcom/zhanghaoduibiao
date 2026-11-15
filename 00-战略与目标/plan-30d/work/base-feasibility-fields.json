@@ -1,0 +1,7 @@
+[
+  {"name":"维度","type":"text"},
+  {"name":"结论","type":"text"},
+  {"name":"依据","type":"text"},
+  {"name":"风险等级","type":"select","multiple":false,"options":[{"name":"高"},{"name":"中"},{"name":"低"}]},
+  {"name":"建议","type":"text"}
+]

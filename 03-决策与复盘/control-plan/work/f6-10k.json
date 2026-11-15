@@ -1,0 +1,7 @@
+[
+  {"name":"路径/来源","type":"text"},
+  {"name":"具体内容","type":"text"},
+  {"name":"机制或依据","type":"text"},
+  {"name":"风险","type":"text"},
+  {"name":"动作","type":"text"}
+]

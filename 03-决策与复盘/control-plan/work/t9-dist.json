@@ -1,0 +1,8 @@
+[
+  {"name":"平台","type":"text"},
+  {"name":"同一条内容要改什么","type":"text"},
+  {"name":"频次","type":"text"},
+  {"name":"目标人群","type":"text"},
+  {"name":"目的","type":"text"},
+  {"name":"是否现在做","type":"select","multiple":false,"options":[{"name":"现在做"},{"name":"延后"},{"name":"不做"}]}
+]

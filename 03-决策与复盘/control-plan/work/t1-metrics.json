@@ -1,0 +1,8 @@
+[
+  {"name":"指标","type":"text"},
+  {"name":"定义/口径","type":"text"},
+  {"name":"角色","type":"text"},
+  {"name":"目标","type":"text"},
+  {"name":"异常动作","type":"text"},
+  {"name":"数据来源","type":"text"}
+]

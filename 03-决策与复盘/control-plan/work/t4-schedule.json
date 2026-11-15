@@ -1,0 +1,11 @@
+[
+  {"name":"条号","type":"text"},
+  {"name":"发布日期","type":"datetime","style":{"format":"yyyy/MM/dd"}},
+  {"name":"素材来源项目","type":"text"},
+  {"name":"那件事","type":"text"},
+  {"name":"开场（结果/冲突）","type":"text"},
+  {"name":"可核对数字","type":"text"},
+  {"name":"固定句式","type":"text"},
+  {"name":"结尾身份","type":"text"},
+  {"name":"状态","type":"select","multiple":false,"options":[{"name":"未开拍"},{"name":"已拍"},{"name":"已发布"}]}
+]

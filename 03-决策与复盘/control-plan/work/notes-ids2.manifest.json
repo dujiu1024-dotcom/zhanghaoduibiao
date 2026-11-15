@@ -1,0 +1,38 @@
+{
+  "manifest_version": "v1",
+  "format": "ndjson",
+  "base_token": "JChjbMdNzaOf2msRkgoc8qK4neb",
+  "table_id": "tbloOG8AXrhxFkSo",
+  "rev": 1,
+  "timezone": "Asia/Shanghai",
+  "query_context": {
+    "field_scope": "selected_fields",
+    "record_scope": "all_records"
+  },
+  "requested_limit": 20,
+  "records_count": 8,
+  "page_count": 1,
+  "has_more": false,
+  "record_file": "/Users/longyi/project/账号对标/03-决策与复盘/control-plan/work/notes-ids2.ndjson",
+  "record_file_size_bytes": 549,
+  "manifest_file": "/Users/longyi/project/账号对标/03-决策与复盘/control-plan/work/notes-ids2.manifest.json",
+  "columns": {
+    "record_id": {
+      "physical_type": "string",
+      "stats": {
+        "max_length": 16
+      },
+      "example": "reczz28ZVQpoPAeT"
+    },
+    "模块": {
+      "field_id": "fldz33VwQR",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 14
+      },
+      "example": "四级阶梯"
+    }
+  }
+}

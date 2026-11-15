@@ -1,0 +1,6 @@
+[
+  {"name":"规则","type":"text"},
+  {"name":"具体做法","type":"text"},
+  {"name":"反例","type":"text"},
+  {"name":"依据","type":"text"}
+]

@@ -1,0 +1,147 @@
+# 图书入库总账
+
+- 书单总数：205 本，覆盖 64 个细类
+- 已入库、可引原文：**8 本**（其中既有 1 本；本次新入库 6 本；2026-11-14 补入 08-16《Free Culture》——官方 Docbook 源重排版 PDF，254 页、923 段；明细见各分类 manifest.csv）
+- 二手读书笔记（仅索引，不计入门槛）：3 本
+- 未取到：197 本（其中 P0 19 本；08-16 已由不可得改判为已入库）
+
+## 已入库明细
+
+| 书名 | 渠道 | 质量档 | 说明 |
+|---|---|---|---|
+| The Crowd: A Study of the Popular Mind | Project Gutenberg | 可引用 | books/01-人性与心理/pg445_the-crowd-a-study-of-the-popular-mind.txt |
+| The Theory of the Leisure Class | Project Gutenberg | 可引用 | books/01-人性与心理/pg833_the-theory-of-the-leisure-class.txt |
+| The Expression of the Emotions in Man and Animals | Project Gutenberg | 可引用 | books/01-人性与心理/pg1227_the-expression-of-the-emotions-in-man-and-animals.txt |
+| Public Opinion（舆论） | Project Gutenberg | 可引用 | books/02-传播与内容/pg6456_public-opinion-舆论.txt |
+| 修辞学 / Rhetoric | Perseus / MIT Internet Classics Archive（既有） | 可引用 | fulltext/books/rhetoric_aristotle.txt |
+| The Elements of Style | Project Gutenberg | 可引用 | books/02-传播与内容/pg37134_the-elements-of-style.txt |
+| Site Reliability Engineering（第 15 章：无责复盘） | GitHub 仓库（euclid1990/google-sre-book，官方 CC BY-NC-ND 全书 EPUB）+ jsDelivr 取件 | 可引用 | books/09-专业本体/sre_ch15_postmortem-culture.txt |
+
+## 渠道结论（实测）
+
+- 可用：Project Gutenberg 站内检索 + pglaf 镜像；GitHub（api.github.com / jsDelivr 取件）；**作者/出版社官方免费版**（CC 或开放授权的在版书，作者站点常直供全文 PDF；官方链接失效时取"官方 Docbook/LaTeX 源重排版"，2026-11-14 由 08-16《Free Culture》漏判补入）
+- 不可达：Internet Archive、Open Library、Wikisource、Google 系、Gallica、HathiTrust、OAPEN、DOAB API、IPFS
+- 被降级：Bing / 360 / 搜狗，只返回词典释义
+- 单连接限速约 9KB/s，大文件需分批共用连接
+
+## 判断
+
+- 按现在能通的路：205 本里**最多 8 本可引原文**（已全部拿到）；再增加只能靠买书或用你自己的渠道。**「作者/出版社官方免费版」渠道已在 2026-11-14 补跑一轮：见下节，未增加可引书目，仍是 8 本。**
+- 替代材料能补的判断细类：**12 个**——统计与因果推断、实验设计与A/B、抽样与样本偏差、指标口径与度量、复盘与归因方法、议程设置与框架、叙事结构与故事、推荐机制、搜索与关键词、冷启动与账号权重、认知偏差与判断启发、从众与社会认同。〔2026-11-14 已由推断转为实测：33 份开放全文全部取回并入库，31 份可引用、2 份仅参考，清点见 `catalog/替代材料取件总账.md`〕
+- 剩下 **52 个细类**（共 64 个）没有可引原文、也没有像样的 OA 替代，必须买书或借书才能补。
+- 二手读书笔记只有 3 本（Pragmatic Programmer / DDIA / Never Split the Difference），仅作线索，不计入上述任何数字。
+
+## 2026-11-14 第二轮重筛（作者/出版社官方页）
+
+范围：198 本待采集里 1990 年后、作者为学者／公共知识分子／技术写作者的 18 本。
+做法：逐个访问作者个人站、机构页、出版社页，记录有无免费全文（日期 2026-11-14）。
+
+- **捞回：0 本。** 18 本里没有一本提供官方免费全文。
+- 唯一确认"官方免费"的是 04-07《Jobs to be Done: Theory to Practice》（jobs-to-be-done-book.com，免费 PDF/有声书，但需提交邮箱表单换取），未取件，保持待采集。
+- 3 本页面未取到、未验证：06-16（ipa.co.uk 被 Cloudflare 拦）、X-01（adamgrant.net 空响应）、05-23（svpg.com/inspired 404）——按规矩不记"不可得"。
+- 其余 130 本（1990 年后但作者无独立官方站点，如中文教材、影视技术作者、销售培训师）本轮未逐一访问主页，保持待采集，不写不可得。
+
+明细已逐条写回飞书清单对应行的「遇到问题」列。
+
+## 2026-11-15 结算：逐本找书这条路走完了
+
+**结论：205 本里，靠"逐本找免费全文"能拿到的已经拿完，可引原文 8 本，不再增加。**
+依据是两轮实测相加，不是"没查"：
+
+- 第一轮（2026-11-14）：公版库 + GitHub + 二手渠道，拿到 8 本。
+- 第二轮（2026-11-14）：1990 年后学者/公共知识分子/技术写作者 18 本，逐个开作者主页与机构页，**捞回 0 本**。其中 3 本页面被拦/404，按规矩记"未验证"，不记"不可得"。
+- 第三轮（2026-11-15）：CC 一脉逐本核实（见下），**新增 0 本**。
+
+三层加起来，"查过主页后确认没有"的是 15 本；"页面打不开、无法确认"的是 3 本。两者分开记，不许合并成"都没有"。
+
+### CC 一脉逐本核实（2026-11-15）
+
+| 作者 | 查了什么 | 结果 |
+| --- | --- | --- |
+| Lessig | free-culture.cc、codev2.cc、remix.lessig.org、lessig.org | 站点可达；三个 PDF 直链均返回 HTML（站点壳），**未取到可下载全文**。Free Culture 已有（重排版 PDF），其余不加 |
+| Benkler | benkler.org（http/https） | **不可达**（连接失败），未验证 → 不记"不可得" |
+| Shirky | 无官方免费全文入口 | 未加 |
+| Doctorow | craphound.com 电子书页 | 可访问，但抓到的清单是 2004 年单篇讲稿，非整书目录；**本轮未确认任何整书** |
+| Weinberger | smallpieces.com | 站点可达，PDF 路径 404；未加 |
+
+**净结果：可引原文仍是 8 本，一本没加。** 没有为了凑数把"听说 CC"的书塞进 catalog。
+
+## 2026-11-15 新增入库（不占 205 本口径，按细类计）
+
+| 来源 | 数量 | 质量档 | 说明 |
+| --- | ---: | --- | --- |
+| books-for-agents（60 本书摘要，CC BY-SA 4.0） | 60 份 / 2,744 段 | 仅参考·二手提炼 | 命中不吐原句；书目对照见 `catalog/work/2026-11-15-books-for-agents书目对照.md` |
+| behavioral-economics-notes | 22 份 | 仅参考·二手笔记 | Baddeley VSI 读书笔记 |
+| marketing-psychology | 1 份（70+ 模型） | 仅参考·二手笔记 | 无统一原始出处 |
+| copywriting-vault | 24 份 / 2,176 段 | 仅参考·来源不明 | 30 个框架中 16 个有具名出处，见 `catalog/work/2026-11-15-二手框架追源.md` |
+| RockENZO/data 诈骗样本 | 21,065 条正文 + 4,000 条抽样 | 反面样本库（独立 scam-corpus.db） | 主库只放结构说明，见 `catalog/work/2026-11-15-诈骗样本结构分析.md` |
+| Mohammed Ali Sharafuddin 数字营销教材（CC BY 4.0） | 1 份 / 1,740 段 | **可引用** | 8 周课程正文，版权页已核 |
+| JTBD 替代材料（Christensen Institute、Strategyn 官方页） | 2 份 / 297 段 | 可引用 | 替代 04-07 需邮箱换取的 PDF |
+
+## 2026-11-15 五个中文书源仓结论（未入库，只落线索）
+
+| 仓库 | 实测 | 判定 |
+| --- | --- | --- |
+| shjwudp/shu | 471 个 txt，先秦典籍 + 民国文学，含张爱玲/钱钟书等在版权期内作品 | 与运营营销缺口无关；不整包入库 |
+| JINGBODAI/ChineseClassicaPublicBooks | 实际 199 个 epub 古籍，README 称一万本，名实不符 | 无关 |
+| gkmz/ebooks | 空仓，仅 README 书单 | 无线索 |
+| learnuidev/zh-books | 29 本现代出版物整本 PDF/EPUB，含 02-14《千面英雄》 | 命中 1 本，但实测下载不通（jsDelivr 403、raw 302），未取到 |
+| Henrilin28/books-1 | 仅 README.wiki 书单（BT Sync 密钥） | 无线索 |
+
+另：sigmeta/ChineseBookCorpus 正文在百度网盘，无法按文件匹配（命中 0，不可验证）；open-guji/guji-resource-index 71 条全为古籍，只发现一个新渠道「国家哲学社会科学文献中心 ncpssd.cn」（可达、需注册、未验命中）。
+
+## 2026-11-15 三批开放材料接库（DOAB / 公版经典 / 开放教材）
+
+### 实际入库
+
+| 批次 | 文档数 | 段数 | 可引用 | 仅参考 |
+| --- | ---: | ---: | ---: | ---: |
+| DOAB 专著（Springer Open / Logos OA） | 12 | 17,013 | 11 | 1 |
+| 1930 年前公版经典（Gutenberg / Gallica） | 12 | 19,187 | 11 | 1 |
+| 开放教材与章节页（OpenStax / OTL / ds4psy） | 23（7 本教材 + 16 章） | 50,994 | 23 | 0 |
+| 合计 | 47 | 87,194 | 45 | 2 |
+
+入库时间取自 `kbase.db` 的 `docs.ingested_at`：DOAB 01:05–01:12、公版 01:13–01:21、开放教材 01:23–01:42（2026-11-15）；Tarde《模仿律》02:09 降档重入，段数不变。〔2026-11-15 核实会话修正：本节初稿误写为 02:01–02:41，与库内 docs.ingested_at 不符〕采集时间按各批次 manifest 的取回时间记，未用文件修改时间代替。
+
+### 可引原文那一刻重算
+
+- 205 本那条线的可引原文：**仍是 8 本**，没有被本批改动。
+- 本批新增可引**作品**：30 本（DOAB 11 + 公版 11 + 开放教材 7 + 早前 OpenStax《Principles of Marketing》1）。
+- 合计可引作品：**38 本**（8 + 30），其中无限制 29 本、NC 限制 9 本。
+- 其中受 NC 限制 9 本：本批 7 本（OpenStax 五本、eMarketing、ds4psy）＋ 早前 OpenStax《Principles of Marketing》1 本 ＋ Free Culture（CC BY-NC）与 SRE 第 15 章（CC BY-NC-ND）按 books 目录口径计为作品。全部按「对外只可转述观点并注出处，不得成段搬用」标注。
+- 受限仅内部阅读 1 本：《Pricing of Consumer Innovations》（Logos Verlag，内页「Alle Rechte vorbehalten」），metadata 授权限制写死「不得引用原文」。
+
+### 需要单独说明的三件事
+
+1. **授权以版权页为准，不以平台列表页为准**：Open Textbook Library 把 Psychology 2e / Sociology 3e / Economics 3e 标成 CC BY，三本 PDF 版权页写的是 CC BY-NC-SA 4.0，本库按版权页记 NC。
+2. **塔尔德《模仿律》是 OCR**：1890 法文 Gallica 扫描本，前几页错字重。〔2026-11-15 核实会话降档：扫描 OCR 文本按硬规则不进可引用档，质量档由「可引用」改「仅参考·OCR」并 force 重入（02:09:11，1130 段不变）〕摘句前必须回核扫描页，页码只能引页眉，不能当干净文本。
+3. **麦独孤是 1920《The Group Mind》**，不是 1908《An Introduction to Social Psychology》，metadata 已写死不得混为一本。
+
+### 未入库、只登记
+
+Asch 1951、Milgram 1963、Cialdini 2001 三份版权保留，只登记书目与文件路径，不入库、不给可引用档；Oxford-Sociology-Texts 172 份版权书全文整仓排除；Springer 两仓 127 本 127/127 返回付费墙页面。明细见 `catalog/work/2026-11-15-仅登记未入库书目.md`。
+
+### 两个仍空的格
+
+- **格05 销售与谈判**：本来没有免费原文。OA 目录内无对题专著，最对题的 T&F《Intercultural Business Negotiations》只在 OAPEN、无开放下载。
+- **格08 定价与报价（可引用口径）**：渠道可达但无开放授权，唯一对题那本写明保留所有权利，已按仅参考入库。
+两格均已写进飞书「遇到问题」列，处理方式为图书馆借阅或购书。
+
+## 全库当前口径（2026-11-15 清点后，以此为准）
+
+| 项 | 数值 |
+| --- | ---: |
+| 文档 | 474 |
+| 段 | 131,793 |
+| 可引用 | **177** |
+| 仅参考 | **295** |
+| 不可引用 | 1 |
+| 历史文本\|已废止 | 1 |
+| 整本书 | 45 本 / 95,813 段 |
+| 可引作品 | 38 本（无限制 29 ＋ NC 9） |
+
+与清点前写的 158 / 197 不一致，原因有两个：一是 02:20 之后并行线新增的论文、官方文档、自撰件未回写；二是有 11 篇 metadata 手写「可引用」、检索侧实际是「仅参考」。11 篇已于 2026-11-15 按检索侧实际对齐，清单见 `catalog/2026-11-15-藏量清点.md` 第五节。
+
+**2026-11-15 二次修正**：11 篇里有 3 条是官方规章全文（网络交易监督管理办法 56 条、消费者权益保护法实施条例 53 条、明码标价和禁止价格欺诈规定 27 条），本地确有全文，判「仅参考」是过严。已只对这三条 `--force` 重入、档位改回「可引用」，其余 8 篇不动。全库变为 **可引用 177 / 仅参考 295**（474 篇、131,793 段均不变；三条重切后仍为 59＋54＋28＝141 段）。
+
+

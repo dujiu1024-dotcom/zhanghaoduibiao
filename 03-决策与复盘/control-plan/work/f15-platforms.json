@@ -1,0 +1,8 @@
+[
+  {"name":"平台","type":"text"},
+  {"name":"同一条内容要改什么","type":"text"},
+  {"name":"发布频次","type":"text"},
+  {"name":"目标人群","type":"text"},
+  {"name":"目的","type":"text"},
+  {"name":"优先级","type":"select","multiple":false,"options":[{"name":"最高"},{"name":"中"},{"name":"低"},{"name":"不做"}]}
+]

@@ -1,0 +1,7 @@
+[
+  {"name":"阶段","type":"text"},
+  {"name":"天数区间","type":"text"},
+  {"name":"条数","type":"number","style":{"type":"plain","precision":0}},
+  {"name":"这一阶段只干什么","type":"text"},
+  {"name":"达成判据","type":"text"}
+]

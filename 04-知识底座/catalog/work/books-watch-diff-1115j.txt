@@ -1,0 +1,122 @@
+快照行数: 526  当前行数: 592
+新增行: 66  删除行: 0  变更行: 27
+  [新增] reczz28Zt1UMYBlL 编号=OAPEN-183 Emotions and Affective Decisions in Hospitality Equity Investment 状态=['已采集']
+  [新增] reczz28Zt1UMYNZ0 编号=OAPEN-177 Maritime Ports, Supply Chains and Logistics Corridors 状态=['已采集']
+  [新增] reczz28Zt1UMYZtC 编号=OAPEN-155 Managing Labour in Small Firms 状态=['已采集']
+  [新增] reczz28Zt1UMYbN9 编号=OAPEN-186 Security Strategies in International Business History 状态=['已采集']
+  [新增] reczz28Zt1UMYbqk 编号=OAPEN-147 Business Models and Digital Technology Platforms 状态=['已采集']
+  [新增] reczz28Zt1UMYmQw 编号=OAPEN-169 Knowing Through Consulting in Action 状态=['已采集']
+  [新增] reczz28Zt1UMYsaw 编号=OAPEN-132 Der Syndikus-Steuerberater 状态=['已采集']
+  [新增] reczz28Zt1UMYunR 编号=OAPEN-137 Aus der Elternzeit zurück in die Erwerbstätigkeit 状态=['已采集']
+  [新增] reczz28Zt1UMYvPo 编号=OAPEN-154 Corporate Social Responsibility and SMEs 状态=['已采集']
+  [新增] reczz28Zt1UMYzSW 编号=OAPEN-182 Craft as a Creative Industry 状态=['已采集']
+  [新增] reczz28Zt1UMYzqK 编号=OAPEN-165 Brand e sostenibilità 状态=['已采集']
+  [新增] reczz28Zt1UMZ0NR 编号=OAPEN-185 Information and Communication Technologies in Tourism 2023 状态=['已采集']
+  [新增] reczz28Zt1UMZ8bo 编号=OAPEN-136 The Digital Transformation of Production and Operations Management 状态=['已采集']
+  [新增] reczz28Zt1UMZ9AE 编号=OAPEN-148 Business Model Innovation 状态=['已采集']
+  [新增] reczz28Zt1UMZ9Vs 编号=OAPEN-145 Crip Spacetime 状态=['已采集']
+  [新增] reczz28Zt1UMZEpQ 编号=OAPEN-135 The Ultimate Case Guide 状态=['已采集']
+  [新增] reczz28Zt1UMZQZU 编号=OAPEN-144 CONVR 2023 - Proceedings of the 23rd International Conference on Construction Applications of Virtual Reality 状态=['已采集']
+  [新增] reczz28Zt1UMZR0f 编号=OAPEN-179 Konstruksieveiligheid Sakboekie vir Suid-Afrika 状态=['已采集']
+  [新增] reczz28Zt1UMZUiG 编号=OAPEN-152 Open Innovation and Startups 状态=['已采集']
+  [新增] reczz28Zt1UMZXlw 编号=OAPEN-181 Creative Business in Australia 状态=['已采集']
+  [新增] reczz28Zt1UMZh2P 编号=OAPEN-140 Sustainable Logistics Services of Food Provisions on Merchant Ships 状态=['已采集']
+  [新增] reczz28Zt1UMZpa0 编号=OAPEN-157 Micro, Small, and Medium Enterprises in Vietnam 状态=['已采集']
+  [新增] reczz28Zt1UMZtF5 编号=OAPEN-176 Construction Site Planning and Logistical Operations 状态=['已采集']
+  [新增] reczz28Zt1UMZth4 编号=OAPEN-150 Digital Business Models 状态=['已采集']
+  [新增] reczz28Zt1UMZuFi 编号=OAPEN-160 Performing Artists and Precarity 状态=['已采集']
+  [新增] reczz28Zt1UMaAQq 编号=OAPEN-172 Working in the Service Sector 状态=['已采集']
+  [新增] reczz28Zt1UMaCo9 编号=OAPEN-149 Digital Business Models in Sport 状态=['已采集']
+  [新增] reczz28Zt1UMaDXV 编号=OAPEN-174 Managing the Transition to a Circular Economy 状态=['已采集']
+  [新增] reczz28Zt1UMaJKO 编号=OAPEN-187 Made in Africa: 状态=['已采集']
+  [新增] reczz28Zt1UMaNa6 编号=OAPEN-168 Graduate Students in Data Science Consulting 状态=['已采集']
+  [新增] reczz28Zt1UMaQ7P 编号=OAPEN-184 Shakespeare and Hospitality 状态=['已采集']
+  [新增] reczz28Zt1UMaQzp 编号=OAPEN-151 Dynamics of Long-Life Assets: From Technology Adaptation to Upgrading the Business Model 状态=['已采集']
+  [新增] reczz28Zt1UMaWyJ 编号=OAPEN-180 Risk Management Treatise for Engineering Practitioners 状态=['已采集']
+  [新增] reczz28Zt1UMakyy 编号=OAPEN-161 Global Platform Work 状态=['已采集']
+  [新增] reczz28Zt1UMap9H 编号=OAPEN-163 Coworking 状态=['已采集']
+  [新增] reczz28Zt1UMb19J 编号=OAPEN-153 The Value &amp; Purpose of Management Education 状态=['已采集']
+  [新增] reczz28Zt1UMb1UZ 编号=OAPEN-139 Construction Supply Chain Economics 状态=['已采集']
+  [新增] reczz28Zt1UMbAnD 编号=OAPEN-143 Environmental Management in Construction 状态=['已采集']
+  [新增] reczz28Zt1UMbAxl 编号=OAPEN-166 Trasparenza e prevenzione della corruzione nel nuovo codice dei contratti pubblici 状态=['已采集']
+  [新增] reczz28Zt1UMbKnn 编号=OAPEN-162 Well-Being and Mental Health in the Gig Economy 状态=['已采集']
+  [新增] reczz28Zt1UMbLid 编号=OAPEN-173 The Future of Third Sector Research 状态=['已采集']
+  [新增] reczz28Zt1UMbPJh 编号=OAPEN-178 Pocketbook ea Polokeho ea Kaho bakeng 状态=['已采集']
+  [新增] reczz28Zt1UMbV1Z 编号=OAPEN-159 Family and Business during the Industrial Revolution 状态=['已采集']
+  [新增] reczz28Zt1UMbZrS 编号=OAPEN-133 Navigating the 21st Century Business World 状态=['已采集']
+  [新增] reczz28Zt1UMbcR2 编号=OAPEN-170 Schreibberatung 状态=['已采集']
+  [新增] reczz28Zt1UMbcXD 编号=OAPEN-142 Construction Safety Pocketbook for South Africa 状态=['已采集']
+  [新增] reczz28Zt1UMboyV 编号=OAPEN-175 Dynamics in Logistics 状态=['已采集']
+  [新增] reczz28Zt1UMbpVB 编号=OAPEN-156 Small Firms and Innovation Policy in Japan 状态=['已采集']
+  [新增] reczz28Zt1UMbsXA 编号=OAPEN-158 Listen and Design 状态=['已采集']
+  [新增] reczz28Zt1UMbvRY 编号=OAPEN-171 Responsible Pleasure 状态=['已采集']
+  [新增] reczz28Zt1UMbvuR 编号=OAPEN-188 Shipping and Globalization in the Post-War Era 状态=['已采集']
+  [新增] reczz28Zt1UMbzGo 编号=OAPEN-141 State-of-the-Art Digital Twin Applications for Shipping Sector Decarbonization 状态=['已采集']
+  [新增] reczz28Zt1UMc0WK 编号=OAPEN-138 Contract Law in the Construction Industry Context 状态=['已采集']
+  [新增] reczz28Zt1UMc1K7 编号=OAPEN-131 The QUEECA Experience 状态=['已采集']
+  [新增] reczz28Zt1UMc1Qj 编号=OAPEN-164 La gratuità si paga 状态=['已采集']
+  [新增] reczz28Zt1UMc2E1 编号=OAPEN-134 Pro-ecological Restructuring of Companies 状态=['已采集']
+  [新增] reczz28Zt1UMc2lu 编号=OAPEN-167 Come la consulenza direzionale crea conoscenza 状态=['已采集']
+  [新增] reczz28Zt1UMc6Lt 编号=OAPEN-146 The Multi Business Model Innovation Approach 状态=['已采集']
+  [新增] reczz28Zt1UMck0Q 编号=OAPEN-193 Public Procurement Pathways: Sustainability Edition 状态=['已采集']
+  [新增] reczz28Zt1UMcnkf 编号=OAPEN-190 Drones and the Creative Industry 状态=['已采集']
+  [新增] reczz28Zt1UMd8k9 编号=OAPEN-194 Procurement and Politics 状态=['已采集']
+  [新增] reczz28Zt1UMdinr 编号=OAPEN-189 Information and Communication Technologies in Tourism 2024 状态=['已采集']
+  [新增] reczz28Zt1UMdq1S 编号=OAPEN-192 Public Procurement and Contract Law 状态=['已采集']
+  [新增] reczz28Zt1UMf6bs 编号=OAPEN-196 Noncomplainer-Management im BtB-Marketing 状态=['已采集']
+  [新增] reczz28Zt1UMfhAw 编号=OAPEN-195 Responsible Procurement 状态=['已采集']
+  [新增] reczz28Zt1UMgCSC 编号=OAPEN-191 Industry 4.0 dislocations in small and medium enterprises: A supply chain management view 状态=['已采集']
+  [变更] reczz28Ze4DtqpCi 编号=DOAB-10 Pricing of Consumer Innovations
+      遇到问题: "仅参考·保留所有权利｜内页第4页实写 © Logos Verlag Berlin GmbH 2022 Alle Rechte vorbehalten，非 CC 授权（核实会话改正：原标「可引用·CC BY 4.0」有误）；库内已按仅参考档入库，不得对外引用原文；可引用口径需购书或借阅（见 GAP-08 行）；2026-11-15 14:10 复核：本书与 OAPEN-002 重复入库（同一本书两份文件、两条 RAG 记录），库内以 OAPEN-002 为准（其许可核实同此句、档位标仅参考·可转述；两行档位口径不一，均为保守方向，不影响对外合规），本行文件保留作对照，RAG 重复条目待 rag 工具支持删除后清理" -> "仅参考·保留所有权利｜内页第4页实写 © Logos Verlag Berlin GmbH 2022 Alle Rechte vorbehalten，非 CC 授权（核实会话改正：原标「可引用·CC BY 4.0」有误）；库内已按仅参考档入库，不得对外引用原文；可引用口径需购书或借阅（见 GAP-08 行）；2026-11-15 14:10 复核：本书与 OAPEN-002 重复入库（同一本书两份文件、两条 RAG 记录），库内以 OAPEN-002 为准（其许可核实同此句、档位标不可引用；两行档位口径不一，均为保守方向，不影响对外合规），本行文件保留作对照，RAG 重复条目待 rag 工具支持删除后清理"
+  [变更] reczz28ZqEaPYxMN 编号=OAPEN-014 EIB Working Paper 2024/03 - Investment decisions in a high-inflation environment
+      遇到问题: "许可档位 仅参考·可转述（保留所有权利）；OAPEN 编号 014" -> "许可档位 不可引用（保留所有权利）；OAPEN 编号 014"
+  [变更] reczz28ZqEaPaM2P 编号=OAPEN-002 Pricing of Consumer Innovations
+      遇到问题: "许可档位 仅参考·可转述（保留所有权利）；OAPEN 编号 002" -> "许可档位 不可引用（保留所有权利）；OAPEN 编号 002"
+  [变更] reczz28ZqEaPaqFg 编号=OAPEN-045 Selling the Sea: A study of conflict over marine tenure in Kei Islands, Eastern Indonesia
+      遇到问题: "许可档位 仅参考·可转述（保留所有权利）；OAPEN 编号 045" -> "许可档位 不可引用（保留所有权利）；OAPEN 编号 045"
+  [变更] reczz28ZqEaPb2yP 编号=OAPEN-035 Intercultural Business Negotiations
+      遇到问题: "许可档位 仅参考·可转述（保留所有权利）；OAPEN 编号 035" -> "许可档位 不可引用（保留所有权利）；OAPEN 编号 035"
+  [变更] reczz28ZqEaPc8eY 编号=OAPEN-050 Pathways in Decentralised Collective Bargaining in Europe
+      遇到问题: "许可档位 仅参考·可转述（未找到许可）；OAPEN 编号 050" -> "许可档位 不可引用（未找到许可）；OAPEN 编号 050"
+  [变更] reczz28ZqEaPcLHB 编号=OAPEN-029 Practical Guide to Guest House Management
+      遇到问题: "许可档位 仅参考·可转述（保留所有权利）；OAPEN 编号 029" -> "许可档位 不可引用（保留所有权利）；OAPEN 编号 029"
+  [变更] reczz28ZqEaPcYrc 编号=OAPEN-046 Selling the Sea, Fishing for Power
+      遇到问题: "许可档位 仅参考·可转述（保留所有权利）；OAPEN 编号 046" -> "许可档位 不可引用（保留所有权利）；OAPEN 编号 046"
+  [变更] reczz28ZqEaPdCty 编号=OAPEN-053 Negotiating Dissidence
+      遇到问题: "许可档位 仅参考·可转述（未找到许可）；OAPEN 编号 053" -> "许可档位 不可引用（未找到许可）；OAPEN 编号 053"
+  [变更] reczz28ZqEaPdeoa 编号=OAPEN-033 The Performance Complex
+      遇到问题: "许可档位 仅参考·可转述（保留所有权利）；OAPEN 编号 033" -> "许可档位 不可引用（保留所有权利）；OAPEN 编号 033"
+  [变更] reczz28ZqEaPeY4z 编号=OAPEN-028 EIB Working Paper 2020/09 - Investment vs debt trade-offs in the post-COVID-19 European economy
+      遇到问题: "许可档位 仅参考·可转述（未找到许可）；OAPEN 编号 028" -> "许可档位 不可引用（未找到许可）；OAPEN 编号 028"
+  [变更] reczz28Zr3E1phCi 编号=Option-12-Sociology-of-Mafias-The-Sicilian-Mafia.ocr.md The Sicilian Mafia
+      遇到问题: "OCR 未校，质量档仅参考·可转述，只作线索，检索不输出原句" -> "OCR 未校，质量档不可引用，只作线索，检索不输出原句"
+  [变更] reczz28Zr3E1rYOg 编号=Option-3-Online-Social-Networks-Week-1-Introduction-Social-structures---A-network-approach.ocr.md Social structures - A network approach
+      遇到问题: "OCR 未校，质量档仅参考·可转述，只作线索，检索不输出原句" -> "OCR 未校，质量档不可引用，只作线索，检索不输出原句"
+  [变更] reczz28Zr3E1sDhV 编号=Core-2-Research-Method-1-Qualitative-Methods-Whyte-W-F-19431993-Street-corner-society---the-social-structure-of-an-Italian-slum-4th-Edition-Chicago-London---University-of-Chicago-Press.ocr.md Whyte, W. F. ([1943]1993) Street corner society - the social structure of an Ita
+      遇到问题: "OCR 未校，质量档仅参考·可转述，只作线索，检索不输出原句" -> "OCR 未校，质量档不可引用，只作线索，检索不输出原句"
+  [变更] reczz28Zs0JdDby5 编号=OAPEN-084 The Performance Complex
+      遇到问题: "许可档位 仅参考·可转述；OAPEN 编号 033" -> "许可档位 不可引用；OAPEN 编号 033"
+  [变更] reczz28Zs0JdE54f 编号=OAPEN-124 African Principles on the Law Applicable to International Commercial Contracts
+      遇到问题: "许可档位 未找到许可，仅参考·可转述；OAPEN 编号 075" -> "许可档位 未找到许可，不可引用；OAPEN 编号 075"
+  [变更] reczz28Zs0JdESNl 编号=OAPEN-096 Selling the Sea: A study of conflict over marine tenure in Kei Islands, Eastern Indonesia
+      遇到问题: "许可档位 仅参考·可转述；OAPEN 编号 045" -> "许可档位 不可引用；OAPEN 编号 045"
+  [变更] reczz28Zs0JdEeC8 编号=OAPEN-095 Selling &amp; Collecting
+      遇到问题: "许可档位 仅参考·可转述（全书未找到 CC 许可句，仅 ©2018 eum；单节 CC-BY 不计为全书许可）；OAPEN 编号 044" -> "许可档位 不可引用（全书未找到 CC 许可句，仅 ©2018 eum；单节 CC-BY 不计为全书许可）；OAPEN 编号 044"
+  [变更] reczz28Zs0JdEl2y 编号=OAPEN-055 Pricing of Consumer Innovations
+      遇到问题: "许可档位 仅参考·可转述；OAPEN 编号 002" -> "许可档位 不可引用；OAPEN 编号 002"
+  [变更] reczz28Zs0JdEwF9 编号=OAPEN-130 Qualität 2030
+      遇到问题: "许可档位 未找到许可，仅参考·可转述；OAPEN 编号 081" -> "许可档位 未找到许可，不可引用；OAPEN 编号 081"
+  [变更] reczz28Zs0JdFX4L 编号=OAPEN-127 Contratti a lungo termine e rimedi correttivi
+      遇到问题: "许可档位 未找到许可，仅参考·可转述；OAPEN 编号 078" -> "许可档位 未找到许可，不可引用；OAPEN 编号 078"
+  [变更] reczz28Zs0JdFo8U 编号=OAPEN-104 Negotiating Dissidence
+      遇到问题: "许可档位 未找到许可，仅参考·可转述；OAPEN 编号 053" -> "许可档位 未找到许可，不可引用；OAPEN 编号 053"
+  [变更] reczz28Zs0JdGCMs 编号=OAPEN-086 Intercultural Business Negotiations
+      遇到问题: "许可档位 仅参考·可转述；OAPEN 编号 035" -> "许可档位 不可引用；OAPEN 编号 035"
+  [变更] reczz28Zs0JdGfPR 编号=OAPEN-080 Practical Guide to Guest House Management
+      遇到问题: "许可档位 仅参考·可转述；OAPEN 编号 029" -> "许可档位 不可引用；OAPEN 编号 029"
+  [变更] reczz28Zs0JdGuKM 编号=OAPEN-079 EIB Working Paper 2020/09 - Investment vs debt trade-offs in the post-COVID-19 European economy
+      遇到问题: "许可档位 未找到许可，仅参考·可转述；OAPEN 编号 028" -> "许可档位 未找到许可，不可引用；OAPEN 编号 028"
+  [变更] reczz28Zs0JdH7tg 编号=OAPEN-097 Selling the Sea, Fishing for Power
+      遇到问题: "许可档位 仅参考·可转述；OAPEN 编号 046" -> "许可档位 不可引用；OAPEN 编号 046"
+  [变更] reczz28Zs0JdHEkg 编号=OAPEN-067 EIB Working Paper 2024/03 - Investment decisions in a high-inflation environment
+      遇到问题: "许可档位 仅参考·可转述；OAPEN 编号 014" -> "许可档位 不可引用；OAPEN 编号 014"

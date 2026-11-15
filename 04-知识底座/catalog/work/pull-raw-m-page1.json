@@ -1,0 +1,11 @@
+{
+  "ok": false,
+  "identity": "user",
+  "error": {
+    "type": "validation",
+    "subtype": "invalid_argument",
+    "message": "invalid --limit 500: must be between 1 and 200",
+    "hint": "--page-size maps to canonical flag --limit",
+    "param": "--page-size"
+  }
+}

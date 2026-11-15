@@ -1,0 +1,8 @@
+[
+  {"name":"对象类型","type":"text"},
+  {"name":"账号","type":"text"},
+  {"name":"抄什么","type":"text"},
+  {"name":"怎么用","type":"text"},
+  {"name":"链接","type":"url"},
+  {"name":"备注/边界","type":"text"}
+]

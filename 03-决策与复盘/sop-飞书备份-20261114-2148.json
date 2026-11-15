@@ -1,0 +1,91 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "data": [
+      [
+        "1",
+        "每个子项不少于6个知识",
+        null,
+        "操盘手知识库（A库）搭建 "
+      ],
+      [
+        "2",
+        "知识满足道法术器的要求，如果不满足，继续补充采集A库",
+        "1",
+        "操盘手知识库审查"
+      ],
+      [
+        "3",
+        "道法术器的知识库搭建完成",
+        "2",
+        "利用知识库，补充道法术器的理论架构"
+      ],
+      [
+        "4",
+        null,
+        "3",
+        "利用A库和道的知识，给出IP的整体框架"
+      ],
+      [
+        "5",
+        null,
+        "4",
+        "利用A库和法的知识，来做整体的蓝图和战略规划"
+      ],
+      [
+        "6",
+        null,
+        "5",
+        "利用A库和术来制定详细计划"
+      ],
+      [
+        "7",
+        null,
+        "6",
+        "根据计划来补充器和B库"
+      ],
+      [
+        "8",
+        null,
+        null,
+        "出当期的内容"
+      ]
+    ],
+    "field_id_list": [
+      "fldCDpXr5U",
+      "fld0ls9c0K",
+      "fldk44dCjO",
+      "fldvEA9nO1"
+    ],
+    "field_type_list": [
+      "text",
+      "text",
+      "text",
+      "text"
+    ],
+    "fields": [
+      "序号",
+      "目标",
+      "依赖项",
+      "任务名称"
+    ],
+    "has_more": false,
+    "query_context": {
+      "field_scope": "all_fields",
+      "record_scope": "all_records"
+    },
+    "record_id_list": [
+      "reczz28ZZm6yy9hG",
+      "reczz28ZZm6yyBCU",
+      "reczz28ZZm6yyBRK",
+      "reczz28ZZm6yyBe4",
+      "reczz28ZZm6yyBna",
+      "reczz28ZZtJdXgCu",
+      "reczz28ZZtKnX0dK",
+      "reczz28ZZugtWkwy"
+    ],
+    "rev": 36,
+    "timezone": "Asia/Shanghai"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "manifest_version": "v1",
+  "format": "ndjson",
+  "base_token": "JChjbMdNzaOf2msRkgoc8qK4neb",
+  "table_id": "tblzKTY9AHnw3FDg",
+  "rev": 3,
+  "timezone": "Asia/Shanghai",
+  "query_context": {
+    "field_scope": "all_fields",
+    "record_scope": "all_records"
+  },
+  "requested_limit": 100,
+  "records_count": 5,
+  "page_count": 1,
+  "has_more": false,
+  "record_file": "/Users/longyi/project/账号对标/03-决策与复盘/control-plan/work/del-ladder.ndjson",
+  "record_file_size_bytes": 1449,
+  "manifest_file": "/Users/longyi/project/账号对标/03-决策与复盘/control-plan/work/del-ladder.manifest.json",
+  "columns": {
+    "record_id": {
+      "physical_type": "string",
+      "stats": {
+        "max_length": 16
+      },
+      "example": "reczz28ZVNTbIn6F"
+    },
+    "天数区间": {
+      "field_id": "fldJssyX9T",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 7
+      },
+      "example": "D1–D7"
+    },
+    "条数": {
+      "field_id": "fld2xc3EGV",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 0,
+        "min": 7,
+        "max": 30,
+        "avg": 20
+      },
+      "example": 7
+    },
+    "达成判据": {
+      "field_id": "fldcdWtdHQ",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 39
+      },
+      "example": "粉丝不低于 3,000"
+    },
+    "这一阶段只干什么": {
+      "field_id": "fldIKQsKX4",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 33
+      },
+      "example": "冲 1 万或保底；四数复盘；不临时加新系列"
+    },
+    "阶段": {
+      "field_id": "fldfHpsShO",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 11
+      },
+      "example": "D8–D14 跑量"
+    }
+  }
+}

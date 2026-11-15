@@ -1,0 +1,198 @@
+{
+  "manifest_version": "v1",
+  "format": "ndjson",
+  "base_token": "JChjbMdNzaOf2msRkgoc8qK4neb",
+  "table_id": "tblLlWDVHrKnYECN",
+  "rev": 1,
+  "timezone": "Asia/Shanghai",
+  "query_context": {
+    "field_scope": "all_fields",
+    "record_scope": "all_records"
+  },
+  "requested_limit": 100,
+  "records_count": 4,
+  "page_count": 1,
+  "has_more": false,
+  "record_file": "/Users/longyi/project/账号对标/03-决策与复盘/control-plan/work/del-tblLlWDVHrKnYECN.ndjson",
+  "record_file_size_bytes": 2178,
+  "manifest_file": "/Users/longyi/project/账号对标/03-决策与复盘/control-plan/work/del-tblLlWDVHrKnYECN.manifest.json",
+  "columns": {
+    "record_id": {
+      "physical_type": "string",
+      "stats": {
+        "max_length": 16
+      },
+      "example": "reczz28ZVQluSf51"
+    },
+    "下周资源压在哪": {
+      "field_id": "fldhzN33xs",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 35
+      },
+      "example": "压报价与交付范围：范围写死，先成第一单，不扩单"
+    },
+    "内容线瓶颈": {
+      "field_id": "fldboRmZx6",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 19
+      },
+      "example": "开头结构待校准，先改前 3 秒"
+    },
+    "发布条数": {
+      "field_id": "fldWu3e2lH",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 0,
+        "min": 7,
+        "max": 28,
+        "avg": 17.5
+      },
+      "example": 7
+    },
+    "可演示项目数": {
+      "field_id": "fldEQh3PEw",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 0,
+        "min": 8,
+        "max": 8,
+        "avg": 8
+      },
+      "example": 8
+    },
+    "周次": {
+      "field_id": "fld7oHW237",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 5
+      },
+      "example": "第 1 周"
+    },
+    "复购": {
+      "field_id": "fldriUbcEz",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 0,
+        "min": 0,
+        "max": 0,
+        "avg": 0
+      },
+      "example": 0
+    },
+    "客单价": {
+      "field_id": "fldem26Don",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 0,
+        "min": 0,
+        "max": 0,
+        "avg": 0
+      },
+      "example": 0
+    },
+    "平均完播率": {
+      "field_id": "fldMAwDU9L",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 0,
+        "min": 0,
+        "max": 0,
+        "avg": 0
+      },
+      "example": 0
+    },
+    "成交单数": {
+      "field_id": "fld92Ygcc5",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 0,
+        "min": 0,
+        "max": 0,
+        "avg": 0
+      },
+      "example": 0
+    },
+    "接单线瓶颈": {
+      "field_id": "fldUe5qFPt",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 16
+      },
+      "example": "还没有可接单信号，渠道未铺"
+    },
+    "接单线索数": {
+      "field_id": "fldl859hS6",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 0,
+        "min": 0,
+        "max": 0,
+        "avg": 0
+      },
+      "example": 0
+    },
+    "新增粉丝": {
+      "field_id": "fldS24r9JE",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 0,
+        "min": 0,
+        "max": 0,
+        "avg": 0
+      },
+      "example": 0
+    },
+    "本月新增案例数": {
+      "field_id": "fldMsviyKJ",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 0,
+        "min": 0,
+        "max": 1,
+        "avg": 0.5
+      },
+      "example": 0
+    },
+    "评论问价人数": {
+      "field_id": "fldYvEEanx",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 0,
+        "min": 0,
+        "max": 0,
+        "avg": 0
+      },
+      "example": 0
+    },
+    "资产线瓶颈": {
+      "field_id": "fld201bGCA",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 19
+      },
+      "example": "第一单未成交，案例仍为 0"
+    }
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "manifest_version": "v1",
+  "format": "ndjson",
+  "base_token": "QuklbYw7napdOss56HGcvLZWnqb",
+  "table_id": "tblj1FWohIQI4gYB",
+  "rev": 14,
+  "timezone": "Asia/Shanghai",
+  "query_context": {
+    "field_scope": "all_fields",
+    "record_scope": "all_records"
+  },
+  "requested_limit": 2000,
+  "records_count": 205,
+  "page_count": 1,
+  "has_more": false,
+  "record_file": "/Users/longyi/project/账号对标/04-知识底座/catalog/work/books-watch/records.ndjson",
+  "record_file_size_bytes": 75631,
+  "manifest_file": "/Users/longyi/project/账号对标/04-知识底座/catalog/work/books-watch/records.manifest.json",
+  "columns": {
+    "record_id": {
+      "physical_type": "string",
+      "stats": {
+        "max_length": 16
+      },
+      "example": "reczz28Zam65Or9p"
+    },
+    "书籍名称": {
+      "field_id": "fldly3Fu6M",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 91
+      },
+      "example": "文心"
+    },
+    "作者": {
+      "field_id": "fldQ6H1XbM",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 66
+      },
+      "example": "彭兰"
+    },
+    "是否采集到": {
+      "field_id": "fldmhr6gER",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 0,
+        "max_length": 1,
+        "avg_length": 1
+      },
+      "example": [
+        "待采集"
+      ]
+    },
+    "最后更新时间": {
+      "field_id": "fldA4rv0nN",
+      "field_type": "datetime",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "min": "2026-11-14T22:33:00.000+08:00",
+        "max": "2026-11-14T22:33:00.000+08:00"
+      },
+      "example": "2026-11-14T22:33:00.000+08:00"
+    },
+    "编号": {
+      "field_id": "fldgqJIEud",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 5
+      },
+      "example": "X-01"
+    },
+    "路径": {
+      "field_id": "fldngcLzWZ",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 198,
+        "max_length": 75
+      },
+      "example": "fulltext/books/rhetoric_aristotle.txt"
+    },
+    "遇到问题": {
+      "field_id": "fldxee5rxD",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 7,
+        "max_length": 35
+      },
+      "example": "需你买或借，已试渠道：公版库、GitHub"
+    },
+    "采集人": {
+      "field_id": "fldCUskGas",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 198,
+        "max_length": 1,
+        "avg_length": 0.03414634146341464
+      },
+      "example": [
+        "操盘手"
+      ]
+    },
+    "采集时间": {
+      "field_id": "fldDmqcByc",
+      "field_type": "datetime",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 205
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    }
+  }
+}

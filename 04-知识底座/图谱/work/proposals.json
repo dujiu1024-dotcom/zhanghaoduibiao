@@ -1,0 +1,334 @@
+{
+  "generated_at": "2026-11-14T18:12:04+08:00",
+  "docs": 65,
+  "nodes": 217,
+  "edges": 318,
+  "new_nodes": [],
+  "gone_nodes": [],
+  "stale_docs": {},
+  "uncovered_docs": [
+    "sources/00-资料采购清单.md"
+  ],
+  "candidates": [
+    {
+      "doc": "methodology/00-知识覆盖矩阵.md",
+      "heading": "一、自媒体运营（抖音）",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/00-知识覆盖矩阵.md",
+      "heading": "二、新媒体运营（跨平台）",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/00-知识覆盖矩阵.md",
+      "heading": "三、IP 操盘",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/00-知识覆盖矩阵.md",
+      "heading": "四、商业",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/00-知识覆盖矩阵.md",
+      "heading": "五、营销",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/00-知识覆盖矩阵.md",
+      "heading": "总账（第二轮）",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/01-推荐机制与流量池.md",
+      "heading": "一、能确认的",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/01-推荐机制与流量池.md",
+      "heading": "二、行业通行描述（未经官方确认）",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/01-推荐机制与流量池.md",
+      "heading": "三、没拿到的东西",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/01-推荐机制与流量池.md",
+      "heading": "四、对 FDE 账号意味着什么",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/02-新号冷启动与养号.md",
+      "heading": "一、能确认的",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/02-新号冷启动与养号.md",
+      "heading": "二、常见说法与真实状态",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/02-新号冷启动与养号.md",
+      "heading": "三、未获取",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/02-新号冷启动与养号.md",
+      "heading": "四、对这个账号意味着什么",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/L1-平台-七大平台对照.md",
+      "heading": "一、平台对照表",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/L1-平台-七大平台对照.md",
+      "heading": "二、三条结构性判断",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/L1-平台-七大平台对照.md",
+      "heading": "三、对 FDE 账号意味着什么",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/L1-无数据支撑清单.md",
+      "heading": "一、未获取（数据不存在或拿不到）",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/L1-无数据支撑清单.md",
+      "heading": "二、经验推断（我的判断，不是数据）",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/L1-无数据支撑清单.md",
+      "heading": "三、传闻（广泛流传、找不到出处，本库不作为依据）",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/L1-无数据支撑清单.md",
+      "heading": "四、有出处但需注意边界",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/L2-战略-三个未决选择.md",
+      "heading": "选择一：平台",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/L2-战略-三个未决选择.md",
+      "heading": "选择二：人群",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/L2-战略-三个未决选择.md",
+      "heading": "选择三：形态",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/L2-战略-三个未决选择.md",
+      "heading": "三个选择的耦合关系",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/L3-战术-跨平台改写.md",
+      "heading": "一、一条抖音成片（35 秒，标题「我让 HR 智能体招个 CEO，它拒绝了」）",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/L3-战术-跨平台改写.md",
+      "heading": "二、四条改写原则",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/L3-战术-跨平台改写.md",
+      "heading": "三、成本与排期",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/L3-战术-跨平台改写.md",
+      "heading": "四、常见错误",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/README.md",
+      "heading": "FDE 三段式的待验证假设",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/公开内容边界.md",
+      "heading": "一句话规则",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/公开内容边界.md",
+      "heading": "什么算\"步骤\"（出现即删）",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/公开内容边界.md",
+      "heading": "什么不算步骤（可以放心给）",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/公开内容边界.md",
+      "heading": "公开内容里的唯一转化句",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/公开内容边界.md",
+      "heading": "自检（发布前逐条过）",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/抽样与归因的边界.md",
+      "heading": "一、抽样框决定结论上限",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/抽样与归因的边界.md",
+      "heading": "二、「没观察到」不等于「不存在」",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/抽样与归因的边界.md",
+      "heading": "三、要断言 A 随 B 变化，样本必须在 B 上分布开",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/抽样与归因的边界.md",
+      "heading": "四、措辞不能夹带价值判断",
+      "kind": "未匹配的小节"
+    },
+    {
+      "doc": "methodology/抽样与归因的边界.md",
+      "heading": "五、每次下结论前的四问",
+      "kind": "未匹配的小节"
+    }
+  ],
+  "errors": [],
+  "warnings": [],
+  "layer_stats": {
+    "layer-seen": {
+      "theory": 13,
+      "action": 18,
+      "metric": 10,
+      "missing": 1,
+      "unverified": 4,
+      "expected": 0,
+      "na": 0,
+      "total": 41,
+      "evidence": {
+        "sourced": 8,
+        "boundary": 2,
+        "inferred": 20,
+        "none": 7,
+        "rumor": 4
+      }
+    },
+    "layer-remembered": {
+      "theory": 10,
+      "action": 9,
+      "metric": 3,
+      "missing": 0,
+      "unverified": 0,
+      "expected": 0,
+      "na": 0,
+      "total": 22,
+      "evidence": {
+        "sourced": 5,
+        "boundary": 3,
+        "inferred": 13,
+        "none": 1,
+        "rumor": 0
+      }
+    },
+    "layer-trusted": {
+      "theory": 9,
+      "action": 18,
+      "metric": 3,
+      "missing": 0,
+      "unverified": 0,
+      "expected": 0,
+      "na": 0,
+      "total": 30,
+      "evidence": {
+        "sourced": 8,
+        "boundary": 3,
+        "inferred": 19,
+        "none": 0,
+        "rumor": 0
+      }
+    },
+    "layer-found": {
+      "theory": 9,
+      "action": 13,
+      "metric": 5,
+      "missing": 0,
+      "unverified": 0,
+      "expected": 0,
+      "na": 1,
+      "total": 27,
+      "evidence": {
+        "sourced": 8,
+        "boundary": 0,
+        "inferred": 17,
+        "none": 2,
+        "rumor": 0
+      }
+    },
+    "layer-closed": {
+      "theory": 16,
+      "action": 30,
+      "metric": 10,
+      "missing": 1,
+      "unverified": 0,
+      "expected": 0,
+      "na": 0,
+      "total": 56,
+      "evidence": {
+        "sourced": 15,
+        "boundary": 3,
+        "inferred": 36,
+        "none": 2,
+        "rumor": 0
+      }
+    },
+    "layer-referred": {
+      "theory": 1,
+      "action": 5,
+      "metric": 2,
+      "missing": 0,
+      "unverified": 0,
+      "expected": 0,
+      "na": 0,
+      "total": 8,
+      "evidence": {
+        "sourced": 3,
+        "boundary": 0,
+        "inferred": 5,
+        "none": 0,
+        "rumor": 0
+      }
+    }
+  },
+  "evidence_counts": {
+    "sourced": 53,
+    "boundary": 11,
+    "inferred": 133,
+    "none": 15,
+    "rumor": 5
+  },
+  "dim_counts": {
+    "k1": 112,
+    "k2": 65,
+    "k3": 11,
+    "k4": 18,
+    "k5": 11
+  }
+}

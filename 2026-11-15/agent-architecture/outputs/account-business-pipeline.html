@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>业务架构 · 这个账号的生意怎么跑</title>
+<style>
+  :root{
+    --bg:#f6f4ee; --paper:#fbfaf6; --ink:#1e2320; --muted:#6c716c;
+    --line:#d8d3c6; --accent:#1f5c4a; --accent-soft:#e6efe9;
+    --warn:#8a5a1f; --warn-soft:#f4ecdf; --bad:#8a3a34; --bad-soft:#f3e6e4;
+    --code:#5b615c;
+  }
+  [data-theme="dark"]{
+    --bg:#15181a; --paper:#1c2022; --ink:#e8e7e1; --muted:#9aa09b;
+    --line:#333a3c; --accent:#79c3a4; --accent-soft:#1e2f29;
+    --warn:#d3a86a; --warn-soft:#2e271b; --bad:#d58f88; --bad-soft:#2f2221;
+    --code:#a4aba5;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#15181a; --paper:#1c2022; --ink:#e8e7e1; --muted:#9aa09b;
+      --line:#333a3c; --accent:#79c3a4; --accent-soft:#1e2f29;
+      --warn:#d3a86a; --warn-soft:#2e271b; --bad:#d58f88; --bad-soft:#2f2221;
+      --code:#a4aba5;
+    }
+  }
+  *{box-sizing:border-box}
+  html{color-scheme:light dark}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif;font-size:14px;line-height:1.7;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4{font-family:"Songti SC","Noto Serif SC",Georgia,serif;font-weight:600}
+  a{color:var(--accent)}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--bg);border:1px solid var(--line);border-radius:2px;padding:0 4px;font-size:.88em;color:var(--code);word-break:break-all}
+  .wrap{max-width:1280px;margin:0 auto;padding:20px 24px 70px}
+  .top{display:flex;justify-content:space-between;align-items:flex-end;gap:26px;border-bottom:2px solid var(--ink);padding-bottom:12px}
+  .kicker{margin:0 0 4px;font-size:10.5px;letter-spacing:.18em;color:var(--muted)}
+  h1{margin:0;font-size:clamp(21px,2.6vw,29px);line-height:1.3}
+  .lede{margin:5px 0 0;font-size:12px;color:var(--muted);max-width:720px}
+  .lede b{color:var(--ink)}
+  .facts{display:flex;gap:20px;flex:0 0 auto;padding-bottom:3px}
+  .fact b{display:block;font-family:"Songti SC",Georgia,serif;font-size:19px;line-height:1.2;color:var(--accent)}
+  .fact span{display:block;font-size:10px;color:var(--muted);margin-top:1px;white-space:nowrap}
+
+  .canvas{height:calc(100vh - 192px);min-height:560px;display:flex;flex-direction:column;gap:9px;margin-top:10px}
+  .pipeline{flex:1;min-height:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:13px}
+  .node{position:relative;display:flex;flex-direction:column;background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:11px 11px 9px;min-width:0}
+  .node.notrun{border-style:dashed}
+  .node .stamp{position:absolute;top:7px;right:7px;font-size:9px;line-height:1.6;color:var(--bad);border:1px solid var(--bad);padding:0 4px;border-radius:2px;letter-spacing:.08em;background:var(--bad-soft)}
+  .node .num{font-family:"Songti SC",Georgia,serif;font-size:10px;color:var(--accent);letter-spacing:.14em}
+  .node h3{margin:1px 0 5px;font-size:15px;line-height:1.35;padding-right:48px}
+  .node .one{margin:0 0 7px;font-size:11.2px;line-height:1.55;color:var(--ink);min-height:34px}
+  .node ul{margin:0;padding-left:13px;font-size:10.4px;line-height:1.55;color:var(--muted)}
+  .node li{margin-bottom:3px}
+  .node .foot{margin-top:auto;padding-top:7px;border-top:1px dashed var(--line);display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+  .pill{display:inline-block;font-size:9.2px;line-height:1.7;padding:0 5px;border-radius:2px;white-space:nowrap}
+  .p-ok{background:var(--accent-soft);color:var(--accent)}
+  .p-part{background:var(--warn-soft);color:var(--warn)}
+  .p-idle{background:var(--bad-soft);color:var(--bad)}
+  .src{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:8.8px;color:var(--muted);line-height:1.4;word-break:break-all}
+  .node:not(:last-child)::after{content:"›";position:absolute;right:-11px;top:50%;transform:translateY(-50%);font-size:17px;color:var(--line);background:var(--bg);padding:0 1px;z-index:2}
+
+  .kband{display:grid;grid-template-columns:200px minmax(0,1fr);gap:12px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:8px 11px}
+  .kband .kt{font-size:11px;line-height:1.5}
+  .kband .kt b{display:block;font-size:12.5px;color:var(--accent);margin-bottom:1px}
+  .kcells{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px}
+  .kcell{font-size:9.6px;line-height:1.45;color:var(--muted);border-left:2px solid var(--accent);padding-left:6px}
+  .kcell b{display:block;font-size:10.4px;color:var(--ink);font-weight:600}
+  .kcell .lv{color:var(--warn)}
+  .kcell.weak{border-left-color:var(--bad)}
+  .kcell.weak .lv{color:var(--bad)}
+
+  .loop{display:flex;align-items:center;gap:9px;flex-wrap:wrap;border:1px dashed var(--line);border-radius:3px;padding:6px 11px;font-size:10.6px;color:var(--muted)}
+  .loop b{color:var(--bad);font-weight:600}
+  .loop .arrowline{flex:1;min-width:60px;border-top:1px dashed var(--line);height:1px}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:9.8px;color:var(--muted);padding-top:1px}
+  .legend i{display:inline-block;width:9px;height:9px;margin-right:4px;vertical-align:0;border:1px solid var(--line)}
+  .lg-solid{background:var(--paper)}
+  .lg-dash{background:transparent;border-style:dashed!important}
+
+  .details{margin-top:44px;border-top:1px solid var(--line);padding-top:8px}
+  .details h2{font-size:19px;margin:0 0 4px}
+  .details .sub{font-size:11.5px;color:var(--muted);margin:0 0 14px}
+  details{border-top:1px solid var(--line);padding:10px 0}
+  summary{cursor:pointer;font-size:13.5px;font-weight:600;list-style:none;display:flex;align-items:center;gap:8px}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"+";font-family:ui-monospace,monospace;color:var(--accent);font-size:15px;width:14px}
+  details[open] summary::before{content:"−"}
+  details .body{padding:12px 0 4px 22px}
+  .table-wrap{overflow-x:auto;border:1px solid var(--line);margin-top:10px}
+  table{width:100%;border-collapse:collapse;font-size:11.8px;background:var(--paper);min-width:680px}
+  th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6}
+  th{background:var(--bg);font-size:11px;white-space:nowrap}
+  tr:last-child td{border-bottom:0}
+  td code{font-size:9.8px}
+  ul.notes{margin:10px 0 0;padding-left:18px;font-size:12px;color:var(--muted)}
+  ul.notes li{margin-bottom:5px}
+  ul.notes b{color:var(--ink)}
+  .read{margin-top:9px;font-size:11px;color:var(--muted);border-left:2px solid var(--accent);padding-left:9px}
+  .read b{color:var(--accent)}
+  .toggle{position:fixed;right:14px;top:10px;z-index:9;background:var(--paper);border:1px solid var(--line);color:var(--muted);font:inherit;font-size:10.5px;padding:3px 8px;border-radius:2px;cursor:pointer}
+  .toggle:hover{color:var(--accent);border-color:var(--accent)}
+  @media (max-width:1100px){
+    .canvas{height:auto;min-height:0}
+    .pipeline{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .node:not(:last-child)::after{display:none}
+    .kband{grid-template-columns:1fr}
+    .kcells{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .facts{display:none}
+  }
+  @media (max-width:560px){
+    .wrap{padding:14px 12px 60px}
+    .pipeline{grid-template-columns:1fr}
+    .kcells{grid-template-columns:1fr 1fr}
+  }
+</style>
+</head>
+<body>
+<button class="toggle" id="themeBtn" type="button">切换主题</button>
+<div class="wrap">
+
+<div class="top">
+  <div>
+    <p class="kicker">业务架构 / 抖音 FDE 人设账号 / 2026-11-15</p>
+    <h1>这个账号的生意怎么跑起来</h1>
+    <p class="lede">六段一条线：<b>人设 → 内容 → 分发 → 承接 → 成交 → 交付</b>。每段只写两件事：规则定了什么、实际跑到哪。虚线框＝还没跑通，不是已运转。</p>
+  </div>
+  <div class="facts">
+    <div class="fact"><b>6 段</b><span>业务链路</span></div>
+    <div class="fact"><b>0 段</b><span>跑通</span></div>
+    <div class="fact"><b>0 条</b><span>有效私信</span></div>
+    <div class="fact"><b>0 单</b><span>成交</span></div>
+  </div>
+</div>
+
+<div class="canvas">
+  <div class="pipeline">
+
+    <div class="node">
+      <span class="num">01 / 定位</span>
+      <h3>人设与定位</h3>
+      <p class="one">帮不懂技术的人，把重复的活做成能跑的工具。</p>
+      <ul>
+        <li>内容三拍：摆事实 → 翻人话 → 给判断</li>
+        <li>配比 6 涨粉 · 5 建信任 · 4 引私信</li>
+      </ul>
+      <div class="foot">
+        <span class="pill p-ok">方向已定</span>
+        <span class="pill p-part">待拍板</span>
+        <span class="src">道 2 / strategy / 05-给你看 02</span>
+      </div>
+    </div>
+
+    <div class="node notrun">
+      <span class="stamp">未跑通</span>
+      <span class="num">02 / 生产</span>
+      <h3>内容生产</h3>
+      <p class="one">30 天 15 条，两天一更，3 条一批拍。</p>
+      <ul>
+        <li>第一条脚本、批量拍法、工时表已有</li>
+        <li>素材 12 个独立事件，缺 3 个独立故事</li>
+      </ul>
+      <div class="foot">
+        <span class="pill p-ok">规则已定</span>
+        <span class="pill p-idle">0 条拍摄</span>
+        <span class="src">术-30天打法 / 01-执行包</span>
+      </div>
+    </div>
+
+    <div class="node notrun">
+      <span class="stamp">未跑通</span>
+      <span class="num">03 / 分发</span>
+      <h3>渠道分发</h3>
+      <p class="one">抖音唯一内容分发；知乎同稿同步，不改写。</p>
+      <ul>
+        <li>闲鱼只挂 199 诊断，不投流不发内容</li>
+        <li>账号未开，0 条已发</li>
+      </ul>
+      <div class="foot">
+        <span class="pill p-ok">规则已定</span>
+        <span class="pill p-idle">0 条已发</span>
+        <span class="src">道 1 / 术 / 05-给你看 01</span>
+      </div>
+    </div>
+
+    <div class="node notrun">
+      <span class="stamp">未跑通</span>
+      <span class="num">04 / 承接</span>
+      <h3>流量承接</h3>
+      <p class="one">评论区 → 站内私信 → 主动留资，三级不跳级。</p>
+      <ul>
+        <li>北极星：有效私信数（多少钱／能不能做）</li>
+        <li>简介稿 A 不写微信、电话、二维码</li>
+      </ul>
+      <div class="foot">
+        <span class="pill p-ok">规则已定</span>
+        <span class="pill p-idle">0 私信</span>
+        <span class="src">道 5 / 转-05·09·11·37 / 公约原文</span>
+      </div>
+    </div>
+
+    <div class="node notrun">
+      <span class="stamp">未跑通</span>
+      <span class="num">05 / 成交</span>
+      <h3>转化成交</h3>
+      <p class="one">199 诊断 → 8,000 标准件 → 变更 800–1,500。</p>
+      <ul>
+        <li>五条拒单；50% 开工、50% 验收</li>
+        <li>0 成交；另有两套旧价并存（见第二屏）</li>
+      </ul>
+      <div class="foot">
+        <span class="pill p-ok">规则已定</span>
+        <span class="pill p-idle">0 成交</span>
+        <span class="src">道 3 / 交-02·04·07 / business-loop</span>
+      </div>
+    </div>
+
+    <div class="node notrun">
+      <span class="stamp">未跑通</span>
+      <span class="num">06 / 交付</span>
+      <h3>交付</h3>
+      <p class="one">三件套：能跑的流程＋1 次培训＋1 份文档。</p>
+      <ul>
+        <li>输入输出各 ≤5 条；验收单＋5 个工作日异议</li>
+        <li>7 天交付；无首单，工时未实测</li>
+      </ul>
+      <div class="foot">
+        <span class="pill p-ok">规则已定</span>
+        <span class="pill p-idle">无首单</span>
+        <span class="src">交-02·04·28 / 民法典 470 条</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="kband">
+    <div class="kt"><b>知识底座在背后托哪一环</b>623 篇 / 252,961 段<br>可引用 178 · 仅参考 443</div>
+    <div class="kcells">
+      <div class="kcell"><b>定位</b>09 审计＋经验 D1/D6<span class="lv">撑一半</span></div>
+      <div class="kcell weak"><b>生产</b>叙事 / 钩子 / 口播原文<span class="lv">B 库空</span></div>
+      <div class="kcell"><b>分发</b>推荐机制 / 官方规则<span class="lv">有原文</span></div>
+      <div class="kcell"><b>承接</b>法规与公约原文<span class="lv">可引用</span></div>
+      <div class="kcell weak"><b>成交</b>E1/E2 同行情报<span class="lv">他人数据</span></div>
+      <div class="kcell"><b>交付</b>民法典 470＋审计 15<span class="lv">推断级</span></div>
+    </div>
+  </div>
+
+  <div class="loop">
+    <span><b>回流（未跑通）</b>：发布 → 数据 → 归因 → experience.csv → A 库</span>
+    <span class="arrowline"></span>
+    <span>0 条数据，这条线仍是虚线</span>
+  </div>
+
+  <div class="legend">
+    <span><i class="lg-solid"></i>实线：规则与文件已在</span>
+    <span><i class="lg-dash"></i>虚线：执行未跑通</span>
+    <span><b style="color:var(--bad)">未跑通</b>：没有实际产出，不按已运转算</span>
+  </div>
+</div>
+
+<div class="read"><b>读法：</b>先从左到右看六个阶段（生意的顺序）；再看下方「知识底座」六个格子（哪一环有依据、哪一环空）；最后看虚线回流（现在还没启动）。第二屏是按段细账、钱怎么流、口径冲突。</div>
+
+<div class="details">
+  <h2>第二屏：细账与口径</h2>
+  <p class="sub">主图只留结构，这里放每段的依据、已有、缺口和状态。数字与文件均为 2026-11-15 现场核对。</p>
+
+  <details open>
+    <summary>一、六段逐段对账</summary>
+    <div class="body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="width:110px">阶段</th><th style="width:210px">规则依据</th><th>已经有的</th><th>缺什么</th><th style="width:120px">状态</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>人设与定位</td>
+              <td><code>道/02-什么人设.md</code><br><code>strategy/01-strategy-one-pager.md</code></td>
+              <td>一句话人设（稿 A 首句）；三拍结构；6/5/4 内容配比；不服务想学技术的人。</td>
+              <td>账号类型（接活操盘手／卖工具的人）与第一条选题仍写「待你定」；道 2 已锁口号，两处状态不一致。</td>
+              <td>方向已定<br>待拍板</td>
+            </tr>
+            <tr>
+              <td>内容生产</td>
+              <td><code>术/术-30天打法.md</code><br><code>plan-30d/outputs/01-30day-plan.md</code></td>
+              <td>15 条排期；3 条一批共 5 批；第一条脚本；拍摄清单＋六段工时表；12 个独立事件。</td>
+              <td>0 条拍摄、0 条剪辑；缺 3 个完全独立的故事；单条完整工时没有实测。</td>
+              <td>有件<br>未跑</td>
+            </tr>
+            <tr>
+              <td>渠道分发</td>
+              <td><code>道/01-做哪些平台.md</code><br><code>术-30天打法.md</code></td>
+              <td>只发抖音；知乎同稿机械改写；闲鱼只挂 199、不投流不发内容；加平台门槛＝5 条里 3 条有效私信且单条 ≤4h。</td>
+              <td>账号未开；0 条已发；发布时段 20:00–21:00 无 A 库依据（本术自定）；知乎／微博／小红书三处说法不一致。</td>
+              <td>未开始</td>
+            </tr>
+            <tr>
+              <td>流量承接</td>
+              <td><code>道/05-怎么转化.md</code><br><code>转-05·09·11·37</code></td>
+              <td>评论区→私信→留资三级；简介稿 A 四行；有效私信口径；首响 2 小时；私信每天一行记录。</td>
+              <td>0 私信、0 评论；站内与私域转化率「未获取」；小号导流规则没有实测。</td>
+              <td>规则已定<br>未跑</td>
+            </tr>
+            <tr>
+              <td>转化成交</td>
+              <td><code>道/03-交付什么凭什么信.md</code><br><code>business-loop/outputs/01-business-loop.md</code></td>
+              <td>三档：199 诊断／8,000 标准件／变更 800–1,500＋加急 30%；五条拒单；50%＋50% 付款；闲鱼 199 试验田。</td>
+              <td>0 成交；0 份真实报价单；报价口径三套并存（见下）；199 的成交样本在库里是「近半年成交 0」。</td>
+              <td>规则已定<br>未跑</td>
+            </tr>
+            <tr>
+              <td>交付</td>
+              <td><code>交-02·04·28</code><br>民法典第 470 条</td>
+              <td>三件套；输入输出各 ≤5 条；验收单＋3–5 条样例＋5 个工作日异议；7 天交付；文档当天归档。</td>
+              <td>无首单；三件套没有成交样本；7 天工时未实测；没有验收范本。</td>
+              <td>规则已定<br>无首单</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>二、钱怎么流：三档与两道闸</summary>
+    <div class="body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="width:130px">节点</th><th>金额与动作</th><th style="width:250px">依据</th></tr></thead>
+          <tbody>
+            <tr><td>入口</td><td>199 元诊断：60 分钟＋1 页结论，24 小时内给；可抵扣后续项目。</td><td><code>术-30天打法.md</code>「三档报价」</td></tr>
+            <tr><td>主档</td><td>8,000 元标准件：7 天交付，三件套（流程＋培训＋文档）。</td><td>同上；<code>交-04</code></td></tr>
+            <tr><td>变更</td><td>改字段 800／加一步流程 1,200／接一个系统 1,500；加急 +30%；当天书面确认后动工。</td><td><code>交-07</code>；D9-81（E1）＋H-4/IL-60</td></tr>
+            <tr><td>付款</td><td>50% 开工、50% 验收；不接受后付与账期。</td><td><code>转-23</code>（偏好）</td></tr>
+            <tr><td>拒单</td><td>要资质／要账期／要免费小样／预算低于 8,000 却要同等范围／说不清需求且不做 199 诊断。</td><td><code>转-23</code>、<code>转-13</code></td></tr>
+            <tr><td>闲鱼</td><td>只挂 199，不投流、不发内容、不新增内容渠道；定位「成交试验田」。</td><td><code>术-30天打法.md</code>「成交入口」</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="notes">
+        <li><b>没验证的部分：</b>8,000 与 7 天交付没有成交样本；变更单价来自他人 14 单，不是本账号数据；真实毛利、每月能接几单、获客成本都没有实测。</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>三、知识底座支撑哪一环（逐格）</summary>
+    <div class="body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="width:100px">环节</th><th>从 A 库拿什么</th><th style="width:190px">强度</th><th>缺口</th></tr></thead>
+          <tbody>
+            <tr><td>定位</td><td><code>09-判断支撑审计.md</code> 第 1–7 条；经验 D1/D6</td><td>撑一半；多数格子是偏好</td><td>没有客户访谈；平台规模与竞争度未获取</td></tr>
+            <tr><td>生产</td><td>叙事结构、钩子与注意力、口播与语言表达原文</td><td>有原文；但 <code>器/02-B库</code> 状态为空</td><td>对标样本散在 <code>02-调研与对标</code>，没有进 B 库</td></tr>
+            <tr><td>分发</td><td>推荐机制论文、抖音官方规则原文</td><td>有原文</td><td>更新频率与涨粉关系的数据未获取</td></tr>
+            <tr><td>承接</td><td>个保法、广告法、自律公约 13/33/34/35 条</td><td>可引用（原文）</td><td>站内私信转化率未获取</td></tr>
+            <tr><td>成交</td><td>E1/E2 经验（D9-81、H-4/IL-60）＋平台挂牌价</td><td>他人数据，不是本账号成交</td><td>0 份真实报价单、0 单成交</td></tr>
+            <tr><td>交付</td><td>民法典 470 条；审计第 15 条</td><td>有依据的推断</td><td>没有验收范本；7 天工时未实测</td></tr>
+            <tr><td>复盘</td><td><code>experience.csv</code> 回写机制、<code>check_e0.py</code></td><td>机制在，数据为 0</td><td>没有一条自采实测（E3 未产生）</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>四、口径冲突（图里没有抹平）</summary>
+    <div class="body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="width:120px">冲突点</th><th>三种说法</th><th style="width:230px">本图采用</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>报价</td>
+              <td><code>道 3＋术</code>：199／8,000／变更 800–1,500；<code>business-loop</code>：199／1,999／2,800／9,800／39,800；<code>05-给你看/03</code>：199／小工具 1,500 起／智能体 6,000 起。</td>
+              <td>采用道 3＋术的三档（最新拍板口径），另两套在第二屏并列，不合并</td>
+            </tr>
+            <tr>
+              <td>内容时长</td>
+              <td><code>术-30天打法</code>：30–45 秒；<code>30day-plan</code>：20–40 秒三拍；<code>03-combo</code>：2 分钟、3–4 个动作。</td>
+              <td>主图不写时长，只写「一条一个判断」；冲突留在本表</td>
+            </tr>
+            <tr>
+              <td>同步平台</td>
+              <td><code>道 1</code>：知乎、微博只同步；<code>05-给你看/04</code>：知乎、小红书只同步；<code>术</code>：闲鱼只挂 199。</td>
+              <td>主图写「知乎同稿同步」，另两处标为口径不一</td>
+            </tr>
+            <tr>
+              <td>人设状态</td>
+              <td><code>道-六格</code>：第 2 格「用户已定」；<code>05-给你看/02</code>：账号类型与第一条「待你定」。</td>
+              <td>主图标「方向已定／待拍板」，两件事分开算</td>
+            </tr>
+            <tr>
+              <td>成交主战场</td>
+              <td><code>道 1</code>：闲鱼只是 199 试验田；<code>see-and-sell/02-sell</code>：闲鱼是成交主战场，价格带 100–18,888。</td>
+              <td>主图按道 1 画，闲鱼不进主链路；第二屏注明「抖音→外部成交无样本」</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="notes">
+        <li><b>最重要的一条：</b>六段里前四段有规则、后两段只有推断级依据；<b>没有一段有真实执行数据</b>。所以整张图只能是「设计图」，不是「运行图」。</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>五、下一步先动哪一段</summary>
+    <div class="body">
+      <ul class="notes">
+        <li><b>先动第 1 段：</b>账号类型与第一条选题拍板。没有这一步，后面五段都只是纸上规则。</li>
+        <li><b>再动第 2 段：</b>拍第一批 3 条。只有出了素材，第 3 段的「0 条已发」才会变成真实数据。</li>
+        <li><b>第 4–6 段现在不该优化：</b>0 私信、0 成交、无首单，任何话术和报价调整都没有对象。</li>
+        <li><b>知识底座先补 B 库：</b>生产环节的「B 库空」是六格里最直接的空档；对标样本已在 <code>02-调研与对标</code>，只是没有归位。</li>
+      </ul>
+    </div>
+  </details>
+</div>
+
+</div>
+<script>
+(function(){
+  var btn=document.getElementById('themeBtn'), root=document.documentElement;
+  function cur(){var t=root.getAttribute('data-theme');if(t)return t;return window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+  function lab(){btn.textContent=cur()==='dark'?'切换浅色':'切换深色';}
+  btn.addEventListener('click',function(){root.setAttribute('data-theme',cur()==='dark'?'light':'dark');lab();});
+  lab();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+{
+  "manifest_version": "v1",
+  "format": "ndjson",
+  "base_token": "JChjbMdNzaOf2msRkgoc8qK4neb",
+  "table_id": "tblzUjX6KRp0thcz",
+  "rev": 1,
+  "timezone": "Asia/Shanghai",
+  "query_context": {
+    "field_scope": "all_fields",
+    "record_scope": "all_records"
+  },
+  "requested_limit": 100,
+  "records_count": 4,
+  "page_count": 1,
+  "has_more": false,
+  "record_file": "/Users/longyi/project/账号对标/03-决策与复盘/control-plan/work/del-tblzUjX6KRp0thcz.ndjson",
+  "record_file_size_bytes": 1838,
+  "manifest_file": "/Users/longyi/project/账号对标/03-决策与复盘/control-plan/work/del-tblzUjX6KRp0thcz.manifest.json",
+  "columns": {
+    "record_id": {
+      "physical_type": "string",
+      "stats": {
+        "max_length": 16
+      },
+      "example": "reczz28ZVKR9arLh"
+    },
+    "为什么这个配比": {
+      "field_id": "fldZ1pdv7O",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 36
+      },
+      "example": "三条目标冲突时，1 优先于 2，2 优先于 3；配比就是优先级。"
+    },
+    "内容类型": {
+      "field_id": "fld79UGdTb",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 5
+      },
+      "example": "合计"
+    },
+    "占比": {
+      "field_id": "fld59RiEsu",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 4
+      },
+      "example": "70%"
+    },
+    "条数（30天）": {
+      "field_id": "fldnnChDD7",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 0,
+        "min": 1,
+        "max": 15,
+        "avg": 7.5
+      },
+      "example": 3
+    },
+    "每条结构": {
+      "field_id": "fldMKNEkFi",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 46
+      },
+      "example": "7:2:1 折算为 10.5、3、1.5，取整为 11、3、1"
+    },
+    "素材从哪来": {
+      "field_id": "fld19d2Ex6",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 33
+      },
+      "example": "15 条总量不变，两天一更"
+    },
+    "范例": {
+      "field_id": "fldtYNK8lT",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 50
+      },
+      "example": "《不编数据的后台长什么样》"
+    }
+  }
+}

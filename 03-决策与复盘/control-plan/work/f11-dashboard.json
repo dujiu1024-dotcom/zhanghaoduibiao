@@ -1,0 +1,17 @@
+[
+  {"name":"周次","type":"text"},
+  {"name":"接单线索数","type":"number","style":{"type":"plain","precision":0}},
+  {"name":"成交单数","type":"number","style":{"type":"plain","precision":0}},
+  {"name":"客单价","type":"number","style":{"type":"plain","precision":0}},
+  {"name":"复购","type":"number","style":{"type":"plain","precision":0}},
+  {"name":"发布条数","type":"number","style":{"type":"plain","precision":0}},
+  {"name":"平均完播率","type":"number","style":{"type":"plain","precision":1}},
+  {"name":"新增粉丝","type":"number","style":{"type":"plain","precision":0}},
+  {"name":"评论问价人数","type":"number","style":{"type":"plain","precision":0}},
+  {"name":"可演示项目数","type":"number","style":{"type":"plain","precision":0}},
+  {"name":"本月新增案例数","type":"number","style":{"type":"plain","precision":0}},
+  {"name":"接单线瓶颈","type":"text"},
+  {"name":"内容线瓶颈","type":"text"},
+  {"name":"资产线瓶颈","type":"text"},
+  {"name":"下周资源压在哪","type":"text"}
+]

@@ -1,0 +1,10 @@
+[
+  {"name":"案例名","type":"text"},
+  {"name":"客户类型","type":"text"},
+  {"name":"客户原来的做法","type":"text"},
+  {"name":"我们交付了什么","type":"text"},
+  {"name":"省了多少时间或钱","type":"text"},
+  {"name":"能用在哪些内容里","type":"text"},
+  {"name":"能不能进报价单","type":"select","multiple":false,"options":[{"name":"能"},{"name":"不能"},{"name":"待验证"}]},
+  {"name":"对应项目路径","type":"text"}
+]

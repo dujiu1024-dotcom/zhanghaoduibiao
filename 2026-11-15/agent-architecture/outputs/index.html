@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>操盘手 Agent · 业务架构与技术架构</title>
+<style>
+  :root{
+    --bg:#f6f4ee; --paper:#fbfaf6; --ink:#1e2320; --muted:#6c716c;
+    --line:#d8d3c6; --accent:#1f5c4a; --accent-soft:#e6efe9;
+    --warn:#8a5a1f; --warn-soft:#f4ecdf; --bad:#8a3a34; --bad-soft:#f3e6e4;
+  }
+  [data-theme="dark"]{
+    --bg:#15181a; --paper:#1c2022; --ink:#e8e7e1; --muted:#9aa09b;
+    --line:#333a3c; --accent:#79c3a4; --accent-soft:#1e2f29;
+    --warn:#d3a86a; --warn-soft:#2e271b; --bad:#d58f88; --bad-soft:#2f2221;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#15181a; --paper:#1c2022; --ink:#e8e7e1; --muted:#9aa09b;
+      --line:#333a3c; --accent:#79c3a4; --accent-soft:#1e2f29;
+      --warn:#d3a86a; --warn-soft:#2e271b; --bad:#d58f88; --bad-soft:#2f2221;
+    }
+  }
+  *{box-sizing:border-box}
+  html{color-scheme:light dark}
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);color:var(--ink);font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif;font-size:14px;line-height:1.7}
+  h1,h2{font-family:"Songti SC","Noto Serif SC",Georgia,serif;font-weight:600}
+  .wrap{width:100%;max-width:1080px;padding:38px 24px}
+  .kicker{margin:0 0 6px;font-size:10.5px;letter-spacing:.18em;color:var(--muted)}
+  h1{margin:0;font-size:clamp(24px,3.3vw,33px);line-height:1.3}
+  .lede{margin:7px 0 22px;font-size:12.6px;color:var(--muted);max-width:760px}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+  a.card{display:block;text-decoration:none;color:inherit;background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:18px 19px 16px;transition:border-color 120ms ease}
+  a.card:hover{border-color:var(--accent)}
+  .card .no{font-family:"Songti SC",Georgia,serif;font-size:10px;letter-spacing:.14em;color:var(--accent)}
+  .card h2{margin:2px 0 6px;font-size:20px}
+  .card p{margin:0 0 12px;font-size:11.8px;color:var(--muted);min-height:58px}
+  .card .meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px}
+  .card .meta span{font-size:9.6px;padding:1px 6px;border-radius:2px;background:var(--accent-soft);color:var(--accent)}
+  .card .go{font-size:11px;color:var(--accent)}
+  .archive{margin-top:20px;border-top:1px solid var(--line);padding-top:10px}
+  .archive .t{font-size:10px;letter-spacing:.1em;color:var(--muted);margin-bottom:5px}
+  .archive a{display:inline-block;font-size:11px;color:var(--muted);margin-right:18px;text-decoration:none;border-bottom:1px dotted var(--line)}
+  .archive a:hover{color:var(--accent)}
+  .note{margin-top:16px;font-size:10.8px;color:var(--muted);border-left:2px solid var(--accent);padding-left:10px}
+  .toggle{position:fixed;right:14px;top:10px;background:var(--paper);border:1px solid var(--line);color:var(--muted);font:inherit;font-size:10.5px;padding:3px 8px;border-radius:2px;cursor:pointer}
+  @media (max-width:720px){ .cards{grid-template-columns:1fr} .card p{min-height:0} }
+</style>
+</head>
+<body>
+<button class="toggle" id="themeBtn" type="button">切换主题</button>
+<div class="wrap">
+  <p class="kicker">操盘手 Agent / 分工与技术组件 / 2026-11-15</p>
+  <h1>先看这个 agent 怎么分工，再看它由什么组成</h1>
+  <p class="lede">两张图都画「操盘手 agent 本身」，不是账号内容流水线。每张一屏主图，细节在第二屏；下面两张是上一版的留档。</p>
+  <div class="cards">
+    <a class="card" href="agent-business.html">
+      <span class="no">图一 / BUSINESS</span>
+      <h2>Agent 业务架构</h2>
+      <p>用户、主控、子会话三个角色怎么分；一件事从一句话到交付经七道手；哪些位置必须停下来问人；结论、底座、飞书三个出口。</p>
+      <div class="meta"><span>3 角色</span><span>7 道手</span><span>4 类停人</span></div>
+      <div class="go">打开业务架构 →</div>
+    </a>
+    <a class="card" href="agent-technical.html">
+      <span class="no">图二 / TECHNICAL</span>
+      <h2>Agent 技术架构</h2>
+      <p>编排、工具、记忆、知识底座、四道校验闸、交付面六个组件；每个框标真实路径；任务流从输入到回写。</p>
+      <div class="meta"><span>6 组件</span><span>4 道闸</span><span>630 篇 / 263,247 段</span></div>
+      <div class="go">打开技术架构 →</div>
+    </a>
+  </div>
+  <div class="archive">
+    <div class="t">上一版留档（主体是账号生意与项目作业链，不是本 agent）</div>
+    <a href="account-business-pipeline.html">账号业务流水线（原业务架构）</a>
+    <a href="project-ops-chain.html">项目作业链（原技术架构）</a>
+  </div>
+  <p class="note">数字按 2026-11-15 12:20 现场实测；没跑通的环节标红或虚线，不按已运转算。</p>
+</div>
+<script>
+(function(){
+  var btn=document.getElementById('themeBtn'), root=document.documentElement;
+  function cur(){var t=root.getAttribute('data-theme');if(t)return t;return window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+  btn.addEventListener('click',function(){root.setAttribute('data-theme',cur()==='dark'?'light':'dark');});
+})();
+</script>
+</body>
+</html>

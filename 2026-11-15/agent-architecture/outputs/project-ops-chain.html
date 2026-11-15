@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>技术架构 · 五层与十二步</title>
+<style>
+  :root{
+    --bg:#f6f4ee; --paper:#fbfaf6; --ink:#1e2320; --muted:#6c716c;
+    --line:#d8d3c6; --accent:#1f5c4a; --accent-soft:#e6efe9;
+    --warn:#8a5a1f; --warn-soft:#f4ecdf; --bad:#8a3a34; --bad-soft:#f3e6e4;
+    --code:#5b615c;
+  }
+  [data-theme="dark"]{
+    --bg:#15181a; --paper:#1c2022; --ink:#e8e7e1; --muted:#9aa09b;
+    --line:#333a3c; --accent:#79c3a4; --accent-soft:#1e2f29;
+    --warn:#d3a86a; --warn-soft:#2e271b; --bad:#d58f88; --bad-soft:#2f2221;
+    --code:#a4aba5;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#15181a; --paper:#1c2022; --ink:#e8e7e1; --muted:#9aa09b;
+      --line:#333a3c; --accent:#79c3a4; --accent-soft:#1e2f29;
+      --warn:#d3a86a; --warn-soft:#2e271b; --bad:#d58f88; --bad-soft:#2f2221;
+      --code:#a4aba5;
+    }
+  }
+  *{box-sizing:border-box}
+  html{color-scheme:light dark}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif;font-size:14px;line-height:1.7;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4{font-family:"Songti SC","Noto Serif SC",Georgia,serif;font-weight:600}
+  a{color:var(--accent)}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--bg);border:1px solid var(--line);border-radius:2px;padding:0 4px;font-size:.88em;color:var(--code);word-break:break-all}
+  .wrap{max-width:1320px;margin:0 auto;padding:18px 24px 70px}
+  .top{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;border-bottom:2px solid var(--ink);padding-bottom:11px}
+  .kicker{margin:0 0 3px;font-size:10.5px;letter-spacing:.18em;color:var(--muted)}
+  h1{margin:0;font-size:clamp(21px,2.5vw,28px);line-height:1.3}
+  .lede{margin:4px 0 0;font-size:11.8px;color:var(--muted);max-width:760px}
+  .lede b{color:var(--ink)}
+  .facts{display:flex;gap:18px;flex:0 0 auto;padding-bottom:2px}
+  .fact b{display:block;font-family:"Songti SC",Georgia,serif;font-size:18px;line-height:1.2;color:var(--accent)}
+  .fact span{display:block;font-size:9.8px;color:var(--muted);margin-top:1px;white-space:nowrap}
+
+  .canvas{height:calc(100vh - 190px);min-height:560px;display:grid;grid-template-columns:1.24fr 1fr;gap:16px;margin-top:9px}
+  .panel{border:1px solid var(--line);border-radius:3px;background:var(--paper);padding:8px 9px;display:flex;flex-direction:column;min-height:0}
+  .panel-h{display:flex;justify-content:space-between;align-items:baseline;padding:0 1px 5px;border-bottom:1px solid var(--line);margin-bottom:6px}
+  .panel-h h2{margin:0;font-size:12.5px;letter-spacing:.02em}
+  .panel-h span{font-size:9px;color:var(--muted);letter-spacing:.06em}
+
+  .layers{flex:1;display:grid;grid-template-rows:repeat(5,minmax(0,1fr));gap:5px;min-height:0}
+  .lrow{display:grid;grid-template-columns:112px minmax(0,1fr);gap:7px;border:1px solid var(--line);border-radius:2px;padding:5px 6px;background:var(--bg);min-height:0}
+  .lrail h3{margin:0;font-size:11.5px;line-height:1.35}
+  .lrail .idx{font-family:"Songti SC",Georgia,serif;font-size:8px;letter-spacing:.1em;color:var(--accent);display:block}
+  .lrail .role{font-size:8.4px;line-height:1.4;color:var(--muted);margin-top:1px}
+  .lrail .st{display:inline-block;font-size:8px;padding:0 4px;border-radius:2px;margin-top:2px}
+  .chips{display:flex;flex-wrap:wrap;gap:3px;align-content:flex-start;min-width:0}
+  .chip{border:1px solid var(--line);background:var(--paper);border-radius:2px;padding:2px 5px;min-width:0;max-width:100%}
+  .chip b{display:block;font-size:9.6px;line-height:1.35;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .chip span{display:block;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:7.8px;line-height:1.3;color:var(--code);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px}
+  .chip.empty{border-style:dashed;border-color:var(--bad);background:var(--bad-soft)}
+  .chip.empty b{color:var(--bad)}
+  .st-ok{background:var(--accent-soft);color:var(--accent)}
+  .st-part{background:var(--warn-soft);color:var(--warn)}
+  .st-bad{background:var(--bad-soft);color:var(--bad)}
+
+  .chain{flex:1;display:flex;flex-direction:column;justify-content:space-between;min-height:0}
+  .step{display:grid;grid-template-columns:18px minmax(0,1fr);gap:5px;align-items:start}
+  .step .n{width:16px;height:16px;border:1px solid var(--accent);color:var(--accent);border-radius:50%;font-family:"Songti SC",Georgia,serif;font-size:8.5px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .step h4{margin:0;font-size:10.4px;line-height:1.35}
+  .step .w{display:block;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:7.8px;color:var(--muted);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .gate{display:flex;gap:5px;align-items:baseline;border-left:2px solid var(--accent);background:var(--accent-soft);padding:1px 6px;border-radius:0 2px 2px 0;margin:1px 0 1px 4px}
+  .gate b{font-size:8.4px;color:var(--accent);white-space:nowrap;letter-spacing:.02em}
+  .gate span{font-size:8.6px;color:var(--muted);line-height:1.3}
+  .gate.hard{background:var(--bad-soft);border-left-color:var(--bad)}
+  .gate.hard b{color:var(--bad)}
+  .gate.cross{background:var(--warn-soft);border-left-color:var(--warn)}
+  .gate.cross b{color:var(--warn)}
+
+  .legend{grid-column:1 / -1;display:flex;gap:14px;flex-wrap:wrap;font-size:9.6px;color:var(--muted);padding:0 2px}
+  .legend i{display:inline-block;width:9px;height:9px;margin-right:4px;border:1px solid var(--line);vertical-align:0}
+  .lg-ok{background:var(--accent)}
+  .lg-part{background:var(--warn)}
+  .lg-bad{background:var(--bad)}
+
+  .read{margin-top:8px;font-size:10.8px;color:var(--muted);border-left:2px solid var(--accent);padding-left:9px}
+  .read b{color:var(--accent)}
+
+  .details{margin-top:40px;border-top:1px solid var(--line);padding-top:8px}
+  .details h2{font-size:19px;margin:0 0 4px}
+  .details .sub{font-size:11.5px;color:var(--muted);margin:0 0 14px}
+  details{border-top:1px solid var(--line);padding:10px 0}
+  summary{cursor:pointer;font-size:13.5px;font-weight:600;list-style:none;display:flex;align-items:center;gap:8px}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"+";font-family:ui-monospace,monospace;color:var(--accent);font-size:15px;width:14px}
+  details[open] summary::before{content:"−"}
+  details .body{padding:12px 0 4px 22px}
+  .table-wrap{overflow-x:auto;border:1px solid var(--line);margin-top:10px}
+  table{width:100%;border-collapse:collapse;font-size:11.7px;background:var(--paper);min-width:700px}
+  th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6}
+  th{background:var(--bg);font-size:11px;white-space:nowrap}
+  tr:last-child td{border-bottom:0}
+  td code{font-size:9.8px}
+  ul.notes{margin:10px 0 0;padding-left:18px;font-size:12px;color:var(--muted)}
+  ul.notes li{margin-bottom:5px}
+  ul.notes b{color:var(--ink)}
+  .toggle{position:fixed;right:14px;top:10px;z-index:9;background:var(--paper);border:1px solid var(--line);color:var(--muted);font:inherit;font-size:10.5px;padding:3px 8px;border-radius:2px;cursor:pointer}
+  .toggle:hover{color:var(--accent);border-color:var(--accent)}
+  @media (max-width:1080px){
+    .canvas{height:auto;min-height:0;grid-template-columns:1fr}
+    .layers{grid-template-rows:auto}
+    .chain{gap:4px}
+    .facts{display:none}
+    .chip span{max-width:none}
+  }
+  @media (max-width:560px){
+    .wrap{padding:12px 12px 60px}
+    .lrow{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<button class="toggle" id="themeBtn" type="button">切换主题</button>
+<div class="wrap">
+
+<div class="top">
+  <div>
+    <p class="kicker">技术架构 / 账号对标 / 2026-11-15</p>
+    <h1>五层架构与十二步运行链路</h1>
+    <p class="lede">左边五层，右边一条链。<b>第一屏只看结构</b>；每层的真实路径、十道闸门原文、自动与人做的分工，全在第二屏。</p>
+  </div>
+  <div class="facts">
+    <div class="fact"><b>5 层</b><span>4 纵向＋1 横切</span></div>
+    <div class="fact"><b>12 步</b><span>任务到回流</span></div>
+    <div class="fact"><b>10 闸</b><span>7 门禁＋3 脚本</span></div>
+    <div class="fact"><b>623 篇</b><span>kbase.db 实测</span></div>
+  </div>
+</div>
+
+<div class="canvas">
+  <div class="panel">
+    <div class="panel-h"><h2>分层结构</h2><span>上层向下层要依据</span></div>
+    <div class="layers">
+
+      <div class="lrow">
+        <div class="lrail"><span class="idx">第 1 层</span><h3>决策与规则</h3><p class="role">方向、路线、做法、边界</p><span class="st st-part">术 6 份空</span></div>
+        <div class="chips">
+          <div class="chip"><b>宪法</b><span>AGENTS.md</span></div>
+          <div class="chip"><b>道·六格</b><span>道/01–06 + 汇总</span></div>
+          <div class="chip"><b>法·收敛</b><span>法-收敛.md</span></div>
+          <div class="chip"><b>术·打法</b><span>术-30天打法.md</span></div>
+          <div class="chip"><b>偏差清单</b><span>术-执行物偏差清单.md</span></div>
+          <div class="chip empty"><b>术动作 01–06</b><span>状态：空</span></div>
+        </div>
+      </div>
+
+      <div class="lrow">
+        <div class="lrail"><span class="idx">第 2 层</span><h3>执行</h3><p class="role">脚本、清单、合规、作业</p><span class="st st-part">上游为空</span></div>
+        <div class="chips">
+          <div class="chip"><b>合规扫描</b><span>01-执行包/check_copy.py</span></div>
+          <div class="chip"><b>内容件</b><span>02-video1 / 04-shoot / 05-简介</span></div>
+          <div class="chip"><b>渠道件</b><span>03-zhihu / 03-xianyu</span></div>
+          <div class="chip"><b>发布前闸</b><span>06-发布前30秒自查.md</span></div>
+          <div class="chip"><b>作业系统</b><span>log_task.py + sop_tables.json</span></div>
+        </div>
+      </div>
+
+      <div class="lrow">
+        <div class="lrail"><span class="idx">第 3 层</span><h3>知识底座</h3><p class="role">依据、原文、经验、复盘</p><span class="st st-part">账本滞后</span></div>
+        <div class="chips">
+          <div class="chip"><b>三路检索</b><span>rag/rag.py + kbase.db</span></div>
+          <div class="chip"><b>二手/来源不明</b><span>SECONDHAND / INDEX_ONLY</span></div>
+          <div class="chip"><b>目录 460 条</b><span>catalog.csv + data1–10.py</span></div>
+          <div class="chip"><b>门槛 77 格</b><span>check_gate.py</span></div>
+          <div class="chip"><b>经验 120 条</b><span>experience.csv</span></div>
+          <div class="chip"><b>假设池 89 条</b><span>industry-lore.csv</span></div>
+          <div class="chip"><b>原文目录</b><span>sources/books·papers·fulltext</span></div>
+          <div class="chip"><b>诈骗样本</b><span>rag/scam-corpus.db</span></div>
+        </div>
+      </div>
+
+      <div class="lrow">
+        <div class="lrail"><span class="idx">第 4 层</span><h3>外部系统</h3><p class="role">供料、写进度、回流数据</p><span class="st st-part">导出滞后</span></div>
+        <div class="chips">
+          <div class="chip"><b>飞书 SOP</b><span>sop_tables.json（11 表）</span></div>
+          <div class="chip"><b>道法术器 base</b><span>00/01/02/03/04/结论</span></div>
+          <div class="chip"><b>书籍清单</b><span>tblj1FWohIQI4gYB</span></div>
+          <div class="chip"><b>飞书 wiki</b><span>FDE OPC 资产库 228 节点</span></div>
+          <div class="chip"><b>取件渠道</b><span>Gutenberg/DOAB/OpenAlex</span></div>
+          <div class="chip"><b>平台数据</b><span>抖音网页版 / 评论区</span></div>
+        </div>
+      </div>
+
+      <div class="lrow">
+        <div class="lrail"><span class="idx">第 5 层</span><h3>协同（横切）</h3><p class="role">谁在干活、何时自动跑</p><span class="st st-bad">定时未证</span></div>
+        <div class="chips">
+          <div class="chip"><b>主控会话</b><span>收任务/查库/出判断</span></div>
+          <div class="chip"><b>取件线</b><span>work/book-scout-1…5</span></div>
+          <div class="chip"><b>入库线</b><span>rag.py ingest / build.py</span></div>
+          <div class="chip"><b>经验线</b><span>experience.csv</span></div>
+          <div class="chip"><b>飞书线</b><span>lark-cli</span></div>
+          <div class="chip empty"><b>定时 3 项</b><span>仅 AGENTS.md 文字记录</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-h"><h2>运行链路</h2><span>顺序向下，闸门卡住即停</span></div>
+    <div class="chain">
+      <div class="step"><span class="n">1</span><div><h4>任务进来</h4><span class="w">用户 / SOP 表行 / 定时</span></div></div>
+      <div class="step"><span class="n">2</span><div><h4>查 A 库</h4><span class="w">rag.py search「自然问句」</span></div></div>
+      <div class="gate"><b>闸①</b><span>查不到＝「库内无依据」，判断不许开工</span></div>
+      <div class="step"><span class="n">3</span><div><h4>出判断</h4><span class="w">标类型 + 自驳三轮 + 审查闸</span></div></div>
+      <div class="gate"><b>闸②</b><span>挂不上依据不进道，只能标偏好</span></div>
+      <div class="step"><span class="n">4</span><div><h4>道·六格</h4><span class="w">道/01–06 + 道-六格汇总.md</span></div></div>
+      <div class="gate"><b>闸③</b><span>道未定，法只许写候选</span></div>
+      <div class="step"><span class="n">5</span><div><h4>法·路线</h4><span class="w">法-收敛.md（154→24）</span></div></div>
+      <div class="gate"><b>闸④</b><span>法未收敛，术不许选路</span></div>
+      <div class="step"><span class="n">6</span><div><h4>术·选路</h4><span class="w">术-30天打法.md（24→19）</span></div></div>
+      <div class="gate hard"><b>闸⑤</b><span>术未定不许出执行物；当前 6 份术动作文件为空</span></div>
+      <div class="step"><span class="n">7</span><div><h4>器 / 执行物</h4><span class="w">check_copy.py + 发布前自查</span></div></div>
+      <div class="gate"><b>闸⑥</b><span>硬禁命中必须改到 0 才许发</span></div>
+      <div class="step"><span class="n">8</span><div><h4>发布</h4><span class="w">抖音（唯一内容分发）</span></div></div>
+      <div class="step"><span class="n">9</span><div><h4>数据</h4><span class="w">48h 记有效私信；万赞以下读不到</span></div></div>
+      <div class="gate"><b>闸⑦</b><span>没有执行，不许做归因</span></div>
+      <div class="step"><span class="n">10</span><div><h4>归因</h4><span class="w">术/06（状态：空）</span></div></div>
+      <div class="step"><span class="n">11</span><div><h4>回写经验</h4><span class="w">experience.csv / industry-lore.csv</span></div></div>
+      <div class="gate"><b>闸 E0</b><span>E0 不进合规/报价/平台规则/合同</span></div>
+      <div class="step"><span class="n">12</span><div><h4>回流知识库</h4><span class="w">data1–10 → build.py → ingest</span></div></div>
+      <div class="gate"><b>闸 DATA</b><span>重复/档位/编号冲突不清不入库</span></div>
+      <div class="gate cross"><b>闸⑧</b><span>答不出「服从上游哪条」→ 撤回重做</span></div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span><i class="lg-ok"></i>已落地／可跑</span>
+    <span><i class="lg-part"></i>部分落地／数字滞后</span>
+    <span><i class="lg-bad"></i>空壳／无证据</span>
+    <span>虚线框：文件在，内容是空的</span>
+  </div>
+</div>
+
+<div class="read"><b>读法：</b>先看右列 1→12（一件事怎么走完全程），再回到左列找每一步落在哪一层，最后看闸门颜色——红色那道（闸⑤）是现在真正卡住的位置。</div>
+
+<div class="details">
+  <h2>第二屏：路径、闸门与分工</h2>
+  <p class="sub">主图只留名字与状态；这里保留上一版的路径、闸门原文、自动/人工分工和不一致清单。</p>
+
+  <details open>
+    <summary>一、五层职责与真实路径</summary>
+    <div class="body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="width:86px">层</th><th style="width:180px">负责什么</th><th>关键文件与实测状态</th></tr></thead>
+          <tbody>
+            <tr><td>决策与规则</td><td>定方向、路线、做法、边界；决定下游能不能开工</td><td><code>AGENTS.md</code>（大前提＋七门禁）；<code>道/01–06</code> 六格已填（4 偏好 / 2 推断）；<code>法-收敛.md</code> 154→24；<code>术-30天打法.md</code> 24→19；<code>术/01–06</code> <b>六份全空</b>。</td></tr>
+            <tr><td>执行</td><td>把术变成能发、能交付、能过审的东西</td><td><code>check_copy.py</code>＋白名单；五件执行物（脚本、拍摄清单、主页、知乎、闲鱼）；<code>06-发布前30秒自查</code>；<code>log_task.py</code>＋<code>sop_tables.json</code>。执行物按旧术校准过，但上游为空。</td></tr>
+            <tr><td>知识底座</td><td>供判断依据、执行原文、复盘经验</td><td><code>rag.py</code>＋<code>kbase.db</code>：<b>623 篇 / 252,961 段</b>，可引用 178、仅参考 443；<code>catalog.csv</code> <b>460 条</b>，源在 <code>work/catalog/data1–10.py</code>；<code>check_gate.py</code> HARD_TOTAL＝77；<code>experience.csv</code> 120 条（E1 71/E2 38/E3 11）；<code>industry-lore.csv</code> 89 条（E0 52）；<code>scam-corpus.db</code> 隔离。</td></tr>
+            <tr><td>外部系统</td><td>供料与回流</td><td>飞书 SOP base <code>QSqGbh…</code>，<code>sop_tables.json</code> 登记 <b>11 个 table id</b>；道法术器 base 导出 00/01/02/03/04/全局结论；书籍清单 <code>tblj1FWohIQI4gYB</code>；wiki 228 节点；取件渠道 Gutenberg/DOAB/OAPEN/OpenAlex/GitHub/HuggingFace。</td></tr>
+            <tr><td>协同（横切）</td><td>谁干活、何时自动跑、结果写哪</td><td>主控会话；取件线 <code>work/book-scout-1…5</code>；入库线 <code>rag.py ingest</code>＋<code>build.py</code>；经验线；飞书线 <code>lark-cli</code>；定时三项只有 <code>AGENTS.md</code> 第 122 行文字记录。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>二、十道闸门：位置、规则、卡住后果</summary>
+    <div class="body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="width:54px">闸</th><th style="width:130px">位置</th><th>规则</th><th style="width:220px">卡住 → 后果</th></tr></thead>
+          <tbody>
+            <tr><td>①</td><td>A 库 → 判断</td><td>查不到就写「库内无依据」；check_gate.py 77 格门槛不过，不算已有原文。</td><td>判断不许开工，只能记缺口。</td></tr>
+            <tr><td>②</td><td>判断 → 道</td><td>六格每格挂至少一条 A 库依据，或明确标偏好。</td><td>道不许填，法更不许列。</td></tr>
+            <tr><td>③</td><td>道 → 法</td><td>道未定不许列法；反向发现道有问题先改道。</td><td>法只许写候选，不许下结论。</td></tr>
+            <tr><td>④</td><td>法 → 术</td><td>法未收敛不许出术；四判据分数只用于排序。</td><td>术不许选路，更不许出动作。</td></tr>
+            <tr><td>⑤</td><td>术 → 执行物</td><td>术未定不许出执行物；执行物必须写清服从哪条术。</td><td><b>当前实际卡住</b>：六份术动作文件为空。</td></tr>
+            <tr><td>⑥</td><td>发布前</td><td>check_copy.py 硬禁命中必须改到 0；白名单只收误报，五字段留痕。</td><td>不许发布；软禁命中转人工复核。</td></tr>
+            <tr><td>⑦</td><td>执行 → 归因</td><td>没有实际执行不许归因；归因必须标【实测】并回写。</td><td>归因不许写，止于「未获取」。</td></tr>
+            <tr><td>E0</td><td>经验 → 判断</td><td>check_e0.py：E0 不进合规、报价、平台规则、合同四类。</td><td>该判断作废；四类只认原文。</td></tr>
+            <tr><td>DATA</td><td>入库前</td><td>check_data.py：重复、缺字段、档位、编号冲突。</td><td>库不更新，下游仍读旧库。</td></tr>
+            <tr><td>⑧</td><td>横切</td><td>任一产出必须回答「服从上游哪一条」。</td><td>产出无效，撤回重做。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>三、哪些自动、哪些必须人做</summary>
+    <div class="body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="width:120px">环节</th><th style="width:70px">归属</th><th>具体做什么</th><th style="width:240px">落在哪</th></tr></thead>
+          <tbody>
+            <tr><td>检索与无答案判定</td><td>自动</td><td>三路融合；不过线直接报「库内无相关内容」</td><td><code>rag.py search</code></td></tr>
+            <tr><td>入库切段与向量</td><td>自动</td><td>切段、算向量、写质量档、重复执行不重复</td><td><code>rag.py ingest</code></td></tr>
+            <tr><td>目录重建</td><td>自动</td><td>从 data1–10.py 生成 catalog.csv</td><td><code>work/catalog/build.py</code></td></tr>
+            <tr><td>门槛与数据自检</td><td>自动</td><td>77 格三层门槛；重复、档位、编号冲突</td><td><code>check_gate.py</code> / <code>check_data.py</code></td></tr>
+            <tr><td>文案合规</td><td>自动</td><td>硬禁清零、软禁提示、白名单只收误报</td><td><code>01-执行包/check_copy.py</code></td></tr>
+            <tr><td>E0 越界</td><td>自动</td><td>扫道法术器与决策复盘</td><td><code>experience/check_e0.py</code></td></tr>
+            <tr><td>取件筛查</td><td>半自动</td><td>批量匹配公版库与开放库；不确定命中要人核</td><td><code>work/book-scout-*</code></td></tr>
+            <tr><td>按表写日志</td><td>半自动</td><td>写状态、时间、下一行；check 五类违规</td><td><code>log_task.py</code></td></tr>
+            <tr><td>判断起草</td><td>半自动</td><td>AI 出草稿与自驳三轮，采信在人</td><td><code>AGENTS.md</code> 判断规则</td></tr>
+            <tr><td>经验定级</td><td>半自动</td><td>AI 录入，E1/E2/E3 升级由人核来源独立性</td><td><code>experience.csv</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="notes">
+        <li><b>必须人拍板：</b>道六格里 4 格偏好（只做抖音、一句话人设、只做个体小微、节奏与四条止损阈值）。</li>
+        <li><b>必须人做：</b>出镜、拍摄、点发布、回私信；8–12 人客户访谈；首单交付；价格测试。</li>
+        <li><b>必须人授权：</b>采购与书稿授权、扫码登录、账号实名。</li>
+        <li><b>只能人产生：</b>E3 实测数据。库里 0 条自采实测，这是当前最大的空档。</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>四、读文件发现的不一致（保留）</summary>
+    <div class="body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="width:30px">#</th><th style="width:200px">不一致在哪</th><th>事实（现场核过）</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>SOP 表到底几张</td><td><code>log_task.py</code> 写「七张」；<code>sop_tables.json</code> 登记 <b>t1–t11 共 11 个</b>；<code>17-飞书收拢分类</code> 数出 8 保留＋1 结论＋2 归档＝11。三处口径不同。</td></tr>
+            <tr><td>2</td><td>catalog 与经验条数</td><td>README 355 条、三本账 358 条、<code>catalog.csv</code> 实测 <b>460 条</b>；两文件引用经验 35 条，<code>experience.csv</code> 实测 <b>120 条</b>。</td></tr>
+            <tr><td>3</td><td>检索库规模</td><td>rag README 68 篇/2,718 段；彩排记录 478 篇/137,421 段；<code>05-给你看/01</code> 472 篇；当前 <b>623 篇/252,961 段</b>。</td></tr>
+            <tr><td>4</td><td>道法术器导出滞后</td><td>11-15 11:34 导出写 00 知识底座 478 篇，本地已 623 篇；04 器 12 条完成 0；本地无该 base 连接配置。</td></tr>
+            <tr><td>5</td><td>定时任务无落地证据</td><td><code>a169593e</code> 只在 <code>AGENTS.md</code> 第 122 行；无调度配置、无运行日志。书籍监控只有 <code>books-watch*</code>；进度汇报只有 <code>05-给你看/</code> 六份文档。</td></tr>
+            <tr><td>6</td><td>术层只有选路</td><td><code>术/01–06</code> 六份全「状态：空」；只有 <code>术-30天打法</code> 与 <code>偏差清单</code> 有正文。</td></tr>
+            <tr><td>7</td><td>器层基本空壳</td><td><code>器/02-B库</code>、<code>03-生产工具</code>、<code>04-数据与渠道</code> 全空；<code>01-A库</code> 仍写 65 项（2026-11-14）。</td></tr>
+            <tr><td>8</td><td>路径与描述偏差</td><td>采购清单在 <code>knowledge/sources/00-资料采购清单.md</code>；法规在 <code>sources/fulltext/law/</code>；<code>data1–10.py</code> 在根 <code>work/catalog/</code>。</td></tr>
+            <tr><td>9</td><td>链路缺端到端验证</td><td><code>2026-11-15-彩排中止记录</code>：<code>rag.py stats</code> 两次空输出；search 实调 0 次；check_copy 未实跑。</td></tr>
+            <tr><td>10</td><td>「完成」口径风险</td><td><code>05-给你看</code> 数字来自旧库；AGENTS 要求报完成前真实任务实跑，彩排已中止，这一步没发生。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>五、三个断点</summary>
+    <div class="body">
+      <ul class="notes">
+        <li><b>最大断点：</b>术（做法）为空 → 器与执行物没有上游 → 链路第 6 步之后实际不可开工。是规则问题，不是算力问题。</li>
+        <li><b>第二断点：</b>三个定时任务只有文字记录，按表作业实际靠人工触发。</li>
+        <li><b>第三断点：</b>账本与 README 落后于库，任何「完成」汇报都必须先现场数。</li>
+      </ul>
+    </div>
+  </details>
+</div>
+
+</div>
+<script>
+(function(){
+  var btn=document.getElementById('themeBtn'), root=document.documentElement;
+  function cur(){var t=root.getAttribute('data-theme');if(t)return t;return window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+  function lab(){btn.textContent=cur()==='dark'?'切换浅色':'切换深色';}
+  btn.addEventListener('click',function(){root.setAttribute('data-theme',cur()==='dark'?'light':'dark');lab();});
+  lab();
+})();
+</script>
+</body>
+</html>

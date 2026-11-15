@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>知识图谱 · FDE 抖音账号</title>
+<style>
+:root{
+  --paper:#f7f5f0; --paper-2:#fbfaf6; --panel:#f3f0e9;
+  --ink:#23211d; --ink-2:#4a463f; --muted:#7d766a; --faint:#a49b8c;
+  --line:#ded7c9; --line-2:#cec6b6;
+  --accent:#2f5d4f;
+  --serif:"Songti SC","Source Han Serif SC","Noto Serif CJK SC","STSong",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sans);font-size:13px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+button,input{font-family:inherit;font-size:inherit;color:inherit}
+button{background:none;border:none;cursor:pointer}
+a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(47,93,79,.28)}
+a:hover{border-bottom-color:var(--accent)}
+
+#app{display:grid;grid-template-columns:264px minmax(0,1fr) 348px;height:100vh;overflow:hidden}
+
+/* ---------- 左侧 ---------- */
+#side{
+  border-right:1px solid var(--line);padding:22px 18px 16px;
+  overflow-y:auto;background:var(--paper);display:flex;flex-direction:column;gap:18px;
+}
+.brand h1{font-family:var(--serif);font-size:21px;font-weight:600;letter-spacing:.06em;margin:0 0 4px}
+.brand .sub{margin:0;color:var(--muted);font-size:11.5px;letter-spacing:.03em}
+.search{position:relative}
+.search input{
+  width:100%;padding:7px 9px;border:1px solid var(--line-2);background:var(--paper-2);
+  border-radius:2px;outline:none;
+}
+.search input:focus{border-color:var(--accent)}
+#results{position:absolute;top:100%;left:0;right:0;z-index:20;background:var(--paper-2);
+  border:1px solid var(--line-2);border-top:none;max-height:260px;overflow-y:auto;display:none}
+#results.on{display:block}
+#results button{display:block;width:100%;text-align:left;padding:6px 9px;border-bottom:1px solid var(--line);font-size:12px}
+#results button:hover{background:var(--panel)}
+#results .rt{color:var(--faint);font-size:10.5px;margin-left:6px}
+
+section h2{
+  font-family:var(--serif);font-size:12px;font-weight:600;letter-spacing:.12em;
+  color:var(--muted);margin:0 0 8px;text-transform:none;
+}
+.filters{display:flex;flex-direction:column;gap:5px}
+.frow{display:flex;align-items:center;gap:8px;padding:2px 0;font-size:12.5px;color:var(--ink-2)}
+.frow input{accent-color:var(--accent);margin:0;width:13px;height:13px}
+.frow .num{margin-left:auto;color:var(--faint);font-size:11px;font-variant-numeric:tabular-nums}
+.lrow{
+  display:flex;align-items:baseline;gap:6px;width:100%;text-align:left;
+  padding:4px 5px;margin-left:-5px;border-radius:2px;font-size:12.5px;color:var(--ink-2);
+}
+.lrow:hover{background:var(--panel)}
+.lrow.on{background:#e8eee9;color:var(--accent)}
+.lrow .nm{font-family:var(--serif);font-size:13px}
+.lrow .cnt{margin-left:auto;color:var(--faint);font-size:10.5px;font-variant-numeric:tabular-nums}
+.lrow .miss{color:#8a5b3f}
+.lrow .na{color:#8b8375}
+.switch{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2);cursor:pointer}
+.switch input{accent-color:var(--accent);margin:0}
+.legend{font-size:11.5px;color:var(--muted)}
+.legend .li{display:flex;align-items:center;gap:8px;margin:5px 0}
+.legend svg{flex:0 0 34px}
+.legend .sh{flex:0 0 34px;display:flex;justify-content:center}
+.foot{margin-top:auto;padding-top:10px;border-top:1px solid var(--line);color:var(--faint);font-size:10.5px;line-height:1.7}
+.foot b{font-weight:600;color:var(--muted)}
+
+/* ---------- 画布 ---------- */
+#stage{position:relative;overflow:hidden;background:var(--paper)}
+#cv{display:block;width:100%;height:100%;cursor:grab}
+#cv.dragging{cursor:grabbing}
+#topbar{position:absolute;top:auto;bottom:34px;right:14px;display:flex;gap:6px;align-items:center}
+#topbar button{
+  border:1px solid var(--line-2);background:rgba(251,250,246,.9);
+  padding:4px 9px;border-radius:2px;color:var(--ink-2);font-size:11.5px;
+}
+#topbar button:hover{border-color:var(--accent);color:var(--accent)}
+#hint{position:absolute;left:14px;bottom:12px;color:var(--faint);font-size:10.5px;letter-spacing:.02em;pointer-events:none}
+#stats{position:absolute;right:14px;bottom:12px;color:var(--faint);font-size:10.5px;font-variant-numeric:tabular-nums}
+
+/* ---------- 右侧 ---------- */
+#panel{
+  border-left:1px solid var(--line);background:var(--panel);overflow-y:auto;padding:20px 20px 40px;
+}
+#panel .empty{color:var(--muted);font-size:12px;line-height:1.9}
+#panel .empty h2{font-family:var(--serif);font-size:17px;font-weight:600;color:var(--ink);margin:0 0 10px}
+.kicker{font-size:10.5px;letter-spacing:.16em;color:var(--faint);margin-bottom:6px}
+#panel h2.title{font-family:var(--serif);font-size:20px;line-height:1.35;font-weight:600;margin:0 0 10px}
+.badges{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+.badge{font-size:10.5px;padding:2px 6px;border:1px solid var(--line-2);border-radius:2px;color:var(--muted);background:var(--paper-2)}
+.badge.st-missing,.badge.st-mentioned,.badge.st-unverified,.badge.st-expected{border-color:#c8b49f;color:#8a5b3f}
+.badge.st-supported{border-color:#b6c8bd;color:var(--accent)}
+.badge.st-na{border-color:#b9b2a4;color:var(--muted);border-style:solid;background:#ece9e2}
+.badge.ev-sourced{border-color:#b6c8bd;color:var(--accent)}
+.badge.ev-boundary{border-color:#c9c1b1;color:#6d6353}
+.badge.ev-inferred{border-color:#c9c1b1;color:#6d6353;background:#efebe3}
+.badge.ev-none{border-color:#c8a98e;color:#8a5b3f}
+.badge.ev-rumor{border-color:#c8a98e;color:#8a5b3f;border-style:dashed}
+.evbar{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 12px}
+.evbar span{font-size:10.5px;border:1px solid var(--line-2);padding:2px 6px;border-radius:2px;color:var(--muted);background:var(--paper-2)}
+.evbar span.none,.evbar span.rumor{border-color:#c8a98e;color:#8a5b3f}
+.statgrid.na b{color:#8b8375}
+.def{font-size:13px;line-height:1.85;color:var(--ink-2);margin:0 0 16px}
+.sec-t{font-size:10.5px;letter-spacing:.14em;color:var(--faint);margin:18px 0 6px}
+.kv{font-size:12px;line-height:1.75;color:var(--ink-2);margin:0 0 4px}
+.kv .k{color:var(--faint);display:inline-block;min-width:52px}
+.docbox{border-left:2px solid var(--line-2);padding:6px 0 6px 10px;font-size:11.5px;color:var(--muted);line-height:1.8;word-break:break-all}
+.rel{display:flex;flex-direction:column;gap:3px}
+.rel button{text-align:left;font-size:12px;color:var(--ink-2);padding:3px 0;border-bottom:1px dashed transparent}
+.rel button:hover{color:var(--accent);border-bottom-color:rgba(47,93,79,.3)}
+.rel .arrow{color:var(--faint);margin-right:5px;font-size:10.5px}
+.rel .why{display:block;color:var(--faint);font-size:10.5px;line-height:1.5;margin-top:1px}
+.statgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin:6px 0 14px}
+.statgrid div{background:var(--paper-2);padding:9px 4px;text-align:center}
+.statgrid b{display:block;font-family:var(--serif);font-size:19px;font-weight:600;line-height:1.2}
+.statgrid span{font-size:10px;color:var(--faint);letter-spacing:.06em}
+.statgrid div.miss b{color:#8a5b3f}
+.layertext{font-size:12px;line-height:1.85;color:var(--ink-2);margin:0 0 8px}
+.layertext b{color:var(--muted);font-weight:600;font-size:11px;letter-spacing:.06em}
+.grouplist{margin-top:4px}
+.grouplist .gt{font-size:10.5px;color:var(--faint);letter-spacing:.1em;margin:10px 0 3px}
+.grouplist button{display:block;width:100%;text-align:left;font-size:12px;color:var(--ink-2);padding:2px 0}
+.grouplist button:hover{color:var(--accent)}
+.grouplist .m{color:#8a5b3f;font-size:10px;margin-left:4px}
+.grouplist .e{color:var(--faint);font-size:10px;margin-left:4px}
+
+#mobileBar{display:none}
+@media (max-width:980px){
+  #app{grid-template-columns:1fr;height:100dvh}
+  #side{
+    position:absolute;z-index:30;top:0;left:0;bottom:0;width:270px;
+    transform:translateX(-101%);transition:transform .16s ease;border-right:1px solid var(--line-2);
+  }
+  #side.open{transform:none}
+  #panel{
+    position:absolute;z-index:25;left:0;right:0;bottom:0;max-height:58dvh;
+    border-left:none;border-top:1px solid var(--line-2);transform:translateY(101%);
+    transition:transform .16s ease;padding:16px 16px 28px;
+  }
+  #panel.open{transform:none}
+  #mobileBar{
+    display:flex;gap:6px;position:absolute;bottom:12px;left:12px;z-index:26;
+  }
+  #mobileBar button{border:1px solid var(--line-2);background:rgba(251,250,246,.94);padding:5px 10px;border-radius:2px;font-size:11.5px}
+  #topbar{left:auto;right:12px}
+  #hint{display:none}
+  #stats{display:none}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <aside id="side">
+    <div class="brand">
+      <h1>知识图谱</h1>
+      <p class="sub">FDE 抖音账号 · 六层主干 · 缺口可见</p>
+    </div>
+    <div class="search">
+      <input id="q" placeholder="搜索节点（按 / 聚焦）" autocomplete="off">
+      <div id="results"></div>
+    </div>
+    <section>
+      <h2>节点类型</h2>
+      <div class="filters" id="typeFilters"></div>
+    </section>
+    <section>
+      <h2>层级（点一层看缺口）</h2>
+      <div class="filters" id="layerFilters"></div>
+    </section>
+    <section>
+      <h2>证据分级（能不能对外引用）</h2>
+      <div class="filters" id="evFilters"></div>
+    </section>
+    <section>
+      <h2>知识维度</h2>
+      <div class="filters" id="dimFilters"></div>
+    </section>
+    <section>
+      <label class="switch"><input type="checkbox" id="gapOnly"> 只看缺口 / 不可引用</label>
+    </section>
+    <section class="legend">
+      <h2>读法</h2>
+      <div class="li"><span class="sh"><svg width="14" height="14"><circle cx="7" cy="7" r="5" fill="#23211d"/></svg></span>理论 / 模型</div>
+      <div class="li"><span class="sh"><svg width="14" height="14"><rect x="3" y="3" width="9" height="9" fill="#4c4740"/></svg></span>动作</div>
+      <div class="li"><span class="sh"><svg width="14" height="14"><path d="M7 3 L11 7 L7 11 L3 7 Z" fill="#6f6759"/></svg></span>指标</div>
+      <div class="li"><span class="sh"><svg width="14" height="14"><circle cx="7" cy="7" r="6" fill="none" stroke="#2f5d4f" stroke-width="1.6"/></svg></span>层级</div>
+      <div class="li"><span class="sh"><svg width="14" height="14"><circle cx="7" cy="7" r="5" fill="none" stroke="#8b8375" stroke-width="1.4" stroke-dasharray="2 2"/></svg></span>缺口（文档提到但没展开 / 缺失）</div>
+      <div class="li"><span class="sh"><svg width="14" height="14"><circle cx="7" cy="7" r="5" fill="none" stroke="#8b8375" stroke-width="1"/><line x1="3" y1="11" x2="11" y2="3" stroke="#8b8375" stroke-width="1"/></svg></span>不适用（主动判定不做）</div>
+      <div class="li"><span class="sh"><svg width="14" height="14"><circle cx="7" cy="7" r="5" fill="none" stroke="#b5ad9d" stroke-width="1.2" stroke-dasharray="2 2"/><text x="7" y="10" font-size="7" text-anchor="middle" fill="#a49b8c">空</text></svg></span>占位（应有但全库没有）</div>
+      <div class="li"><span class="sh"><svg width="14" height="14"><rect x="9" y="2" width="4" height="4" fill="#a49b8c"/></svg></span>证据：实心小块 = 经验推断</div>
+      <div class="li"><span class="sh"><svg width="14" height="14"><circle cx="11" cy="4" r="2.6" fill="none" stroke="#8b8375"/></svg></span>证据：空心圈 = 需注意边界</div>
+      <div class="li"><span class="sh"><svg width="14" height="14"><path d="M8 1 L14 7 M14 1 L8 7" stroke="#8a5b3f" stroke-width="1.1"/></svg></span>证据：叉 = 未获取</div>
+      <div class="li"><span class="sh"><svg width="14" height="14"><text x="9" y="9" font-size="9" font-weight="700" fill="#8a5b3f">?</text></svg></span>证据：问号 = 传闻</div>
+      <div class="li"><svg width="34" height="8"><line x1="0" y1="4" x2="34" y2="4" stroke="#2f5d4f" stroke-opacity=".55" stroke-width="1.2"/></svg>驱动</div>
+      <div class="li"><svg width="34" height="8"><line x1="0" y1="4" x2="34" y2="4" stroke="#a9a192" stroke-width="1" stroke-dasharray="3 3"/></svg>度量</div>
+      <div class="li"><svg width="34" height="8"><line x1="0" y1="4" x2="34" y2="4" stroke="#6f6a5e" stroke-width="2.2" stroke-opacity=".55"/></svg>依赖（前层→后层）</div>
+      <div class="li"><svg width="34" height="8"><line x1="0" y1="4" x2="34" y2="4" stroke="#8b8375" stroke-width="1" stroke-dasharray="1 3"/></svg>引用</div>
+    </section>
+    <div class="foot">
+      <b>状态</b>：已有文档支撑 / 只有提及没有展开 / 缺失 / 待确认。<br>
+      <b>数据</b>：<span id="metaline"></span><br>
+      <b>口径</b>：节点只从 knowledge/ 抽取，不编造；归属拿不准的标「待确认」，不硬连边。
+    </div>
+  </aside>
+
+  <main id="stage">
+    <canvas id="cv"></canvas>
+    <div id="mobileBar">
+      <button id="mFilter">筛选</button>
+      <button id="mDetail">详情</button>
+    </div>
+    <div id="topbar">
+      <button id="btnFit">适应窗口</button>
+      <button id="btnReset">回到总览</button>
+      <button id="btnLabels">显示标签</button>
+    </div>
+    <div id="hint">拖拽平移 · 滚轮缩放 · 点节点看详情 · 点层级看缺口</div>
+    <div id="stats"></div>
+  </main>
+
+  <aside id="panel"></aside>
+</div>
+
+<script>
+const GRAPH = {"meta":{"schema_version":"1.0","generated_at":"2026-11-14T18:12:04+08:00","knowledge_dir":"/Users/longyi/project/账号对标/04-知识底座/knowledge","doc_url_prefix":"../../../knowledge/","docs_scanned":65,"node_count":217,"edge_count":318,"type_counts":{"theory":77,"action":100,"metric":34,"layer":6},"status_counts":{"supported":208,"unverified":6,"mentioned":1,"missing":1,"na":1},"evidence_counts":{"sourced":53,"boundary":11,"inferred":133,"none":15,"rumor":5},"dim_counts":{"k1":112,"k2":65,"k3":11,"k4":18,"k5":11},"missing_total":2,"na_total":1,"unverified_total":6,"placeholder_total":0,"expected_slots":27,"uncovered_docs":["sources/00-资料采购清单.md"],"type_labels":{"theory":"理论/模型","action":"动作","metric":"指标","layer":"层级"},"status_labels":{"supported":"已有文档支撑","mentioned":"只有提及没有展开","missing":"缺失","unverified":"待确认","expected":"应有但缺失","na":"不适用"},"evidence_labels":{"sourced":"有出处","boundary":"需注意边界","inferred":"经验推断","none":"未获取","rumor":"传闻"},"dim_labels":{"k1":"L1 知识","k2":"L2 战略","k3":"L3 战术","k4":"L4 方法论","k5":"L5 工具"},"edge_labels":{"belongs":"属于","drives":"驱动","measures":"度量","depends":"依赖","cites":"引用"},"edge_notes":{"belongs":"理论归属某一层","drives":"理论驱动某动作","measures":"动作影响某指标","depends":"箭头由前层指向后层，表示后层依赖前层成立","cites":"文档之间的显式引用，挂在承载该概念的节点上"}},"layers":[{"id":"layer-seen","order":1,"name":"被看见","problem":"让系统把你推给对的人，且他们没在前 3 秒划走。","success":"5 秒完播率 ≥50%，完播率与同长度同类可比；评论区出现具体追问而不只是「没看懂」。","death":"开头自我介绍；标题写品类词；一条开三个缺口；日更但题材乱跳。","if_broken":"后面五层全部归零——没人看见，记忆、信任、成交都没有输入。","doc":"methodology/00-操盘主干.md","section":"第一层：被看见","stats":{"theory":13,"action":18,"metric":10,"missing":1,"unverified":4,"expected":0,"na":0,"total":41,"evidence":{"sourced":8,"boundary":2,"inferred":20,"none":7,"rumor":4}}},{"id":"layer-remembered","order":2,"name":"被记住","problem":"看完之后，观众能用一个词或一句话说出你是谁。","success":"评论区有人用你的句式接话，或直接叫出定位词；主页访问率持续上升。","death":"每期换题材；今天讲技术、明天讲创业；口号一周一改。","if_broken":"播放再高也换不来私信，第三层的信任没有对象可依附。","doc":"methodology/00-操盘主干.md","section":"第二层：被记住","stats":{"theory":10,"action":9,"metric":3,"missing":0,"unverified":0,"expected":0,"na":0,"total":22,"evidence":{"sourced":5,"boundary":3,"inferred":13,"none":1,"rumor":0}}},{"id":"layer-trusted","order":3,"name":"被信任","problem":"让观众相信这个人说的话有依据，且他真做过。","success":"评论区出现 L2（求方法）或 L1（求定制/问价）原话；私信里出现「我看了你那条 XX」。","death":"只讲信息不给判断；全是成功案例；出现一次效果承诺。","if_broken":"第四层即使发生，找到的只是一个报价页——没有信任的询价会直接进入比价。","doc":"methodology/00-操盘主干.md","section":"第三层：被信任","stats":{"theory":9,"action":18,"metric":3,"missing":0,"unverified":0,"expected":0,"na":0,"total":30,"evidence":{"sourced":8,"boundary":3,"inferred":19,"none":0,"rumor":0}}},{"id":"layer-found","order":4,"name":"被找到","problem":"有人真想解决这个问题时，能在哪找到你，且找到的是「人」不是「号」。","success":"私信第一句出现「我搜 XX 找到你的」；主页访问→私信转化率可手工计算。","death":"简介写满形容词没有事实；置顶是自我介绍；所有标题只写反常。","if_broken":"需求发生时找不到入口，第三层积累的信任无法兑现。","doc":"methodology/00-操盘主干.md","section":"第四层：被找到","stats":{"theory":9,"action":13,"metric":5,"missing":0,"unverified":0,"expected":0,"na":1,"total":27,"evidence":{"sourced":8,"boundary":0,"inferred":17,"none":2,"rumor":0}}},{"id":"layer-closed","order":5,"name":"被成交","problem":"把「有兴趣」变成「有报价、有订单」。","success":"有效私信数（出现多少钱/能不能做）≥3 条；报价数、成单数、客单价可手工记。","death":"一上来甩报价；同时要四个动作；承诺效果；客户名单留在平台里。","if_broken":"第六层没有交付事实可引用，整个链路退化成流量生意。","doc":"methodology/00-操盘主干.md","section":"第五层：被成交","stats":{"theory":16,"action":30,"metric":10,"missing":1,"unverified":0,"expected":0,"na":0,"total":56,"evidence":{"sourced":15,"boundary":3,"inferred":36,"none":2,"rumor":0}}},{"id":"layer-referred","order":6,"name":"被转介绍","problem":"让交付过的客户愿意公开说一句，并带来下一个客户。","success":"老客户主动推荐数 ≥1；公开评价 ≥3 条。","death":"交付完即失联；只敢要好话；把转介绍做成返佣。","if_broken":"每一单都要重新买流量，账号永远停在获客阶段，没有复利。","doc":"methodology/00-操盘主干.md","section":"第六层：被转介绍","stats":{"theory":1,"action":5,"metric":2,"missing":0,"unverified":0,"expected":0,"na":0,"total":8,"evidence":{"sourced":3,"boundary":0,"inferred":5,"none":0,"rumor":0}}}],"nodes":[{"id":"theory-recall-ranking","label":"召回-排序-重排","type":"theory","layer":"layer-seen","status":"supported","definition":"平台先从百万级候选里召回几百条（粗筛看相似度），再排序（预估点击/时长/转化），最后重排（多样性、去重）。内容没被推，多数是召回阶段就没进候选，不是排序输了。","citation":"Covington et al., RecSys 2016；周国睿等, KDD 2018","doc":"methodology/流量理论-推荐到搜索.md","section":"1. 推荐系统的基本逻辑","note":"","doc_mtime":"2026-11-14T17:23:52+08:00","doc_sha1":"2a069f21103a","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-explore-exploit","label":"探索-利用","type":"theory","layer":"layer-seen","status":"supported","definition":"系统必须拿一部分流量试新内容/新题材，否则只会推已知会爆的。探索流量很小，只够评估内容，不够起量。","citation":"Sutton & Barto, 1998","doc":"methodology/流量理论-推荐到搜索.md","section":"2. 探索与利用","note":"","doc_mtime":"2026-11-14T17:23:52+08:00","doc_sha1":"2a069f21103a","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-traffic-pool","label":"流量池分层","type":"theory","layer":"layer-seen","status":"unverified","definition":"行业说法：作品先进小池，指标达标再进更大池。具体层级与阈值找不到任何官方或学术来源，按【传闻】处理。当解释框架可以，当规则执行不行。","citation":"无出处（行业通行说法）","doc":"methodology/流量理论-推荐到搜索.md","section":"3. 流量池分层与冷启动","note":"出处待确认：文档明确标注【传闻】，500/1000/1 万这类层级数字无来源。","doc_mtime":"2026-11-14T17:23:52+08:00","doc_sha1":"2a069f21103a","evidence":"rumor","evidence_note":"500/1000/1 万分层无出处，只当框架。","dim":"k1","review_state":"已确认"},{"id":"theory-interest-recommend","label":"去中心化兴趣推荐","type":"theory","layer":"layer-seen","status":"supported","definition":"抖音采用兴趣推荐而非粉丝全量触达；账号标签影响分发人群，但官方从未公布权重、阈值与判定公式。","citation":"抖音创作者服务中心【官方】","doc":"methodology/01-推荐机制与流量池.md","section":"一、能确认的","note":"","doc_mtime":"2026-11-14T17:22:58+08:00","doc_sha1":"f893fdee89d7","evidence":"sourced","evidence_note":"官方表述；权重与阈值未公布。","dim":"k1","review_state":"已确认"},{"id":"theory-cold-start","label":"新号冷启动与内容标签","type":"theory","layer":"layer-seen","status":"supported","definition":"官方没有「养号」概念，新号作品同样进推荐候选；初始人群依赖内容标签，连续同题材能更快找到对的人（【经验帖】）。前几条播放低是常态，不是处罚（【实测】）。","citation":"抖音官方文档【官方】+ 项目实测","doc":"methodology/02-新号冷启动与养号.md","section":"一、能确认的","note":"","doc_mtime":"2026-11-14T17:25:03+08:00","doc_sha1":"3527cd4abcbd","evidence":"sourced","evidence_note":"官方无养号概念；初始标签依赖为经验帖。","dim":"k1","review_state":"已确认"},{"id":"theory-curiosity-gap","label":"好奇心缺口","type":"theory","layer":"layer-seen","status":"supported","definition":"好奇不是「想知道更多」，而是意识到自己有一个具体的缺口。缺口越具体、越接近可填补，好奇越强；模糊的「秘密」不产生好奇，开了不填会掉信任。","citation":"Loewenstein, Psychological Bulletin, 1994","doc":"methodology/心理-02-好奇心缺口.md","section":"全文","note":"","doc_mtime":"2026-11-14T17:25:38+08:00","doc_sha1":"730e5154a7bc","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-high-arousal","label":"高唤醒情绪","type":"theory","layer":"layer-seen","status":"supported","definition":"驱动转发的是唤醒度而不是正负情绪：愤怒、敬畏、焦虑促进转发，悲伤、满足抑制。本项目样本中 AI 剧情号高唤醒但 L1/L2 为 0【实测】，故只取「敬畏/意外」。","citation":"Berger & Milkman, JMR, 2012","doc":"methodology/传播理论-情绪到说服路径.md","section":"1. 情绪传播","note":"","doc_mtime":"2026-11-14T17:23:35+08:00","doc_sha1":"c27459067afc","evidence":"boundary","evidence_note":"只解释转发，不解释成交。","dim":"k1","review_state":"已确认"},{"id":"theory-rec-flow","label":"推荐流量","type":"theory","layer":"layer-seen","status":"supported","definition":"推荐流量靠前 3 秒抓注意力，适合泛人群；标题写反常。与搜索流量是两套标题、两套打法。","citation":"行业共识【经验帖】","doc":"methodology/流量理论-推荐到搜索.md","section":"5. 搜索流量 vs 推荐流量","note":"","doc_mtime":"2026-11-14T17:23:52+08:00","doc_sha1":"2a069f21103a","evidence":"inferred","evidence_note":"行业共识。","dim":"k1","review_state":"已确认"},{"id":"theory-search-flow","label":"搜索流量","type":"theory","layer":"layer-found","status":"supported","definition":"搜索流量靠标题命中关键词 + 内容给答案，适合已有明确问题的人（「AI 智能体怎么落地」「企业怎么用 agent」）。搜索量太小的词不值得做。","citation":"抖音搜索产品表述【官方】+ 打法【经验帖】","doc":"methodology/流量理论-推荐到搜索.md","section":"5. 搜索流量 vs 推荐流量","note":"","doc_mtime":"2026-11-14T17:23:52+08:00","doc_sha1":"2a069f21103a","evidence":"inferred","evidence_note":"打法为经验帖。","dim":"k1","review_state":"已确认"},{"id":"theory-free-traffic-three","label":"免费流量三来源","type":"theory","layer":"layer-found","status":"supported","definition":"推荐靠算法、搜索靠需求、社交靠转发。抖音的社交分发权重很低，微信/群才是社交流量主场。","citation":"行业通行框架【经验帖】","doc":"methodology/流量理论-推荐到搜索.md","section":"6. 免费流量的三种来源","note":"","doc_mtime":"2026-11-14T17:23:52+08:00","doc_sha1":"2a069f21103a","evidence":"inferred","evidence_note":"行业通行框架。","dim":"k1","review_state":"已确认"},{"id":"theory-positioning","label":"定位理论","type":"theory","layer":"layer-remembered","status":"supported","definition":"竞争发生在用户心智里，要占一个空位而不是比别人更好；做不到第一就重新定位对手。品类未成形时无位可占；定位越强、体验落差越伤。","citation":"Al Ries & Jack Trout, 1981","doc":"methodology/广告理论-定位到说服.md","section":"1. 定位理论","note":"","doc_mtime":"2026-11-14T17:27:06+08:00","doc_sha1":"26b9444b5948","evidence":"boundary","evidence_note":"理论，无量化验证。","dim":"k1","review_state":"已确认"},{"id":"theory-usp","label":"USP 独特销售主张","type":"theory","layer":"layer-remembered","status":"supported","definition":"每条广告给一个竞争对手没有或没说过的具体主张，且能拉动销售。主张无法被验证时会反噬。","citation":"Rosser Reeves, 1961","doc":"methodology/广告理论-定位到说服.md","section":"2. USP","note":"","doc_mtime":"2026-11-14T17:27:06+08:00","doc_sha1":"26b9444b5948","evidence":"boundary","evidence_note":"理论，无量化验证。","dim":"k1","review_state":"已确认"},{"id":"theory-cbbe","label":"品牌联想网络（CBBE）","type":"theory","layer":"layer-remembered","status":"supported","definition":"品牌是记忆里的一个节点，连着属性、利益、态度三类联想。同一维度被反复强化才形成强联想；联想分散时任何单个联想都弱到无法被记住。","citation":"Kevin Lane Keller, Journal of Marketing, 1993","doc":"methodology/广告理论-定位到说服.md","section":"6. 品牌联想网络","note":"","doc_mtime":"2026-11-14T17:27:06+08:00","doc_sha1":"26b9444b5948","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-availability","label":"可得性启发","type":"theory","layer":"layer-remembered","status":"supported","definition":"人判断「哪个更常见/更好」靠能不能想起来，不靠真实概率。用户没有比较标准时最有效；有采购清单时让位于资质与报价。","citation":"Tversky & Kahneman, Cognitive Psychology, 1973","doc":"methodology/广告理论-定位到说服.md","section":"7. 可得性启发","note":"","doc_mtime":"2026-11-14T17:27:06+08:00","doc_sha1":"26b9444b5948","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-slogan","label":"口号结构","type":"theory","layer":"layer-remembered","status":"supported","definition":"好口号 = 短（≤12 字）+ 能复读 + 有节奏 + 指向一个具体利益。没有重复曝光预算时，抽象口号等于没有口号。","citation":"USP 见 Reeves 1961；结构要素为行业归纳【经验帖】","doc":"methodology/广告理论-定位到说服.md","section":"8. 口号与记忆点","note":"","doc_mtime":"2026-11-14T17:27:06+08:00","doc_sha1":"26b9444b5948","evidence":"inferred","evidence_note":"结构要素为行业归纳。","dim":"k1","review_state":"已确认"},{"id":"theory-mere-exposure","label":"重复曝光（曝光效应）","type":"theory","layer":"layer-remembered","status":"supported","definition":"重复接触提升好感，但呈倒 U；峰值次数研究间差异极大、无统一数字，实验室「无意义刺激」与短视频不可直接类比。做法是形式重复、内容不重复。","citation":"Zajonc, JPSP, 1968；Bornstein, Psychological Bulletin, 1989","doc":"methodology/广告理论-定位到说服.md","section":"10. 曝光效应","note":"","doc_mtime":"2026-11-14T17:27:06+08:00","doc_sha1":"26b9444b5948","evidence":"boundary","evidence_note":"最优次数无统一值；实验室刺激≠短视频。","dim":"k1","review_state":"已确认"},{"id":"theory-meme","label":"模因","type":"theory","layer":"layer-remembered","status":"supported","definition":"能被复制的内容 = 低复制成本 + 高变异空间 + 可识别立场。纯知识内容缺立场，只能被收藏、不能被模仿。","citation":"Dawkins, 1976；Shifman, 2014","doc":"methodology/传播理论-情绪到说服路径.md","section":"2. 模因与模仿","note":"","doc_mtime":"2026-11-14T17:23:35+08:00","doc_sha1":"c27459067afc","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-parasocial","label":"准社会关系","type":"theory","layer":"layer-trusted","status":"supported","definition":"观众对屏幕里的人产生单向的、拟人际的关系感，靠三件事建立：持续出现、对镜头说话、暴露私人细节。只讲信息不暴露自己，观众记住的是信息不是你。","citation":"Horton & Wohl, Psychiatry, 1956","doc":"methodology/心理-01-准社会关系.md","section":"全文","note":"","doc_mtime":"2026-11-14T17:25:30+08:00","doc_sha1":"3c5170c50653","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-narrative-transport","label":"叙事传输","type":"theory","layer":"layer-trusted","status":"supported","definition":"人被故事「传送」进去时反驳机制降低，态度改变更持久；察觉「在演」则传输中断、防御更强。顺序是故事在前、道理在后。","citation":"Green & Brock, JPSP, 2000","doc":"methodology/心理-03-叙事传输.md","section":"全文","note":"","doc_mtime":"2026-11-14T17:25:45+08:00","doc_sha1":"331f7927394b","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-central-route","label":"中心路径（ELM）","type":"theory","layer":"layer-trusted","status":"supported","definition":"高卷入 + 有能力加工时看论据。B 端采购属高卷入决策，没有论据与信任，报价只会被比价。","citation":"Petty & Cacioppo, 1986","doc":"methodology/传播理论-情绪到说服路径.md","section":"4. 说服的中心路径与边缘路径","note":"","doc_mtime":"2026-11-14T17:23:35+08:00","doc_sha1":"c27459067afc","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-peripheral-route","label":"边缘路径（ELM）","type":"theory","layer":"layer-seen","status":"supported","definition":"低卷入或没能力加工时看信源、气氛、数量。前 3 秒靠真人 + 现场 + 一句话身份建立可信；把边缘技巧用在高卷入决策上会被识破。","citation":"Petty & Cacioppo, 1986","doc":"methodology/传播理论-情绪到说服路径.md","section":"4. 说服的中心路径与边缘路径","note":"","doc_mtime":"2026-11-14T17:23:35+08:00","doc_sha1":"c27459067afc","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-social-proof","label":"社会认同","type":"theory","layer":"layer-trusted","status":"supported","definition":"人用他人行为判断正确行为，不确定性越高越依赖。造假（刷评）被识破后反噬更强。","citation":"Cialdini, Influence, 1984","doc":"methodology/广告理论-定位到说服.md","section":"5. 广告起作用的三种方式","note":"","doc_mtime":"2026-11-14T17:27:06+08:00","doc_sha1":"26b9444b5948","evidence":"boundary","evidence_note":"Asch 效应量随情境差异大；造假反噬更强。","dim":"k1","review_state":"已确认"},{"id":"theory-prestige-status","label":"声望型地位","type":"theory","layer":"layer-trusted","status":"supported","definition":"获得地位有两条路：支配型（压制、资源控制，跟随是被迫）与声望型（展示能力与慷慨，跟随是自愿）。声望型扩散更快更持久，但缺强制力。","citation":"Henrich & Gil-White, 2001","doc":"methodology/人性-04-地位理论.md","section":"全文","note":"","doc_mtime":"2026-11-14T17:26:29+08:00","doc_sha1":"4fbd21b729b3","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-carnegie","label":"人性的弱点（三条）","type":"theory","layer":"layer-trusted","status":"supported","definition":"经验总结与案例汇编，无对照实验、无数据，按【经验帖】处理，不要当理论引用。可用三条：谈对方的利益、记住名字、让对方保住面子。","citation":"Dale Carnegie, 1936【经验帖】","doc":"methodology/人性-01-人性的弱点.md","section":"全文","note":"非科学：文档明确要求不当理论引用，用过头会变成套路感。","doc_mtime":"2026-11-14T17:26:02+08:00","doc_sha1":"bf3a058ae9ca","evidence":"boundary","evidence_note":"经验总结，无对照实验，按经验帖处理。","dim":"k1","review_state":"已确认"},{"id":"theory-attention-commodity","label":"注意力商品化","type":"theory","layer":"layer-found","status":"supported","definition":"平台不生产内容，平台生产并出售受众注意力；创作者是可替换的内容供应商，客户名单留在平台手里。这是结构性判断，不告诉你下一条怎么拍。","citation":"Smythe, 1977（并及马克思, 1867）","doc":"methodology/人性-02-注意力商品化.md","section":"全文","note":"","doc_mtime":"2026-11-14T17:26:14+08:00","doc_sha1":"1954fa051762","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-two-step-flow","label":"两级传播","type":"theory","layer":"layer-found","status":"supported","definition":"信息先到意见领袖再传给普通人。决策受人际影响大、信息不对称强的领域（B 端采购）仍成立；推荐算法已部分替代人际中转，解释力下降。","citation":"Lazarsfeld et al., 1944；Katz & Lazarsfeld, 1955","doc":"methodology/传播理论-情绪到说服路径.md","section":"3. 两级传播","note":"","doc_mtime":"2026-11-14T17:23:35+08:00","doc_sha1":"c27459067afc","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-private-domain","label":"私域与公域承接","type":"theory","layer":"layer-found","status":"supported","definition":"公域负责获客、私域负责复购与转介绍，承接结构决定 LTV。一次性项目制复购天然低，且平台对站外导流有限制。","citation":"行业概念【经验帖】","doc":"methodology/增长理论-AARRR到复购.md","section":"3. 私域与公域的承接结构","note":"","doc_mtime":"2026-11-14T17:24:03+08:00","doc_sha1":"c4ac876d7c7b","evidence":"inferred","evidence_note":"行业概念。","dim":"k1","review_state":"已确认"},{"id":"theory-anchoring","label":"锚定效应","type":"theory","layer":"layer-closed","status":"supported","definition":"先出现的数字会影响后续判断，即使无关。报价先给锚点，不要从低往高报。","citation":"Tversky & Kahneman, Science, 1974","doc":"methodology/心理-04-行为经济学.md","section":"核心主张·锚定","note":"","doc_mtime":"2026-11-14T17:26:46+08:00","doc_sha1":"ae76c147b82c","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-loss-frame","label":"损失厌恶与框架效应","type":"theory","layer":"layer-closed","status":"supported","definition":"同等金额的损失比收益更痛；常引用的 2–2.5 倍系数被大样本重复验证认为效应存在但被高估，不当精确常数。同一事实换说法，选择会变。","citation":"Kahneman & Tversky, Econometrica, 1979；Kahneman, 2011","doc":"methodology/心理-04-行为经济学.md","section":"核心主张·损失厌恶/框架","note":"","doc_mtime":"2026-11-14T17:26:46+08:00","doc_sha1":"ae76c147b82c","evidence":"boundary","evidence_note":"2–2.5 倍系数近年重复验证认为被高估，不作常数。","dim":"k1","review_state":"已确认"},{"id":"theory-dual-system","label":"双系统","type":"theory","layer":"layer-closed","status":"supported","definition":"快系统（直觉、自动、省力）与慢系统（分析、费力）。短视频只能激活快系统，开头不给数字堆叠，给画面和一句话事实。","citation":"Kahneman, Thinking Fast and Slow, 2011","doc":"methodology/心理-04-行为经济学.md","section":"核心主张·双系统","note":"","doc_mtime":"2026-11-14T17:26:46+08:00","doc_sha1":"ae76c147b82c","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-fcb","label":"FCB 网格","type":"theory","layer":"layer-closed","status":"supported","definition":"按「卷入度 × 理性/情感」分四象限。B 端接单属高卷入理性，信息:情绪 ≈ 7:3。判错象限会做出热闹但没人问价的内容。","citation":"Richard Vaughn, JAR, 1980","doc":"methodology/广告理论-定位到说服.md","section":"9. 情感诉求与理性诉求","note":"","doc_mtime":"2026-11-14T17:27:06+08:00","doc_sha1":"26b9444b5948","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-social-exchange","label":"社会交换理论","type":"theory","layer":"layer-closed","status":"supported","definition":"互动被当作交换来评估：成本（时间、注意力、暴露自己）对回报（信息、身份感、情绪、利益）。回报不确定时，人选成本更低的动作（划走、看完不评）。","citation":"Homans, 1958；Blau, 1964","doc":"methodology/人性-05-社会交换理论.md","section":"全文","note":"","doc_mtime":"2026-11-14T17:26:39+08:00","doc_sha1":"02bc997efb82","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-reciprocal-altruism","label":"互惠利他","type":"theory","layer":"layer-closed","status":"supported","definition":"人愿意帮将来可能回报自己的对象，前提是能识别、能记住、回报可延迟。给得太完整对方拿完就走；给了就催回报会被识别为交易。","citation":"Trivers, 1971；Dawkins, 1976","doc":"methodology/人性-03-互惠利他.md","section":"全文","note":"同时支撑第 6 层：先给后取在长期客户关系里成立。","doc_mtime":"2026-11-14T17:26:21+08:00","doc_sha1":"d1df4a09c70f","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-performance-ad","label":"效果广告 CPA/oCPM","type":"theory","layer":"layer-closed","status":"supported","definition":"投放按「预估转化率 × 出价」排序分配曝光。没有转化回传时 oCPM 学不到人群，退化成买曝光；当前阶段不该投。","citation":"巨量引擎文档【官方】；Skok, 2010","doc":"methodology/广告理论-定位到说服.md","section":"4. 效果广告的核心指标与投放逻辑","note":"","doc_mtime":"2026-11-14T17:27:06+08:00","doc_sha1":"26b9444b5948","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-interest-ecommerce","label":"兴趣电商","type":"theory","layer":"layer-closed","status":"supported","definition":"用户没有明确需求、被内容激发后下单，适合低客单冲动型。高客单 B 端不适用——成交发生在私信/线下，不在小黄车。","citation":"抖音电商, 2021【官方】","doc":"methodology/流量理论-推荐到搜索.md","section":"4. 内容电商与兴趣电商","note":"","doc_mtime":"2026-11-14T17:23:52+08:00","doc_sha1":"2a069f21103a","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-aida","label":"AIDA 与漏斗","type":"theory","layer":null,"status":"unverified","definition":"注意→兴趣→欲望→行动。短视频是非线性的，把 AIDA 当顺序执行会做出「先自我介绍再讲正事」的开头；只借「四件事都要有」，不借顺序。","citation":"E. St. Elmo Lewis, 1898；Kotler, 2017","doc":"methodology/广告理论-定位到说服.md","section":"3. AIDA 与漏斗","note":"归属待确认：跨层的漏斗模型，文档明确否定其顺序，未归入任何单一层。","doc_mtime":"2026-11-14T17:27:06+08:00","doc_sha1":"26b9444b5948","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-north-star","label":"北极星指标","type":"theory","layer":"layer-closed","status":"supported","definition":"全团队唯一要拉动的那个数。本账号北极星 = 有效私信数（出现「多少钱/能不能做」的私信条数），不是粉丝数。","citation":"Sean Ellis【经验帖】","doc":"methodology/增长理论-AARRR到复购.md","section":"1. AARRR 与北极星指标","note":"","doc_mtime":"2026-11-14T17:24:03+08:00","doc_sha1":"c4ac876d7c7b","evidence":"inferred","evidence_note":"北极星框架来自经验帖；本账号选有效私信为判断。","dim":"k1","review_state":"已确认"},{"id":"theory-aarrr","label":"AARRR","type":"theory","layer":null,"status":"supported","definition":"获取→激活→留存→收入→推荐。内容账号没有「激活/留存」的用户概念，取关成本为零；只保留获取（播放）与收入（有效私信）两段。","citation":"Dave McClure, 2007","doc":"methodology/增长理论-AARRR到复购.md","section":"1. AARRR 与北极星指标","note":"跨层使用：只保留获取段（第 1 层）与收入段（第 5 层）。","doc_mtime":"2026-11-14T17:24:03+08:00","doc_sha1":"c4ac876d7c7b","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-nps-referral","label":"NPS 与复购转介绍","type":"theory","layer":"layer-referred","status":"supported","definition":"获客成本要靠生命周期价值摊平，转介绍是最便宜的获客，K>1 才自增长。客户数 <50 时 K 因子无统计意义；改为交付后要一句可公开的评价。","citation":"Reichheld, HBR, 2003","doc":"methodology/增长理论-AARRR到复购.md","section":"5. 复购与转介绍的经济学","note":"","doc_mtime":"2026-11-14T17:24:03+08:00","doc_sha1":"c4ac876d7c7b","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-rfm","label":"RFM","type":"theory","layer":null,"status":"supported","definition":"按最近一次行为、频次、金额分层。当前没有用户级交易数据，分层无统计意义。替代动作：手工维护 10 行私信表。","citation":"Arthur Hughes, 1994","doc":"methodology/增长理论-AARRR到复购.md","section":"2. 用户生命周期与分层","note":"孤岛：文档自列为「找不到合适位置、不硬塞」的三个模型之一。","doc_mtime":"2026-11-14T17:24:03+08:00","doc_sha1":"c4ac876d7c7b","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-k-factor","label":"K 因子与 CLV/CAC","type":"theory","layer":null,"status":"supported","definition":"K = 邀请数 × 转化率，K>1 才自增长；CLV/CAC 用来判断获客是否划算。客户数 <50、项目制、转介绍周期长时，指标不成立。","citation":"Skok, SaaS Metrics 2.0, 2010","doc":"methodology/增长理论-AARRR到复购.md","section":"5. 复购与转介绍的经济学","note":"孤岛：客户数 <50，统计无意义。","doc_mtime":"2026-11-14T17:24:03+08:00","doc_sha1":"c4ac876d7c7b","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-ab-test","label":"增长实验（A/B）","type":"theory","layer":null,"status":"supported","definition":"把想法写成可证伪假设，用最小样本验证再决定加码或放弃。几百播放时无统计功效，实验退化为观察，延后到单条稳定过万播放。","citation":"Eric Ries, 2011；Kohavi et al., 2020","doc":"methodology/增长理论-AARRR到复购.md","section":"4. 增长实验","note":"孤岛：延后使用。","doc_mtime":"2026-11-14T17:24:03+08:00","doc_sha1":"c4ac876d7c7b","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"model-six-layers","label":"六层链路（串联电路）","type":"theory","layer":null,"status":"supported","definition":"前一层不成立，后一层做了也白做：流量在先、记忆在信任之前、信任在成交之前、成交在转介绍之前。断一层，后面全黑。","citation":"本项目总纲","doc":"methodology/00-操盘主干.md","section":"原则 / 层与层之间的传导","note":"","doc_mtime":"2026-11-14T17:28:29+08:00","doc_sha1":"35a704b0f70b","evidence":"inferred","evidence_note":"本项目总纲，无外部验证；串联假设本身待数据检验。","dim":"k2","review_state":"已确认"},{"id":"model-review-8col","label":"单条视频复盘（8 列法）","type":"theory","layer":null,"status":"supported","definition":"48 小时内只看四个数（5 秒完播、完播率、评论数、私信数），记 8 列（编号/选题类型/开头方式/时长/发布时段/播放/完播率/评论·私信）；一次只改一个变量。","citation":"本项目方法","doc":"methodology/制作-02-单条视频复盘方法.md","section":"一至三节","note":"","doc_mtime":"2026-11-14T17:27:54+08:00","doc_sha1":"be88a36dcf76","evidence":"inferred","evidence_note":"本项目方法，未做方法学对照。","dim":"k5","review_state":"已确认"},{"id":"model-sampling-bounds","label":"抽样与归因四问","type":"theory","layer":null,"status":"supported","definition":"下结论前四问：分母是谁？是「没观察到」还是「测到没有」？自变量分布开了吗？删掉形容词还是事实吗？四问有一个答不上来，只能写「样本内观察」。","citation":"本项目复盘方法","doc":"methodology/抽样与归因的边界.md","section":"全文","note":"","doc_mtime":"2026-11-13T23:06:25+08:00","doc_sha1":"f753fccf9fe5","evidence":"inferred","evidence_note":"本项目复盘方法。","dim":"k4","review_state":"已确认"},{"id":"model-public-boundary","label":"公开内容边界（给判断不给步骤）","type":"theory","layer":null,"status":"supported","definition":"公开内容只交付判断，操作步骤留给私域。步骤招来「求源码/求提示词」的人，判断招来「我也遇到过」的人。唯一转化句：「想看这类情况的处理教程，私聊我。」","citation":"本项目规则（团队定，置信度高）","doc":"methodology/公开内容边界.md","section":"全文","note":"横切规则，主要作用于第 3 层（信任）与第 4 层（承接）。","doc_mtime":"2026-11-13T22:12:34+08:00","doc_sha1":"40ba91e0d7f2","evidence":"inferred","evidence_note":"团队定的规则，置信度高但无实验。","dim":"k3","review_state":"已确认"},{"id":"model-compliance","label":"违规红线","type":"theory","layer":null,"status":"supported","definition":"官方明文禁止：搬运、重复低质、诱导互动、诱导站外导流、虚假宣传、无资质敏感领域。限流阈值、敏感词库、重复判定相似度均未获取。","citation":"《抖音社区自律公约》等【官方】","doc":"methodology/03-违规红线.md","section":"一、有官方条文的行为","note":"横切约束：不属于任何一层，但每层都受它限制。","doc_mtime":"2026-11-14T17:25:15+08:00","doc_sha1":"d7ea6cd595be","evidence":"sourced","evidence_note":"禁止行为有官方条文；限流阈值与敏感词库未获取。","dim":"k1","review_state":"已确认"},{"id":"model-monetization-forms","label":"五种变现形态","type":"theory","layer":"layer-closed","status":"supported","definition":"接服务、卖课、卖产品、接广告、换股权/顾问。主线只做接服务（单人年营收上限约 30–60 万，经验推断），课程只做私域钩子，不接无关商单。","citation":"经验推断【经验帖】","doc":"methodology/经营-01-五种变现形态.md","section":"全文","note":"主挂第 5 层，辅挂第 6 层。","doc_mtime":"2026-11-14T17:28:43+08:00","doc_sha1":"34df76e5c9b5","evidence":"inferred","evidence_note":"形态来自经验归纳；营收上限为推算。","dim":"k2","review_state":"已确认"},{"id":"model-direction-switch","label":"方向切换判据","type":"theory","layer":null,"status":"supported","definition":"抖音不认时的四个判据（前 3 秒留存、完播率、评论区接话率、私信/加微转化），三种外壳从轻到重：结果前置 → 替别人解决麻烦 → 转拆解评测。人设内核不动。","citation":"本项目规则","doc":"topics/方向备选与切换判据.md","section":"全文","note":"四个判据的阈值全部「待校准」，见 index.md 缺口节。","doc_mtime":"2026-11-13T22:08:16+08:00","doc_sha1":"4bef5d8299a5","evidence":"inferred","evidence_note":"四个判据的阈值全部待校准。","dim":"k2","review_state":"已确认"},{"id":"model-anomaly-types","label":"反常选题六型","type":"theory","layer":null,"status":"supported","definition":"内容单位 = 一次反常：一个 AI 不听话/出乎意料的瞬间 + 当时的判断。六型：权限边界拒绝、听懂但做错、过度谨慎、自作主张、答非所问、记忆错乱。","citation":"本项目选题框架","doc":"topics/选题库.md","section":"反常类型","note":"","doc_mtime":"2026-11-13T22:12:25+08:00","doc_sha1":"f9aa0adeeddc","evidence":"inferred","evidence_note":"本项目选题框架，案例不足。","dim":"k3","review_state":"已确认"},{"id":"a-same-topic-first5","label":"前 5 条固定同一题材","type":"action","layer":"layer-seen","status":"supported","definition":"标题与口播固定出现「智能体 / 客户现场 / 交付」三个词，连续 5 条不换。换题材等于重新冷启动一次。","citation":"","doc":"methodology/00-操盘主干.md","section":"第一层·必须做的动作","note":"","doc_mtime":"2026-11-14T17:28:29+08:00","doc_sha1":"35a704b0f70b","evidence":"inferred","evidence_note":"前 5 条不删是逻辑推导，无对照实验。","dim":"k2","review_state":"已确认"},{"id":"a-anomaly-first3s","label":"前 3 秒给一个具体反常","type":"action","layer":"layer-seen","status":"supported","definition":"第一帧/第一句就是具体反常，不出现人脸打招呼、不出现片头。","citation":"","doc":"methodology/00-操盘主干.md","section":"第一层·必须做的动作","note":"","doc_mtime":"2026-11-14T17:28:29+08:00","doc_sha1":"35a704b0f70b","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"a-one-gap","label":"一条只开一个缺口，15 秒合一半","type":"action","layer":"layer-seen","status":"supported","definition":"每条只开一个好奇心缺口，15 秒内合上一半，结尾再开下一个。","citation":"","doc":"methodology/00-操盘主干.md","section":"第一层·必须做的动作","note":"","doc_mtime":"2026-11-14T17:28:29+08:00","doc_sha1":"35a704b0f70b","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"a-cut-rhythm","label":"每 3–5 秒一次画面变化","type":"action","layer":"layer-seen","status":"supported","definition":"切镜/推近/字卡/录屏缩放，每 3–5 秒一次；开头 3 秒至少一次变化。","citation":"","doc":"methodology/制作-01-口播与剪辑手艺.md","section":"二、剪辑","note":"","doc_mtime":"2026-11-14T17:27:36+08:00","doc_sha1":"663d3d7be1c7","evidence":"inferred","evidence_note":"行业通行做法，无完播对照。","dim":"k1","review_state":"已确认"},{"id":"a-speech-pace","label":"口播节奏（280–320 字/分）","type":"action","layer":"layer-seen","status":"supported","definition":"每分钟 280–320 字，单句 ≤15 字，转折前停 0.5–0.8 秒，每句只放一个重音。35 秒约 160–180 字，按字数倒推写稿。","citation":"","doc":"methodology/制作-01-口播与剪辑手艺.md","section":"一、口播","note":"","doc_mtime":"2026-11-14T17:27:36+08:00","doc_sha1":"663d3d7be1c7","evidence":"inferred","evidence_note":"行业通行做法，无完播对照。","dim":"k1","review_state":"已确认"},{"id":"a-audio-floor","label":"录音与录屏下限","type":"action","layer":"layer-seen","status":"supported","definition":"室内也必须用领夹麦；窗户侧光，不顶光不背光；录屏前关通知，IDE 字号 ≥16px。","citation":"","doc":"methodology/制作-01-口播与剪辑手艺.md","section":"三、设备下限","note":"","doc_mtime":"2026-11-14T17:27:36+08:00","doc_sha1":"663d3d7be1c7","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-one-variable","label":"每条只改一个变量","type":"action","layer":"layer-seen","status":"supported","definition":"开头方式 / 时长 / 落点 / 发布时段，四选一，每组 3 条。同时改三个，爆了也不知道为什么。","citation":"","doc":"methodology/流量理论-推荐到搜索.md","section":"2. 探索与利用","note":"","doc_mtime":"2026-11-14T17:23:52+08:00","doc_sha1":"2a069f21103a","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-no-cart","label":"不挂车、不带货","type":"action","layer":"layer-seen","status":"supported","definition":"高客单 B 端不适用兴趣电商。把「让人愿意私信」这一步留下，剩下交给人工。","citation":"","doc":"methodology/流量理论-推荐到搜索.md","section":"4. 内容电商与兴趣电商","note":"","doc_mtime":"2026-11-14T17:23:52+08:00","doc_sha1":"2a069f21103a","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-peripheral-first3s","label":"前 3 秒走边缘路径","type":"action","layer":"layer-seen","status":"supported","definition":"真人出镜 + 现场感 + 一句话身份建立可信，中段再上论据。只走边缘会变成人设号没干货，只走中心会变成教程号没人看。","citation":"","doc":"methodology/传播理论-情绪到说服路径.md","section":"4. 说服的中心路径与边缘路径","note":"","doc_mtime":"2026-11-14T17:23:35+08:00","doc_sha1":"c27459067afc","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-no-number-opening","label":"开头不给数字堆叠","type":"action","layer":"layer-seen","status":"supported","definition":"短视频只能激活快系统，开头给画面和一句话事实，把数字放到中段。","citation":"","doc":"methodology/心理-04-行为经济学.md","section":"这个账号上的动作·4","note":"","doc_mtime":"2026-11-14T17:26:46+08:00","doc_sha1":"ae76c147b82c","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-bio-identity","label":"改简介：第一行只写一个身份","type":"action","layer":"layer-remembered","status":"supported","definition":"第一行只出现一个身份（能把 AI 讲成人话、还能替你落地的人），不出现「爱好者/学习者/分享者」。","citation":"","doc":"methodology/广告理论-定位到说服.md","section":"1. 定位理论·动作","note":"","doc_mtime":"2026-11-14T17:27:06+08:00","doc_sha1":"26b9444b5948","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-main-slogan","label":"定主口号，30 天不改","type":"action","layer":"layer-remembered","status":"supported","definition":"建议主口号「AI 不听话的时候，我在场」；简介第一行用信息完整的版本，片尾字幕用短的版本。","citation":"","doc":"methodology/00-操盘主干.md","section":"第二层·必须做的动作","note":"","doc_mtime":"2026-11-14T17:28:29+08:00","doc_sha1":"35a704b0f70b","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"a-assoc-words","label":"只强化 A 组联想词","type":"action","layer":"layer-remembered","status":"supported","definition":"只强化「现场 · 交付 · 跑通」一组，连续 10 条不换；简介、置顶、片尾都只放这三个词。","citation":"","doc":"methodology/广告理论-定位到说服.md","section":"12. 实操：5 组候选联想词","note":"","doc_mtime":"2026-11-14T17:27:06+08:00","doc_sha1":"26b9444b5948","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-fixed-phrase","label":"每条结尾固定句式","type":"action","layer":"layer-remembered","status":"supported","definition":"固定「我让它做 X，它……」，让观众能套自己的经历，这是唯一能带来 UGC 的结构。","citation":"","doc":"methodology/传播理论-情绪到说服路径.md","section":"2. 模因与模仿","note":"","doc_mtime":"2026-11-14T17:23:35+08:00","doc_sha1":"c27459067afc","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-fixed-intro","label":"固定片头 0.5 秒同一动作","type":"action","layer":"layer-remembered","status":"supported","definition":"同一位置、同一动作/同一句话，让「又是他」的识别发生在 1 秒内。不做长片头。","citation":"","doc":"methodology/广告理论-定位到说服.md","section":"10. 曝光效应·动作","note":"","doc_mtime":"2026-11-14T17:27:06+08:00","doc_sha1":"26b9444b5948","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-two-day-cadence","label":"两天一更，不日更","type":"action","layer":"layer-remembered","status":"supported","definition":"形式重复、内容不重复；间隔太密会提前进入曝光效应的下降段，同质内容高频发布也可能被判低质。","citation":"","doc":"methodology/广告理论-定位到说服.md","section":"10. 曝光效应·动作","note":"","doc_mtime":"2026-11-14T17:27:06+08:00","doc_sha1":"26b9444b5948","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-number-each","label":"每条至少一个可核对数字","type":"action","layer":"layer-trusted","status":"supported","definition":"跑了多少单、原来几小时、现在几分钟、错误率多少。不用「效果很好」。","citation":"","doc":"methodology/理论到操盘动作映射表.md","section":"直接说服 / 中心路径","note":"","doc_mtime":"2026-11-14T17:24:13+08:00","doc_sha1":"d24e6840308c","evidence":"inferred","evidence_note":"","dim":"k5","review_state":"已确认"},{"id":"a-refutable-claim","label":"每条一个可反驳的判断句","type":"action","layer":"layer-trusted","status":"supported","definition":"「Agent 的边界应该写在职责里，不是写在提示词里」这类能被反驳的判断，不是「AI 很重要」。","citation":"","doc":"methodology/00-操盘主干.md","section":"第三层·必须做的动作","note":"","doc_mtime":"2026-11-14T17:28:29+08:00","doc_sha1":"35a704b0f70b","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"a-admit-failure","label":"主动讲一次失败/判断错误","type":"action","layer":"layer-trusted","status":"supported","definition":"不每条都成功；给一个私人细节（判断错了、被客户拒绝、熬到几点），这是准社会关系的必需品。","citation":"","doc":"methodology/心理-01-准社会关系.md","section":"这个账号上的动作·2","note":"","doc_mtime":"2026-11-14T17:25:30+08:00","doc_sha1":"3c5170c50653","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-face-to-camera","label":"每条露脸并对镜头说一句话","type":"action","layer":"layer-trusted","status":"supported","definition":"不是全程旁白配录屏。对镜头说话是打破第四面墙，让关系从「内容」转向「人」。","citation":"","doc":"methodology/心理-01-准社会关系.md","section":"这个账号上的动作·1","note":"","doc_mtime":"2026-11-14T17:25:30+08:00","doc_sha1":"3c5170c50653","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-reply-restate","label":"回评论先复述对方问题","type":"action","layer":"layer-trusted","status":"supported","definition":"「你说的是 XX 那种情况吧」再回答，比直接给答案更让人觉得被听见。用第一人称、带情绪，不用客服口气。","citation":"","doc":"methodology/人性-01-人性的弱点.md","section":"这个账号上的动作·2","note":"","doc_mtime":"2026-11-14T17:26:02+08:00","doc_sha1":"bf3a058ae9ca","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-judgment-only","label":"公开内容只给判断不给步骤","type":"action","layer":"layer-trusted","status":"supported","definition":"步骤、提示词全文、参数值、完整代码、分步编号一律不给；给判断、反常表现、代价、可迁移的观点。","citation":"","doc":"methodology/公开内容边界.md","section":"一句话规则","note":"","doc_mtime":"2026-11-13T22:12:34+08:00","doc_sha1":"40ba91e0d7f2","evidence":"inferred","evidence_note":"","dim":"k3","review_state":"已确认"},{"id":"a-no-effect-promise","label":"不承诺效果","type":"action","layer":"layer-trusted","status":"supported","definition":"不写「包」「保证」「百分百」「稳赚」，不说「省 80%」，改成可核对的事实句。","citation":"","doc":"methodology/03-违规红线.md","section":"五、这个账号意味着什么","note":"","doc_mtime":"2026-11-14T17:25:15+08:00","doc_sha1":"d7ea6cd595be","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-real-review","label":"用真实客户评价截图","type":"action","layer":"layer-trusted","status":"supported","definition":"不用「很多人都在用」；截图必须是真实评价，造假被识破后反噬更强。","citation":"","doc":"methodology/广告理论-定位到说服.md","section":"5. 广告起作用的三种方式","note":"","doc_mtime":"2026-11-14T17:27:06+08:00","doc_sha1":"26b9444b5948","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-not-expert-intro","label":"不说「我是 XX 专家」","type":"action","layer":"layer-trusted","status":"supported","definition":"改说「我最近在给一家公司做 XX」——前者是支配型宣告，后者是声望型展示。","citation":"","doc":"methodology/人性-04-地位理论.md","section":"这个账号上的动作·2","note":"","doc_mtime":"2026-11-14T17:26:29+08:00","doc_sha1":"4fbd21b729b3","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-no-peer-bashing","label":"不贬低同行","type":"action","layer":"layer-trusted","status":"supported","definition":"贬低是支配型动作，会吸引来怕你的人，不是跟你做事的人。","citation":"","doc":"methodology/人性-04-地位理论.md","section":"这个账号上的动作·3","note":"","doc_mtime":"2026-11-14T17:26:29+08:00","doc_sha1":"4fbd21b729b3","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-client-situation","label":"描述客户处境不写自己辛苦","type":"action","layer":"layer-trusted","status":"supported","definition":"「他们每天有个人专门对表」而不是「我熬夜改到三点」——谈对方的利益，不谈自己的成就。","citation":"","doc":"methodology/人性-01-人性的弱点.md","section":"这个账号上的动作·1","note":"","doc_mtime":"2026-11-14T17:26:02+08:00","doc_sha1":"bf3a058ae9ca","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-story-first","label":"故事在前、道理在后","type":"action","layer":"layer-trusted","status":"supported","definition":"给真实场景三要素（谁、在干什么、卡在哪），结尾才给判断句，顺序不能反。","citation":"","doc":"methodology/心理-03-叙事传输.md","section":"这个账号上的动作·1/4","note":"","doc_mtime":"2026-11-14T17:25:45+08:00","doc_sha1":"331f7927394b","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-first-person-now","label":"第一人称现在时讲自己的案例","type":"action","layer":"layer-trusted","status":"supported","definition":"「我点开它，它回我一句：这不在我的职责里」，不用「曾经有一次」；不讲别人的成功案例。","citation":"","doc":"methodology/心理-03-叙事传输.md","section":"这个账号上的动作·2/3","note":"","doc_mtime":"2026-11-14T17:25:45+08:00","doc_sha1":"331f7927394b","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-blur-client","label":"客户素材打码化名","type":"action","layer":"layer-trusted","status":"supported","definition":"所有客户画面打码，名称用「一家做 XX 的公司」，并在视频里说一句「已获客户许可」。","citation":"","doc":"methodology/03-违规红线.md","section":"四、对 FDE 账号的高危点·1","note":"","doc_mtime":"2026-11-14T17:25:15+08:00","doc_sha1":"d7ea6cd595be","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-bio-three-lines","label":"简介三行（身份/做过什么/入口）","type":"action","layer":"layer-found","status":"supported","definition":"身份一句话 / 做过什么 / 入口一句话，30 天不动。写事实不写形容词。","citation":"","doc":"methodology/00-操盘主干.md","section":"第四层·必须做的动作","note":"","doc_mtime":"2026-11-14T17:28:29+08:00","doc_sha1":"35a704b0f70b","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"a-pin-case","label":"置顶放一条交付案例","type":"action","layer":"layer-found","status":"supported","definition":"不是自我介绍。客户进来先看案例，不看朋友圈。","citation":"","doc":"methodology/00-操盘主干.md","section":"第四层·必须做的动作","note":"","doc_mtime":"2026-11-14T17:28:29+08:00","doc_sha1":"35a704b0f70b","evidence":"none","evidence_note":"置顶分布未获取；三条结构是经验推断。","dim":"k2","review_state":"已确认"},{"id":"a-two-titles","label":"同内容两套标题","type":"action","layer":"layer-found","status":"supported","definition":"推荐版写反常，搜索版写问题词，搜索版晚 3–7 天发或做成合集标题。","citation":"","doc":"methodology/流量理论-推荐到搜索.md","section":"5. 搜索流量 vs 推荐流量","note":"","doc_mtime":"2026-11-14T17:23:52+08:00","doc_sha1":"2a069f21103a","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-share-to-peers","label":"每条成片发 3–5 个同行","type":"action","layer":"layer-found","status":"supported","definition":"发给已经在做企业服务的同行、前同事，请他们转群——比投流便宜，也比等算法快。","citation":"","doc":"methodology/传播理论-情绪到说服路径.md","section":"3. 两级传播","note":"","doc_mtime":"2026-11-14T17:23:35+08:00","doc_sha1":"c27459067afc","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-dm-only-asset","label":"每条留一个只能私信拿到的东西","type":"action","layer":"layer-found","status":"supported","definition":"一份流程清单、一个报价口径、一份验收清单。把一次性注意力转成可联系的人。","citation":"","doc":"methodology/人性-02-注意力商品化.md","section":"这个账号上的动作·1","note":"","doc_mtime":"2026-11-14T17:26:14+08:00","doc_sha1":"1954fa051762","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-own-contact-list","label":"客户名单自己建表","type":"action","layer":"layer-found","status":"supported","definition":"加微信后建表：行业、问题、预算、时间。平台只做入口，不做仓库。","citation":"","doc":"methodology/人性-02-注意力商品化.md","section":"这个账号上的动作·2","note":"","doc_mtime":"2026-11-14T17:26:14+08:00","doc_sha1":"1954fa051762","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-minimal-private","label":"私域只做一个微信 + 一条置顶案例","type":"action","layer":"layer-found","status":"supported","definition":"不做社群运营，不做朋友圈人设。客户进来先看案例。","citation":"","doc":"methodology/增长理论-AARRR到复购.md","section":"3. 私域与公域的承接结构","note":"","doc_mtime":"2026-11-14T17:24:03+08:00","doc_sha1":"c4ac876d7c7b","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-no-irrelevant-ads","label":"不接与能力无关的商单","type":"action","layer":"layer-found","status":"supported","definition":"商单是把注意力卖给第三方，卖错一次人设就变成恰饭号；只接云厂商、开发工具这类相关方。","citation":"","doc":"methodology/人性-02-注意力商品化.md","section":"这个账号上的动作·3","note":"","doc_mtime":"2026-11-14T17:26:14+08:00","doc_sha1":"1954fa051762","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-anchor-quote","label":"报价先给锚点","type":"action","layer":"layer-closed","status":"supported","definition":"先摆完整版价格，再说轻量版；只给两个方案 + 一个明显不划算的参照，让人在快系统里就能选。","citation":"","doc":"methodology/心理-04-行为经济学.md","section":"这个账号上的动作·1/3","note":"","doc_mtime":"2026-11-14T17:26:46+08:00","doc_sha1":"ae76c147b82c","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-loss-frame","label":"标题用损失框架","type":"action","layer":"layer-closed","status":"supported","definition":"「这套没做，每天多花 3 小时」，不用「效率提升 300%」（后者是效果承诺，有合规风险）。","citation":"","doc":"methodology/心理-04-行为经济学.md","section":"这个账号上的动作·2","note":"","doc_mtime":"2026-11-14T17:26:46+08:00","doc_sha1":"ae76c147b82c","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-info-emotion-73","label":"信息:情绪 ≈ 7:3","type":"action","layer":"layer-closed","status":"supported","definition":"信息为主（数字、流程、失败记录），情感只用于让人愿意看完（意外、挫败、现场感）。","citation":"","doc":"methodology/广告理论-定位到说服.md","section":"9. FCB 网格·动作","note":"","doc_mtime":"2026-11-14T17:27:06+08:00","doc_sha1":"26b9444b5948","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-dm-first-scene","label":"私信第一轮只要一句话场景","type":"action","layer":"layer-closed","status":"supported","definition":"不要预算和电话。把互动成本降到最低，回报做得确定。","citation":"","doc":"methodology/人性-05-社会交换理论.md","section":"这个账号上的动作·3","note":"","doc_mtime":"2026-11-14T17:26:39+08:00","doc_sha1":"02bc997efb82","evidence":"inferred","evidence_note":"私信首响 2 小时、报价 24 小时为服务惯例。","dim":"k1","review_state":"已确认"},{"id":"a-first3-no-cta","label":"前 3 条不提转化","type":"action","layer":"layer-closed","status":"supported","definition":"先给三次再提要求；第 4 条起才出现「想要的私信我」。","citation":"","doc":"methodology/人性-03-互惠利他.md","section":"这个账号上的动作·3","note":"","doc_mtime":"2026-11-14T17:26:21+08:00","doc_sha1":"d1df4a09c70f","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-low-cost-gift","label":"每条留一个低成本可用的东西","type":"action","layer":"layer-closed","status":"supported","definition":"「这套东西的验收清单我整理过，要的私信我」——给完还能留一个动作。","citation":"","doc":"methodology/人性-03-互惠利他.md","section":"这个账号上的动作·2","note":"","doc_mtime":"2026-11-14T17:26:21+08:00","doc_sha1":"d1df4a09c70f","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-one-cta","label":"每条只提一个动作","type":"action","layer":"layer-closed","status":"supported","definition":"同时要赞、要评、要关注、要私信，等于成本翻四倍，结果一个都不做。","citation":"","doc":"methodology/人性-05-社会交换理论.md","section":"这个账号上的动作·4","note":"","doc_mtime":"2026-11-14T17:26:39+08:00","doc_sha1":"02bc997efb82","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-binary-comment","label":"评论门槛给二选一","type":"action","layer":"layer-closed","status":"supported","definition":"「A 还是 B」而不是「你们怎么看」；这是第 1 层想法征集段的低成本写法。","citation":"","doc":"methodology/人性-05-社会交换理论.md","section":"这个账号上的动作·1","note":"","doc_mtime":"2026-11-14T17:26:39+08:00","doc_sha1":"02bc997efb82","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-promise-reply","label":"承诺「评论区问的下条答」","type":"action","layer":"layer-closed","status":"supported","definition":"把回报变得确定，让人知道评论有回音。","citation":"","doc":"methodology/人性-05-社会交换理论.md","section":"这个账号上的动作·2","note":"","doc_mtime":"2026-11-14T17:26:39+08:00","doc_sha1":"02bc997efb82","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-no-ads-first15","label":"前 15 条不投流","type":"action","layer":"layer-closed","status":"supported","definition":"没有转化回传前投 DOU+ 只能买播放；出现 ≥3 个私信问价后，只把那条投 100 元验证人群。","citation":"","doc":"methodology/广告理论-定位到说服.md","section":"4. 效果广告·动作","note":"","doc_mtime":"2026-11-14T17:27:06+08:00","doc_sha1":"26b9444b5948","evidence":"inferred","evidence_note":"逻辑推导：没有转化回传时 oCPM 学不到人群。","dim":"k1","review_state":"已确认"},{"id":"a-quote-onepager","label":"报价口径一页纸","type":"action","layer":"layer-closed","status":"supported","definition":"范围、交付物、修改次数、周期、付款节点、不做什么。预付 30–50%，尾款验收后结。","citation":"","doc":"methodology/经营-01-五种变现形态.md","section":"六、对这个账号意味着什么·5","note":"","doc_mtime":"2026-11-14T17:28:43+08:00","doc_sha1":"34df76e5c9b5","evidence":"inferred","evidence_note":"","dim":"k5","review_state":"已确认"},{"id":"a-service-only","label":"主线只做接服务","type":"action","layer":"layer-closed","status":"supported","definition":"卖课/卖产品/接广告/换股权作为第 2 年之后的选项，前 6 个月不启动；课程只做私域钩子。","citation":"","doc":"methodology/经营-01-五种变现形态.md","section":"六、对这个账号意味着什么","note":"","doc_mtime":"2026-11-14T17:28:43+08:00","doc_sha1":"34df76e5c9b5","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"a-dm-log","label":"手工私信表（每周记问价条数）","type":"action","layer":"layer-closed","status":"supported","definition":"10 行以内，不上系统：谁问过、问什么、有没有预算、有没有报价。每周记一次有效私信数。","citation":"","doc":"methodology/增长理论-AARRR到复购.md","section":"2. 用户生命周期与分层","note":"","doc_mtime":"2026-11-14T17:24:03+08:00","doc_sha1":"c4ac876d7c7b","evidence":"inferred","evidence_note":"","dim":"k5","review_state":"已确认"},{"id":"a-no-ab","label":"前 15 条不做 A/B","type":"action","layer":"layer-closed","status":"supported","definition":"只做「每 5 条复盘一次类型配比」，等单条稳定过 1 万播放再谈对照实验。","citation":"","doc":"methodology/增长理论-AARRR到复购.md","section":"4. 增长实验·动作","note":"","doc_mtime":"2026-11-14T17:24:03+08:00","doc_sha1":"c4ac876d7c7b","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-ask-review","label":"交付当天要一句可公开的评价","type":"action","layer":"layer-referred","status":"supported","definition":"不要求好评，只要具体。「不要设计推荐有礼，量太小」——评价是唯一能积累的社会认同资产。","citation":"","doc":"methodology/增长理论-AARRR到复购.md","section":"5. 复购与转介绍·动作","note":"","doc_mtime":"2026-11-14T17:24:03+08:00","doc_sha1":"c4ac876d7c7b","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-review-to-pin","label":"评价截图进置顶","type":"action","layer":"layer-referred","status":"supported","definition":"把公开评价变成可被后来者看到的证据，替代「很多人都在用」。","citation":"","doc":"methodology/经营-01-五种变现形态.md","section":"六、对这个账号意味着什么·3","note":"","doc_mtime":"2026-11-14T17:28:43+08:00","doc_sha1":"34df76e5c9b5","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"a-quarterly-touch","label":"每季度给老客户发一次同类问题","type":"action","layer":"layer-referred","status":"supported","definition":"「我看到一个跟你类似的问题」，不问单。维持关系，等待转介绍自然发生。","citation":"","doc":"methodology/00-操盘主干.md","section":"第六层·必须做的动作","note":"","doc_mtime":"2026-11-14T17:28:29+08:00","doc_sha1":"35a704b0f70b","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"a-no-referral-gift","label":"不设计「推荐有礼」","type":"action","layer":"layer-referred","status":"supported","definition":"客户数 <50，K 因子无统计意义；返佣会把转介绍变成交易，损伤声望型地位。","citation":"","doc":"methodology/增长理论-AARRR到复购.md","section":"5. 复购与转介绍·动作","note":"","doc_mtime":"2026-11-14T17:24:03+08:00","doc_sha1":"c4ac876d7c7b","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-no-equity","label":"不接股权换服务","type":"action","layer":"layer-referred","status":"supported","definition":"除非对方已付费且金额覆盖成本。用服务换股份，常见结局是既没收到钱也没拿到股权。","citation":"","doc":"methodology/经营-01-五种变现形态.md","section":"六、对这个账号意味着什么·4","note":"","doc_mtime":"2026-11-14T17:28:43+08:00","doc_sha1":"34df76e5c9b5","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"a-compliance-4q","label":"发布前合规四问","type":"action","layer":null,"status":"supported","definition":"有没有承诺效果？有没有出现客户信息？有没有引导站外？有没有资质外内容（医疗/金融/法律建议）？","citation":"","doc":"methodology/03-违规红线.md","section":"五、这个账号意味着什么·1","note":"","doc_mtime":"2026-11-14T17:25:15+08:00","doc_sha1":"d7ea6cd595be","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-review-8col","label":"复盘记 8 列 / 48 小时看四数","type":"action","layer":null,"status":"supported","definition":"一条一行，存在一张表里；48 小时后数据基本定型。列多了会变成「看数据」而不是「改动作」。","citation":"","doc":"methodology/制作-02-单条视频复盘方法.md","section":"一至三节","note":"","doc_mtime":"2026-11-14T17:27:54+08:00","doc_sha1":"be88a36dcf76","evidence":"inferred","evidence_note":"","dim":"k5","review_state":"已确认"},{"id":"a-review-order","label":"判定顺序：开头→观点→人设","type":"action","layer":null,"status":"supported","definition":"先看 2 秒跳出（开头），再看评论（有没有观点），最后看主页访问（人设）。不要一上来就怀疑选题。","citation":"","doc":"methodology/制作-02-单条视频复盘方法.md","section":"四、判定","note":"","doc_mtime":"2026-11-14T17:27:54+08:00","doc_sha1":"be88a36dcf76","evidence":"inferred","evidence_note":"","dim":"k5","review_state":"已确认"},{"id":"a-topic-twice","label":"同一选题最多试两次","type":"action","layer":null,"status":"supported","definition":"两种开头都低就判死，不第三次，避免在讲不明白的题上反复消耗。","citation":"","doc":"methodology/制作-02-单条视频复盘方法.md","section":"四、判定","note":"","doc_mtime":"2026-11-14T17:27:54+08:00","doc_sha1":"be88a36dcf76","evidence":"inferred","evidence_note":"","dim":"k4","review_state":"已确认"},{"id":"m-plays","label":"播放量","type":"metric","layer":"layer-seen","status":"supported","definition":"分发规模。只作分母，不单独看。","citation":"","doc":"methodology/制作-02-单条视频复盘方法.md","section":"一、48 小时内看哪几个数","note":"","doc_mtime":"2026-11-14T17:27:54+08:00","doc_sha1":"be88a36dcf76","evidence":"none","evidence_note":"抖音后台数据，公开页不展示；当前无实测值。","dim":"k4","review_state":"已确认"},{"id":"m-2s-bounce","label":"2 秒跳出率","type":"metric","layer":"layer-seen","status":"supported","definition":"开头是否成立。高 = 第一帧/第一句不成立，换第一句而不是换选题。","citation":"","doc":"methodology/制作-02-单条视频复盘方法.md","section":"一、48 小时内看哪几个数","note":"","doc_mtime":"2026-11-14T17:27:54+08:00","doc_sha1":"be88a36dcf76","evidence":"none","evidence_note":"后台指标，当前无实测值。","dim":"k4","review_state":"已确认"},{"id":"m-5s-completion","label":"5 秒完播率","type":"metric","layer":"layer-seen","status":"supported","definition":"钩子是否成立。<50% 说明开头有问题【经验帖】。","citation":"","doc":"methodology/制作-02-单条视频复盘方法.md","section":"一、48 小时内看哪几个数","note":"","doc_mtime":"2026-11-14T17:27:54+08:00","doc_sha1":"be88a36dcf76","evidence":"none","evidence_note":"公开页不展示，当前只能人工推断。","dim":"k4","review_state":"已确认"},{"id":"m-completion","label":"完播率","type":"metric","layer":"layer-seen","status":"supported","definition":"内容是否撑得住。必须与时长一起看，35 秒与 6 分钟不可比。","citation":"","doc":"methodology/制作-02-单条视频复盘方法.md","section":"一、48 小时内看哪几个数","note":"","doc_mtime":"2026-11-14T17:27:54+08:00","doc_sha1":"be88a36dcf76","evidence":"none","evidence_note":"同上：完播率在创作者后台，公开页拿不到。","dim":"k4","review_state":"已确认"},{"id":"m-avg-watch","label":"平均播放时长","type":"metric","layer":"layer-seen","status":"supported","definition":"观众在哪掉。结合进度条曲线看掉点位置。","citation":"","doc":"methodology/制作-02-单条视频复盘方法.md","section":"一、48 小时内看哪几个数","note":"","doc_mtime":"2026-11-14T17:27:54+08:00","doc_sha1":"be88a36dcf76","evidence":"none","evidence_note":"后台指标，当前无实测值。","dim":"k4","review_state":"已确认"},{"id":"m-3s-retention","label":"前 3 秒留存","type":"metric","layer":"layer-seen","status":"supported","definition":"算法推不推的第一判据（创作者中心「3 秒完播率」）。阈值待校准。","citation":"","doc":"topics/方向备选与切换判据.md","section":"一、判「抖音不认」的四个指标","note":"","doc_mtime":"2026-11-13T22:08:16+08:00","doc_sha1":"4bef5d8299a5","evidence":"none","evidence_note":"3 秒留存只在后台；对标样本也读不到。","dim":"k2","review_state":"已确认"},{"id":"m-followers","label":"涨粉数","type":"metric","layer":"layer-seen","status":"supported","definition":"阶段目标的量级指标（30 天 1 万），但不是北极星。","citation":"","doc":"methodology/增长理论-AARRR到复购.md","section":"1. AARRR 与北极星指标","note":"","doc_mtime":"2026-11-14T17:24:03+08:00","doc_sha1":"c4ac876d7c7b","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"m-same-audience","label":"同类人群完播","type":"metric","layer":"layer-seen","status":"supported","definition":"不追「进池」，只追同类人看完并接话。比播放量有意义。","citation":"","doc":"methodology/流量理论-推荐到搜索.md","section":"3. 流量池分层与冷启动","note":"","doc_mtime":"2026-11-14T17:23:52+08:00","doc_sha1":"2a069f21103a","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"m-profile-visits","label":"主页访问","type":"metric","layer":"layer-remembered","status":"supported","definition":"人设是否成立。播放高但主页访问低 = 只看内容不认人。","citation":"","doc":"methodology/制作-02-单条视频复盘方法.md","section":"一、48 小时内看哪几个数","note":"","doc_mtime":"2026-11-14T17:27:54+08:00","doc_sha1":"be88a36dcf76","evidence":"sourced","evidence_note":"","dim":"k4","review_state":"已确认"},{"id":"m-brand-search","label":"品牌词搜索量","type":"metric","layer":"layer-remembered","status":"supported","definition":"被记住的强证据（有人主动搜你）。当前外部通道不可测，只能靠后台或站内搜索人工看。","citation":"","doc":"methodology/00-操盘主干.md","section":"第二层·怎么判断成了","note":"当前采集通道拿不到：未登录无法查品牌词搜索量。","doc_mtime":"2026-11-14T17:28:29+08:00","doc_sha1":"35a704b0f70b","evidence":"none","evidence_note":"站内搜索未登录强制登录，无法采集。","dim":"k2","review_state":"已确认"},{"id":"m-identity-recall","label":"定位词/句式复述","type":"metric","layer":"layer-remembered","status":"supported","definition":"评论区有人用你的句式接话，或直接叫出你的定位词。可观测，不需要后台数据。","citation":"","doc":"methodology/00-操盘主干.md","section":"第二层·怎么判断成了","note":"","doc_mtime":"2026-11-14T17:28:29+08:00","doc_sha1":"35a704b0f70b","evidence":"sourced","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"m-comments","label":"评论数","type":"metric","layer":"layer-trusted","status":"supported","definition":"是否产生「想留」的动作。纯情绪与具体追问要分开看。","citation":"","doc":"methodology/制作-02-单条视频复盘方法.md","section":"一、48 小时内看哪几个数","note":"","doc_mtime":"2026-11-14T17:27:54+08:00","doc_sha1":"be88a36dcf76","evidence":"sourced","evidence_note":"","dim":"k4","review_state":"已确认"},{"id":"m-favorites","label":"收藏数","type":"metric","layer":"layer-trusted","status":"supported","definition":"收藏 > 点赞 = 信息型内容；点赞 > 收藏 = 情绪型内容。","citation":"","doc":"methodology/制作-02-单条视频复盘方法.md","section":"一、48 小时内看哪几个数","note":"","doc_mtime":"2026-11-14T17:27:54+08:00","doc_sha1":"be88a36dcf76","evidence":"sourced","evidence_note":"","dim":"k4","review_state":"已确认"},{"id":"m-demand-signal","label":"评论需求信号（L1/L2）","type":"metric","layer":"layer-trusted","status":"supported","definition":"L1 求定制/问价、L2 求方法的原话条数。比播放量更能判断加推质量。","citation":"","doc":"methodology/00-操盘主干.md","section":"第三层·怎么判断成了","note":"","doc_mtime":"2026-11-14T17:28:29+08:00","doc_sha1":"35a704b0f70b","evidence":"sourced","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"m-search-dm","label":"搜索来源私信","type":"metric","layer":"layer-found","status":"supported","definition":"私信第一句出现「我搜 XX 找到你的」。证明搜索标题命中。","citation":"","doc":"methodology/00-操盘主干.md","section":"第四层·怎么判断成了","note":"","doc_mtime":"2026-11-14T17:28:29+08:00","doc_sha1":"35a704b0f70b","evidence":"sourced","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"m-profile-to-dm","label":"主页访问→私信转化率","type":"metric","layer":"layer-found","status":"supported","definition":"私信数 ÷ 主页访问（后台有访问数）。","citation":"","doc":"methodology/00-操盘主干.md","section":"第四层·怎么判断成了","note":"","doc_mtime":"2026-11-14T17:28:29+08:00","doc_sha1":"35a704b0f70b","evidence":"sourced","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"m-dm-to-wechat","label":"私信→加微转化率","type":"metric","layer":"layer-found","status":"supported","definition":"加微数 ÷ 私信数。衡量承接结构是否顺畅。","citation":"","doc":"topics/方向备选与切换判据.md","section":"一、判「抖音不认」的四个指标","note":"","doc_mtime":"2026-11-13T22:08:16+08:00","doc_sha1":"4bef5d8299a5","evidence":"sourced","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"m-contact-list","label":"客户名单数","type":"metric","layer":"layer-found","status":"supported","definition":"留下了几个能联系的人。粉丝是平台的，联系人是你的。","citation":"","doc":"methodology/人性-02-注意力商品化.md","section":"这个账号上的动作·4","note":"","doc_mtime":"2026-11-14T17:26:14+08:00","doc_sha1":"1954fa051762","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"m-effective-dm","label":"有效私信数（北极星）","type":"metric","layer":"layer-closed","status":"supported","definition":"出现「多少钱/能不能做/什么价」的私信条数。北极星指标，不是粉丝数。","citation":"","doc":"methodology/理论到操盘动作映射表.md","section":"北极星指标","note":"","doc_mtime":"2026-11-14T17:24:13+08:00","doc_sha1":"d24e6840308c","evidence":"sourced","evidence_note":"","dim":"k5","review_state":"已确认"},{"id":"m-price-dm","label":"私信问价条数","type":"metric","layer":"layer-closed","status":"supported","definition":"≥3 条才考虑投流验证人群；每条视频带来 ≥1 条问价私信即为有效。","citation":"","doc":"methodology/制作-02-单条视频复盘方法.md","section":"一、48 小时内看哪几个数","note":"","doc_mtime":"2026-11-14T17:27:54+08:00","doc_sha1":"be88a36dcf76","evidence":"sourced","evidence_note":"","dim":"k4","review_state":"已确认"},{"id":"m-quotes","label":"报价数","type":"metric","layer":"layer-closed","status":"supported","definition":"发出报价的条数，手工记。有效私信 → 报价的流失能看出方案问题。","citation":"","doc":"methodology/00-操盘主干.md","section":"第五层·怎么判断成了","note":"","doc_mtime":"2026-11-14T17:28:29+08:00","doc_sha1":"35a704b0f70b","evidence":"sourced","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"m-close-rate","label":"成交率","type":"metric","layer":"layer-closed","status":"supported","definition":"报价 → 成单。没有信任的询价会直接进入比价，成交率是信任的终点指标。","citation":"","doc":"methodology/00-操盘主干.md","section":"第五层·怎么判断成了","note":"","doc_mtime":"2026-11-14T17:28:29+08:00","doc_sha1":"35a704b0f70b","evidence":"sourced","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"m-order-value","label":"客单价","type":"metric","layer":"layer-closed","status":"supported","definition":"手工记。接服务的单笔金额，决定单人产能下的营收上限。","citation":"","doc":"methodology/经营-01-五种变现形态.md","section":"一、接服务","note":"","doc_mtime":"2026-11-14T17:28:43+08:00","doc_sha1":"34df76e5c9b5","evidence":"sourced","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"m-payment-cycle","label":"回款周期","type":"metric","layer":"layer-closed","status":"supported","definition":"预付 30–50%，尾款验收后结；回款周期 1–3 个月，淡旺季明显（经验推断）。","citation":"","doc":"methodology/经营-01-五种变现形态.md","section":"一、接服务","note":"","doc_mtime":"2026-11-14T17:28:43+08:00","doc_sha1":"34df76e5c9b5","evidence":"sourced","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"m-public-reviews","label":"公开评价数","type":"metric","layer":"layer-referred","status":"supported","definition":"≥3 条。转介绍的地基。","citation":"","doc":"methodology/00-操盘主干.md","section":"第六层·怎么判断成了","note":"","doc_mtime":"2026-11-14T17:28:29+08:00","doc_sha1":"35a704b0f70b","evidence":"sourced","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"m-referrals","label":"老客户主动推荐数","type":"metric","layer":"layer-referred","status":"supported","definition":"≥1。唯一能证明复利存在的指标。","citation":"","doc":"methodology/00-操盘主干.md","section":"第六层·怎么判断成了","note":"","doc_mtime":"2026-11-14T17:28:29+08:00","doc_sha1":"35a704b0f70b","evidence":"sourced","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"theory-homepage-packaging","label":"主页包装标准","type":"theory","layer":"layer-found","status":"supported","definition":"头像、名字、简介三行、置顶三条、背景图五项。验收标准只有一个：陌生人看主页 3 秒，能说出「这人做什么的」。","citation":"经验推断（头像/置顶/封面在 40 个账号抽样中读不到）","doc":"methodology/L1-主页包装与转化路径.md","section":"一、主页包装","note":"全部为经验推断，无样本验证：未登录时主页元素不渲染。","doc_mtime":"2026-11-14T17:48:39+08:00","doc_sha1":"720d817bdb16","evidence":"inferred","evidence_note":"全部标准无样本验证，40 个账号三项均未读到。","dim":"k1","review_state":"已确认"},{"id":"theory-diversion-boundary","label":"站外导流边界","type":"theory","layer":"layer-found","status":"supported","definition":"私信、评论区、主页、企业号四个入口各自能做什么、风控触发点在哪。顺序原则：公开区只引发对话，联系方式只在私信里、且对方先开口后给。","citation":"《抖音社区自律公约》【官方】+ 经验【经验帖】","doc":"methodology/L1-主页包装与转化路径.md","section":"二、转化路径细则","note":"","doc_mtime":"2026-11-14T17:48:39+08:00","doc_sha1":"720d817bdb16","evidence":"sourced","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-funnel-six","label":"内容营销漏斗（六段）","type":"theory","layer":null,"status":"supported","definition":"曝光→停留→认同→关注→私信→成交，每段有各自的损耗点与测法。短视频账号的漏斗不是线性的，但损耗点可以逐段定位。","citation":"本项目归纳","doc":"methodology/L1-内容营销漏斗.md","section":"一、六段漏斗","note":"跨层：六段与六层主干一一对应，但不完全等同（认同段横跨第 2/3 层）。","doc_mtime":"2026-11-14T17:47:58+08:00","doc_sha1":"4ceae2495849","evidence":"inferred","evidence_note":"本项目归纳，段间损耗未量化。","dim":"k1","review_state":"已确认"},{"id":"theory-platform-structure","label":"平台分发结构差异","type":"theory","layer":null,"status":"supported","definition":"只有抖音是纯推荐起量；视频号靠社交、小红书靠搜索、知乎靠问题页、B站靠完播。同一套内容逻辑不能平移。B 端客户在视频号/微信生态，不在抖音。","citation":"行业通行描述【经验帖】（比例与成本均未获取）","doc":"methodology/L1-平台-七大平台对照.md","section":"二、三条结构性判断","note":"","doc_mtime":"2026-11-14T17:46:46+08:00","doc_sha1":"505e4a140448","evidence":"none","evidence_note":"机制判断是经验帖；各平台用户比例与投放成本全部未获取。","dim":"k1","review_state":"已确认"},{"id":"theory-goffman","label":"自我呈现（前台/后台）","type":"theory","layer":"layer-trusted","status":"supported","definition":"人在前台表演一个角色，在后台卸下；前台的稳定性决定别人信不信。划法：能力不能演，态度可以演；经历不能编，表达可以设计。","citation":"Erving Goffman, 1959","doc":"methodology/L2-战略-IP操盘.md","section":"一、人设怎么搭","note":"","doc_mtime":"2026-11-14T17:47:33+08:00","doc_sha1":"ca1fe7182799","evidence":"sourced","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"theory-ip-lifecycle","label":"IP 生命周期四阶段","type":"theory","layer":null,"status":"supported","definition":"识别期（0–1 万）→ 信任期（1–10 万）→ 规模期（10–50 万）→ 资产期（50 万+），每阶段该做与不该做不同。判断当前阶段只看私信里问价的比例。","citation":"本项目归纳","doc":"methodology/L2-战略-IP操盘.md","section":"二、IP 生命周期四阶段","note":"跨层：当前在识别期，只做固定句式与固定题材。","doc_mtime":"2026-11-14T17:47:33+08:00","doc_sha1":"ca1fe7182799","evidence":"inferred","evidence_note":"阶段划分为经验归纳，边界值未验证。","dim":"k2","review_state":"已确认"},{"id":"theory-assetization","label":"内容资产化","type":"theory","layer":"layer-remembered","status":"supported","definition":"一条视频至少沉淀四样：判断句、案例卡（场景+数字+前后对比）、开头模板、客户问题。只贡献播放、没产出任何一样的，是消耗品不是资产。","citation":"本项目归纳","doc":"methodology/L2-战略-IP操盘.md","section":"三、内容资产化","note":"","doc_mtime":"2026-11-14T17:47:33+08:00","doc_sha1":"ca1fe7182799","evidence":"inferred","evidence_note":"本项目方法。","dim":"k2","review_state":"已确认"},{"id":"theory-crisis-pr","label":"危机公关四步","type":"theory","layer":"layer-trusted","status":"supported","definition":"2 小时内不删不辩论、先确认事实；当天发「事实+做了什么+何时给结果」；48 小时私下给补救；一周后经客户同意把处理做成内容。三条禁忌：删评、对喷、找水军。","citation":"经验流程【经验帖】","doc":"methodology/L2-战略-IP操盘.md","section":"四、危机公关处置流程","note":"","doc_mtime":"2026-11-14T17:47:33+08:00","doc_sha1":"ca1fe7182799","evidence":"inferred","evidence_note":"经验流程，无案例验证。","dim":"k2","review_state":"已确认"},{"id":"theory-stp","label":"STP 与人群选择","type":"theory","layer":"layer-remembered","status":"supported","definition":"按身份、痛点强度、决策链长度三个变量细分；细分成立的标准是这群人能不能在同一个地方被触达。本账号先选「中小企业老板」，同行只作流量池。","citation":"STP 为教材通说【文献】；客单价为经验推断","doc":"methodology/L2-战略-STP与人群.md","section":"一至三节","note":"","doc_mtime":"2026-11-14T17:47:18+08:00","doc_sha1":"88f0b544c502","evidence":"inferred","evidence_note":"STP 框架是教材通说；三类人群客单价是经验推断，支付分布未获取。","dim":"k2","review_state":"已确认"},{"id":"theory-competitive-map","label":"竞争地图（技术深度 × 是否到场）","type":"theory","layer":"layer-remembered","status":"supported","definition":"四象限里，浅+不到场是教程号，深+不到场是大厂，浅+到场是外包公司；「深 + 到场」是空位，也是 FDE 唯一该占的格。","citation":"本项目归纳","doc":"methodology/L2-战略-STP与人群.md","section":"四、竞争地图","note":"","doc_mtime":"2026-11-14T17:47:18+08:00","doc_sha1":"88f0b544c502","evidence":"inferred","evidence_note":"本项目归纳，象限边界为判断。","dim":"k2","review_state":"已确认"},{"id":"theory-three-choices","label":"平台/人群/形态三选择","type":"theory","layer":null,"status":"supported","definition":"三个未决选择互相耦合：平台决定客户在哪，人群决定话术，形态决定现金流。不能同时选最重的一档。","citation":"本项目归纳","doc":"methodology/L2-战略-三个未决选择.md","section":"三个选择的耦合关系","note":"","doc_mtime":"2026-11-14T17:31:14+08:00","doc_sha1":"116341587c4f","evidence":"inferred","evidence_note":"本项目决策框架。","dim":"k2","review_state":"已确认"},{"id":"theory-pricing-methods","label":"定价三法","type":"theory","layer":"layer-closed","status":"supported","definition":"成本加成算底线、价值定价报出去、竞争定价只做校验。顺序不能反：先算底线，再按客户省的钱报，最后才看同行。","citation":"行业通说【经验帖】","doc":"methodology/L2-战略-商业模式与定价.md","section":"二、定价三法","note":"","doc_mtime":"2026-11-14T17:47:47+08:00","doc_sha1":"f5f79c50b987","evidence":"inferred","evidence_note":"行业通说，本账号未实测。","dim":"k2","review_state":"已确认"},{"id":"theory-negotiation","label":"议价路径与让步规律","type":"theory","layer":"layer-closed","status":"supported","definition":"小 B 客户砍价按四步发生：便宜点→拆单→比价→账期。每一次让步都会引出下一次试探，第一次让步的方式决定后面四步的强度。原则：降范围，不降价。","citation":"经验推断【经验帖】","doc":"methodology/经营-03-议价与谈判.md","section":"一、小 B 客户的砍价路径","note":"","doc_mtime":"2026-11-14T17:29:06+08:00","doc_sha1":"720303a54bd0","evidence":"inferred","evidence_note":"砍价路径来自经验观察，样本有限。","dim":"k2","review_state":"已确认"},{"id":"theory-productization","label":"产品化（标准包）","type":"theory","layer":"layer-closed","status":"supported","definition":"按「输入-输出」划范围而不是按工作量；一个硬边界：不在清单里的需求就是新项目。同一需求被问 3 次以上、交付物开始同构，才值得做标准包。","citation":"经验推断【经验帖】","doc":"methodology/经营-02-产品化.md","section":"一至四节","note":"","doc_mtime":"2026-11-14T17:28:55+08:00","doc_sha1":"ca8a1aed9ab3","evidence":"inferred","evidence_note":"经验推断，尚未形成标准包。","dim":"k2","review_state":"已确认"},{"id":"theory-risk-hedge","label":"四类品牌风险与对冲","type":"theory","layer":null,"status":"supported","definition":"单点依赖、平台依赖、声誉风险、被抄袭。风险不是单独一层，而是同时作用在第 2–4 层：平台依赖伤被看见，单点依赖伤被成交，声誉风险伤被信任。","citation":"经验推断【经验帖】","doc":"methodology/经营-04-品牌风险与对冲.md","section":"全文","note":"横切：对冲动作分散在各层，不集中在某一层。","doc_mtime":"2026-11-14T17:29:17+08:00","doc_sha1":"5df46dcffec3","evidence":"inferred","evidence_note":"经验归纳。","dim":"k2","review_state":"已确认"},{"id":"theory-cross-platform-rewrite","label":"跨平台改写（不能平移）","type":"theory","layer":"layer-found","status":"supported","definition":"开头、时长、引导语、封面都要按平台重做：抖音要反常第一帧，视频号要先给身份与背景，小红书标题即搜索词，B站先给问题。直接同步会被各平台限流。","citation":"经验推断【经验帖】","doc":"methodology/L3-战术-跨平台改写.md","section":"二、四条改写原则","note":"","doc_mtime":"2026-11-14T17:47:02+08:00","doc_sha1":"913c826a6401","evidence":"inferred","evidence_note":"经验推断。","dim":"k3","review_state":"已确认"},{"id":"a-avatar-set","label":"头像/昵称/背景三件套","type":"action","layer":"layer-found","status":"supported","definition":"头像真人正脸、深色纯背景、脸部占 50–60%、缩到 40px 仍能认出；昵称「称呼+定位词」≤10 字；背景用工作场景、压暗 30%。","citation":"","doc":"methodology/L1-主页包装与转化路径.md","section":"一、主页包装","note":"","doc_mtime":"2026-11-14T17:48:39+08:00","doc_sha1":"720d817bdb16","evidence":"none","evidence_note":"40 个账号抽样中头像分布未获取（未登录不渲染）。","dim":"k1","review_state":"已确认"},{"id":"a-no-contact-public","label":"公开区不写联系方式","type":"action","layer":"layer-found","status":"supported","definition":"简介、评论区、视频里都不写微信/手机号/二维码；替代写法「案例在置顶」「评论区说下你的场景」「合作备注来意」。","citation":"","doc":"methodology/L1-主页包装与转化路径.md","section":"二、转化路径细则","note":"","doc_mtime":"2026-11-14T17:48:39+08:00","doc_sha1":"720d817bdb16","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-weekly-focus","label":"每周只盯漏斗的一段","type":"action","layer":"layer-closed","status":"supported","definition":"第 1 周盯开头（第 2 段），第 2 周盯私信（第 5 段），不全都看。第 5 段的动作最便宜：置顶加一条案例 + 评论置顶加需求模板。","citation":"","doc":"methodology/L1-内容营销漏斗.md","section":"五、对这个账号意味着什么","note":"","doc_mtime":"2026-11-14T17:47:58+08:00","doc_sha1":"4ceae2495849","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-platform-priority","label":"抖音主战场 + 视频号第二落点","type":"action","layer":"layer-found","status":"supported","definition":"抖音要量（第 1 层），视频号要人（第 4 层）。小红书只做图文，B站/知乎暂不做，微博/快手不做。","citation":"","doc":"methodology/L1-平台-七大平台对照.md","section":"三、对 FDE 账号意味着什么","note":"","doc_mtime":"2026-11-14T17:46:46+08:00","doc_sha1":"505e4a140448","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-xhs-graphic","label":"小红书图文版（20 分钟）","type":"action","layer":"layer-found","status":"supported","definition":"把一条视频的判断句 + 3 张截图做成笔记，标题写成搜索词，成本约 20 分钟，占搜索位。","citation":"","doc":"methodology/L3-战术-跨平台改写.md","section":"三、成本与排期","note":"","doc_mtime":"2026-11-14T17:47:02+08:00","doc_sha1":"913c826a6401","evidence":"inferred","evidence_note":"20 分钟/条为自估。","dim":"k3","review_state":"已确认"},{"id":"a-asset-four","label":"每条沉淀四样资产","type":"action","layer":"layer-remembered","status":"supported","definition":"判断句、案例卡、开头模板、客户问题，四样至少产出一件；否则这条白拍。","citation":"","doc":"methodology/L2-战略-IP操盘.md","section":"三、内容资产化","note":"","doc_mtime":"2026-11-14T17:47:33+08:00","doc_sha1":"ca1fe7182799","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"a-crisis-four-step","label":"危机处置按四步走","type":"action","layer":"layer-trusted","status":"supported","definition":"2 小时确认事实 → 当天简短说明 → 48 小时私下补救 → 一周后经同意做成内容。不删评、不对喷、不找水军。","citation":"","doc":"methodology/L2-战略-IP操盘.md","section":"四、危机公关处置流程","note":"","doc_mtime":"2026-11-14T17:47:33+08:00","doc_sha1":"ca1fe7182799","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"a-positioning-statement","label":"定位陈述一句话模板","type":"action","layer":"layer-remembered","status":"supported","definition":"「为已经有 AI 想法但落不了地的中小企业，提供从流程诊断到系统上线的一次交付……不同于教程号和外包公司，因为我到场做过，且能给出可核对的前后数字。」写进简介第一行，30 天不改。","citation":"","doc":"methodology/L2-战略-STP与人群.md","section":"五、定位陈述","note":"","doc_mtime":"2026-11-14T17:47:18+08:00","doc_sha1":"88f0b544c502","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"a-boss-three-questions","label":"每条回答老板三问","type":"action","layer":"layer-trusted","status":"supported","definition":"这要花多少钱、跟我像不像、做完谁在用。三条内容分别对应成本、案例、交付。","citation":"","doc":"methodology/L2-战略-STP与人群.md","section":"六、对这个账号意味着什么·2","note":"","doc_mtime":"2026-11-14T17:47:18+08:00","doc_sha1":"88f0b544c502","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"a-payment-willingness-3q","label":"支付意愿三问","type":"action","layer":"layer-closed","status":"supported","definition":"看他已经在为什么付钱（招人/外包/SaaS）；问「这类事你们去年花过多少钱」；看谁签字。写进接单 SOP 第 2 步。","citation":"","doc":"methodology/L2-战略-STP与人群.md","section":"三、支付意愿怎么判断","note":"","doc_mtime":"2026-11-14T17:47:18+08:00","doc_sha1":"88f0b544c502","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"a-deep-onsite-only","label":"只占「深 + 到场」一格","type":"action","layer":"layer-closed","status":"supported","definition":"纯咨询、纯卖课、纯不到的活都不接；竞争地图只占一格，任何「不到场」的收入都不做。","citation":"","doc":"methodology/L2-战略-STP与人群.md","section":"六、对这个账号意味着什么·3","note":"","doc_mtime":"2026-11-14T17:47:18+08:00","doc_sha1":"88f0b544c502","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"a-cashflow-rules","label":"现金流三条硬规则","type":"action","layer":"layer-closed","status":"supported","definition":"预付 50% 才开工、尾款验收 7 天内；单客户收入占比 ≤40%；保留 3 个月固定支出的现金。","citation":"","doc":"methodology/L2-战略-商业模式与定价.md","section":"三、现金流三条硬规则","note":"","doc_mtime":"2026-11-14T17:47:47+08:00","doc_sha1":"f5f79c50b987","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"a-cost-first-pricing","label":"报价三步（成本底线→价值定价→不跟价）","type":"action","layer":"layer-closed","status":"supported","definition":"先用成本加成算底线（(工时×时薪)÷(1−毛利率)），再按客户省的钱报价值价，最后用同行价只做校验、不跟价。","citation":"","doc":"methodology/L2-战略-商业模式与定价.md","section":"五、对这个账号意味着什么·2","note":"","doc_mtime":"2026-11-14T17:47:47+08:00","doc_sha1":"f5f79c50b987","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"a-log-hours","label":"每单记工时","type":"action","layer":"layer-closed","status":"supported","definition":"3 单后回头校正时薪；现在的毛利率是推断不是事实。","citation":"","doc":"methodology/L2-战略-商业模式与定价.md","section":"五、对这个账号意味着什么·3","note":"","doc_mtime":"2026-11-14T17:47:47+08:00","doc_sha1":"f5f79c50b987","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"a-weekly-rhythm","label":"一周节奏（精品 3 : 测试 1）","type":"action","layer":"layer-seen","status":"supported","definition":"精品条 3 条/2 周（有数字、有前后对比），测试条 1 条/周（只改一个变量）。全是测试条没有资产，全是精品条不知道哪种有效。","citation":"","doc":"methodology/L3-战术-一周内容节奏.md","section":"一、两类条目的配比","note":"","doc_mtime":"2026-11-14T17:30:56+08:00","doc_sha1":"aef4ec2234bd","evidence":"inferred","evidence_note":"平衡信任与探索，无对照实验。","dim":"k3","review_state":"已确认"},{"id":"a-fixed-slot","label":"固定发布时段，30 天不变","type":"action","layer":"layer-seen","status":"supported","definition":"建议 19:00–21:00 里的同一时段；时段随机，复盘时无法排除时间因素。","citation":"","doc":"methodology/L4-SOP-发布.md","section":"5. 发布时间","note":"","doc_mtime":"2026-11-14T17:30:34+08:00","doc_sha1":"5293aab7e580","evidence":"inferred","evidence_note":"","dim":"k4","review_state":"已确认"},{"id":"a-same-agent-limit4","label":"同一智能体纵深 ≤4 条","type":"action","layer":"layer-remembered","status":"supported","definition":"超过 4 条必须换案例，防止审美疲劳；纵深是形式重复、内容不重复的边界。","citation":"","doc":"methodology/L3-战术-一周内容节奏.md","section":"三、三条硬规则·3","note":"","doc_mtime":"2026-11-14T17:30:56+08:00","doc_sha1":"aef4ec2234bd","evidence":"inferred","evidence_note":"","dim":"k3","review_state":"已确认"},{"id":"a-comment-templates","label":"评论区五种场景话术","type":"action","layer":"layer-trusted","status":"supported","definition":"问怎么做→「没讲步骤，讲的是判断，私信说场景」；问工具→不报工具名；被质疑→承认特例并给条件；同行挑衅→只回一句；纯喷→不回不删。","citation":"","doc":"methodology/L3-战术-评论区与私信话术.md","section":"一、评论区","note":"","doc_mtime":"2026-11-14T17:31:05+08:00","doc_sha1":"031fb74ad27f","evidence":"inferred","evidence_note":"","dim":"k3","review_state":"已确认"},{"id":"a-pinned-self-comment","label":"置顶自评抛二选一","type":"action","layer":"layer-seen","status":"supported","definition":"每条发完自己置顶一条：「这次我想错了，你觉得该怎么做？」给一个具体二选一。","citation":"","doc":"methodology/L3-战术-评论区与私信话术.md","section":"一、评论区·置顶自评","note":"","doc_mtime":"2026-11-14T17:31:05+08:00","doc_sha1":"031fb74ad27f","evidence":"inferred","evidence_note":"","dim":"k3","review_state":"已确认"},{"id":"a-ladder","label":"评论→私信三级阶梯，不跳级","type":"action","layer":"layer-closed","status":"supported","definition":"看（0 成本）→ 评论区二选一（低成本）→ 私信一句话场景（中成本）。视频里直接喊「私信我报价」等于让陌生人第一次接触就付最高成本。","citation":"","doc":"methodology/L3-战术-评论区与私信话术.md","section":"三、三级阶梯","note":"","doc_mtime":"2026-11-14T17:31:05+08:00","doc_sha1":"031fb74ad27f","evidence":"inferred","evidence_note":"","dim":"k3","review_state":"已确认"},{"id":"a-scope-not-price","label":"降范围不降价","type":"action","layer":"layer-closed","status":"supported","definition":"「这个预算能做，范围砍到只做 X，Y 和 Z 下次再加」。价格是能力的信号，一降就再难涨回去。","citation":"","doc":"methodology/经营-03-议价与谈判.md","section":"二、四种压价话术与应对","note":"","doc_mtime":"2026-11-14T17:29:06+08:00","doc_sha1":"720303a54bd0","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"a-refuse-five","label":"五条拒单标准","type":"action","layer":"layer-closed","status":"supported","definition":"预算低于最低时薪×工时、要求先做后付、合同前改需求 3 次、决策人非付款人、无对价排他。触发即拒，不临场心软。","citation":"","doc":"methodology/经营-03-议价与谈判.md","section":"四、什么时候该拒单","note":"","doc_mtime":"2026-11-14T17:29:06+08:00","doc_sha1":"720303a54bd0","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"a-material-audit-15","label":"起号前盘点 ≥15 个反常瞬间","type":"action","layer":"layer-seen","status":"supported","definition":"按五类归档存量素材；≥15 个才开工，<15 缩到 10 条排期。边拍边想，第 3 条就断更。","citation":"","doc":"methodology/L4-SOP-起号.md","section":"6. 素材盘点","note":"","doc_mtime":"2026-11-14T17:30:26+08:00","doc_sha1":"c46a5f0e0e5c","evidence":"inferred","evidence_note":"","dim":"k4","review_state":"已确认"},{"id":"a-publish-sop","label":"发布 SOP 八步","type":"action","layer":"layer-seen","status":"supported","definition":"定稿四问 → 标题「具体对象+反常结果」≤20 字（另备搜索版）→ 封面用信息量最大一帧 + 6–10 字 → 话题 3 个 → 固定时段 → 手机端发布 → 2 小时回评 → 24 小时记 8 列。","citation":"","doc":"methodology/L4-SOP-发布.md","section":"全文","note":"","doc_mtime":"2026-11-14T17:30:34+08:00","doc_sha1":"5293aab7e580","evidence":"inferred","evidence_note":"标题/封面/话题规则为经验归纳；封面在账号中的分布未获取。","dim":"k4","review_state":"已确认"},{"id":"a-topic-tags","label":"话题三个：垂类 + 问题 + 泛流量","type":"action","layer":"layer-seen","status":"supported","definition":"1 个垂类（#智能体）+ 1 个问题（#AI落地）+ 1 个泛流量，总数 ≤4，不堆 10 个蹭流量。","citation":"","doc":"methodology/L4-SOP-发布.md","section":"4. 话题","note":"","doc_mtime":"2026-11-14T17:30:34+08:00","doc_sha1":"5293aab7e580","evidence":"inferred","evidence_note":"","dim":"k4","review_state":"已确认"},{"id":"a-reply-2h","label":"发布后 2 小时回评，回复率 100%","type":"action","layer":"layer-trusted","status":"supported","definition":"每条评论带具体回答，不用「谢谢」；同时置顶一条自评。","citation":"","doc":"methodology/L4-SOP-发布.md","section":"7. 发布后 2 小时","note":"","doc_mtime":"2026-11-14T17:30:34+08:00","doc_sha1":"5293aab7e580","evidence":"inferred","evidence_note":"","dim":"k4","review_state":"已确认"},{"id":"a-weekly-review","label":"每周一复盘 30 分钟（五步）","type":"action","layer":null,"status":"supported","definition":"补 8 列 → 看四数 → 每条定性一类（开头失败/无观点/人设弱/选题不行）→ 与上周比哪类占比变化最大 → 写一句「下周只改 ___」。","citation":"","doc":"methodology/L4-SOP-复盘.md","section":"全文","note":"","doc_mtime":"2026-11-14T17:30:49+08:00","doc_sha1":"d9b562e1f3bd","evidence":"inferred","evidence_note":"","dim":"k5","review_state":"已确认"},{"id":"a-trigger-adjust","label":"触发式调整，不按心情","type":"action","layer":null,"status":"supported","definition":"连续 3 条 5 秒完播 <40% → 停更一周重写开头库；单条稳定 >1 万播放 → 开始 A/B；一周 ≥3 条问价 → 投 100 元测试；连续 2 周 0 私信 → 查第 3 层，不加更。","citation":"","doc":"methodology/L4-SOP-复盘.md","section":"什么时候调整","note":"","doc_mtime":"2026-11-14T17:30:49+08:00","doc_sha1":"d9b562e1f3bd","evidence":"inferred","evidence_note":"","dim":"k5","review_state":"已确认"},{"id":"a-takeorder-sop","label":"接单 SOP 八步","type":"action","layer":"layer-closed","status":"supported","definition":"2 小时首响 → 需求三问 → 按标准包核对能不能做 → 只发一页报价单 + 一条最像他场景的案例 → 报价（完整版在前）→ 砍价只降范围 → 收 50% 定金并发启动确认 → 不能做就推荐同行。","citation":"","doc":"methodology/L4-SOP-接单.md","section":"全文","note":"","doc_mtime":"2026-11-14T17:30:42+08:00","doc_sha1":"c770d822f269","evidence":"inferred","evidence_note":"首响与报价时限为服务惯例，无成交数据。","dim":"k4","review_state":"已确认"},{"id":"a-quote-two-materials","label":"只发两样材料","type":"action","layer":"layer-closed","status":"supported","definition":"一页报价单 + 一条最像他场景的案例视频；不发作品集 PDF（没人看）。","citation":"","doc":"methodology/L4-SOP-接单.md","section":"4. 发材料","note":"","doc_mtime":"2026-11-14T17:30:42+08:00","doc_sha1":"c770d822f269","evidence":"inferred","evidence_note":"","dim":"k4","review_state":"已确认"},{"id":"a-scope-io","label":"按输入-输出划范围","type":"action","layer":"layer-closed","status":"supported","definition":"输入：客户提供什么；输出：一个能跑的流程 + 1 次培训 + 1 份文档。范围用「不超过」表述：3 个流程、2 个系统、10 个账号。","citation":"","doc":"methodology/经营-02-产品化.md","section":"一、怎么划范围","note":"","doc_mtime":"2026-11-14T17:28:55+08:00","doc_sha1":"ca8a1aed9ab3","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"a-revision-cap","label":"两轮修改上限，第 3 轮按小时计费","type":"action","layer":"layer-closed","status":"supported","definition":"每轮一次性汇总反馈；合同写死「两轮内免费调整，范围变更按 800 元/小时计」。无限修改是项目制亏损第一大来源。","citation":"","doc":"methodology/经营-02-产品化.md","section":"二、修改次数上限","note":"","doc_mtime":"2026-11-14T17:28:55+08:00","doc_sha1":"ca8a1aed9ab3","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"a-negotiation-anchor","label":"锚在客户省了多少","type":"action","layer":"layer-closed","status":"supported","definition":"算给对方听：「每天 1 人 3 小时，一个月 60 小时；这套做完 10 分钟。按 60 元/小时，一年省 4 万多」，再报 1.8 万。只给算式和事实，不承诺百分比。","citation":"","doc":"methodology/经营-03-议价与谈判.md","section":"三、锚在客户省了多少","note":"","doc_mtime":"2026-11-14T17:29:06+08:00","doc_sha1":"720303a54bd0","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"a-risk-hedge","label":"风险对冲四动作","type":"action","layer":null,"status":"supported","definition":"任一客户占比 ≤40% 且保持 2 个在谈线索；每 5 条内容 1 条同步 B站/视频号；准备一页不依赖平台的落地页；被抄只投诉不骂战。","citation":"","doc":"methodology/经营-04-品牌风险与对冲.md","section":"全文","note":"","doc_mtime":"2026-11-14T17:29:17+08:00","doc_sha1":"5df46dcffec3","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"a-client-concentration","label":"客户收入占比表","type":"action","layer":"layer-closed","status":"supported","definition":"一张表记每个客户月度收入，超 40% 立刻找新单。","citation":"","doc":"methodology/经营-04-品牌风险与对冲.md","section":"五、这个账号意味着什么·1","note":"","doc_mtime":"2026-11-14T17:29:17+08:00","doc_sha1":"5df46dcffec3","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"m-homepage-3s","label":"主页 3 秒识别","type":"metric","layer":"layer-found","status":"supported","definition":"让陌生人看主页 3 秒，说出「这人做什么的」。说不出就重做简介第 1/3 行。","citation":"","doc":"methodology/L1-主页包装与转化路径.md","section":"一、主页包装·验收","note":"","doc_mtime":"2026-11-14T17:48:39+08:00","doc_sha1":"720d817bdb16","evidence":"sourced","evidence_note":"","dim":"k5","review_state":"已确认"},{"id":"m-funnel-rates","label":"各段转化率（曝光→停留→私信）","type":"metric","layer":null,"status":"supported","definition":"漏斗六段各自的转化率。当前全部未获取：无曝光数、无后台转化，只能算相对上周的变化。","citation":"","doc":"methodology/L1-内容营销漏斗.md","section":"四、测法","note":"曝光数与各段转化率均拿不到；行业基准也没有，只能比自己上周。","doc_mtime":"2026-11-14T17:47:58+08:00","doc_sha1":"4ceae2495849","evidence":"none","evidence_note":"行业平均转化率各家口径不一，未获取。","dim":"k1","review_state":"已确认"},{"id":"m-quote-ratio","label":"私信问价比例","type":"metric","layer":"layer-closed","status":"supported","definition":"私信里问价的比例，是判断 IP 阶段的唯一指标：0 = 识别期，开始出现 = 信任期。粉丝可以买，问价不能。","citation":"","doc":"methodology/L2-战略-IP操盘.md","section":"二、IP 生命周期四阶段","note":"","doc_mtime":"2026-11-14T17:47:33+08:00","doc_sha1":"ca1fe7182799","evidence":"sourced","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"m-gross-margin","label":"毛利率","type":"metric","layer":"layer-closed","status":"supported","definition":"毛利 = 报价 − 交付工时 × 时薪 − 外包。经验推断 50–60%，未验证；3 单后用真实工时校正。","citation":"","doc":"methodology/L2-战略-商业模式与定价.md","section":"四、成本结构","note":"只有经验推断值，没有实测毛利。","doc_mtime":"2026-11-14T17:47:47+08:00","doc_sha1":"f5f79c50b987","evidence":"inferred","evidence_note":"50–60% 为行业惯例推算，单客户真实毛利未获取。","dim":"k2","review_state":"已确认"},{"id":"m-client-share","label":"单客户收入占比","type":"metric","layer":"layer-closed","status":"supported","definition":"任一客户月度收入占比，红线 40%。超过就说明单点依赖，现金流随时会断。","citation":"","doc":"methodology/经营-04-品牌风险与对冲.md","section":"1. 单点依赖","note":"","doc_mtime":"2026-11-14T17:29:17+08:00","doc_sha1":"5df46dcffec3","evidence":"sourced","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"gap-publish-frequency","label":"发布频次与最优间隔","type":"metric","layer":"layer-seen","status":"mentioned","definition":"一周几条、间隔几天最优。一周节奏给了「两周 3 条精品 + 1 条周测」的排期，但没有独立篇、没有数据支撑，覆盖矩阵记为「部分 / 空缺 1」。","citation":"","doc":"methodology/L3-战术-一周内容节奏.md","section":"一、两类条目的配比","note":"有战术排期，没有最优频次结论；对标样本也不足。","doc_mtime":"2026-11-14T17:30:56+08:00","doc_sha1":"aef4ec2234bd","evidence":"none","evidence_note":"没有最优频次的结论，样本也不足。","dim":"k3","review_state":"已确认"},{"id":"gap-capacity","label":"产能上限与外包","type":"metric","layer":"layer-closed","status":"missing","definition":"一周最多交付几个项目、哪些环节可以外包、外包后毛利还剩多少。经营 01 只有「单人年营收 30–60 万」的经验推断，没有工时与外包口径。","citation":"","doc":"methodology/经营-01-五种变现形态.md","section":"一、接服务","note":"覆盖矩阵建议补的一篇；当前只有营收上限的经验推断。","doc_mtime":"2026-11-14T17:28:43+08:00","doc_sha1":"34df76e5c9b5","evidence":"none","evidence_note":"没有工时与外包口径。","dim":"k2","review_state":"已确认"},{"id":"theory-community-na","label":"社群运营","type":"theory","layer":"layer-found","status":"na","definition":"社群运营（拉群、日常维护、群内转化）。本项目一次性项目制、客户数 <50，主动判定不适用，不补文档。","citation":"主动判定","doc":"monetization/README.md","section":"当前缺口","note":"不适用：不是没写，是判断不该做。避免为了「补全」去维护一个没有复利的群。","doc_mtime":"2026-11-13T21:54:12+08:00","doc_sha1":"2a9512bba09f","evidence":"inferred","evidence_note":"主动判定：不适用，不是缺数据。","dim":"k2","review_state":"已确认"},{"id":"theory-rumor-coldstart","label":"冷启动五条传闻","type":"theory","layer":"layer-seen","status":"unverified","definition":"养号、新号扶持期、一天多发会限流、删作品掉权重、说「微信」就被限流——五条都广泛流传、都找不到出处。真正的问题不是关键词，是导流行为。","citation":"无出处（行业通行说法）","doc":"methodology/02-新号冷启动与养号.md","section":"三、无法确认的","note":"传闻：五条均无出处；冷启动只按「同题材、标签准」执行。","doc_mtime":"2026-11-14T17:25:03+08:00","doc_sha1":"3527cd4abcbd","evidence":"rumor","evidence_note":"养号/扶持期/一天多发/删作品/微信限流五条均无出处。","dim":"k1","review_state":"已确认"},{"id":"theory-rumor-saima","label":"赛马机制（传闻）","type":"theory","layer":null,"status":"unverified","definition":"平台故意让几个新号互相竞争、只推赢的那个。平台不会特意让账号互斗，各号只是独立进入推荐。","citation":"无出处（行业通行说法）","doc":"methodology/L1-矩阵与投放.md","section":"一、矩阵与赛马","note":"传闻：矩阵号「赛马」是运营比喻，不是平台机制。","doc_mtime":"2026-11-14T17:48:53+08:00","doc_sha1":"24007923891c","evidence":"rumor","evidence_note":"行业说法，非平台机制。","dim":"k1","review_state":"已确认"},{"id":"theory-rumor-8s","label":"注意力 8 秒（传闻）","type":"theory","layer":"layer-seen","status":"unverified","definition":"「人的注意力只有 8 秒」被广泛引用，找不到可靠出处。可确认的只有「短视频前 3 秒决定去留」这一定性判断。","citation":"无出处","doc":"methodology/L1-心理补充.md","section":"5. 观众心理","note":"传闻：不要拿 8 秒当设计依据。","doc_mtime":"2026-11-14T17:49:04+08:00","doc_sha1":"e7e804195ba3","evidence":"rumor","evidence_note":"注意力 8 秒无可靠出处。","dim":"k1","review_state":"已确认"},{"id":"m-rumor-completion30","label":"完播率 30% 合格线（传闻）","type":"metric","layer":"layer-seen","status":"unverified","definition":"「完播率过 30% 就算合格」在行业里广泛流传，平台没有公布过任何合格线，也无法验证样本口径。","citation":"","doc":"methodology/L1-完播口径.md","section":"二、不要用的口径","note":"传闻：不同时长、不同赛道不可比，只能跟自己比。","doc_mtime":"2026-11-14T17:49:11+08:00","doc_sha1":"87165e5e12e9","evidence":"rumor","evidence_note":"平台从未公布合格线，明确不采用。","dim":"k1","review_state":"已确认"},{"id":"theory-asch","label":"从众（Asch）","type":"theory","layer":"layer-trusted","status":"supported","definition":"不确定时人用他人行为判断正确行为；公开的多数意见会压制个人判断（约 1/3 被试跟随明显错误的答案）。效应在跨文化重复中存在，但效应量随情境差异很大。","citation":"Asch, 1951；Cialdini, 1984","doc":"methodology/L1-心理补充.md","section":"2. 从众与社会认同","note":"","doc_mtime":"2026-11-14T17:49:04+08:00","doc_sha1":"e7e804195ba3","evidence":"boundary","evidence_note":"跨文化重复存在，效应量随情境差异大。","dim":"k1","review_state":"已确认"},{"id":"theory-foot-in-door","label":"门槛效应","type":"theory","layer":"layer-closed","status":"supported","definition":"先答应小请求的人更容易答应后续大请求（自我形象一致性）。效应稳健但效应量中等，两次请求间隔不能太长。","citation":"Freedman & Fraser, JPSP, 1966","doc":"methodology/L1-心理补充.md","section":"3. 门槛效应","note":"","doc_mtime":"2026-11-14T17:49:04+08:00","doc_sha1":"e7e804195ba3","evidence":"boundary","evidence_note":"效应稳健但量中等。","dim":"k1","review_state":"已确认"},{"id":"theory-bystander","label":"旁观者效应","type":"theory","layer":"layer-closed","status":"supported","definition":"在场人越多，个体越不行动，责任被分散。后续元分析显示效应弱于原研究，危险情境更强，网络情境适用性有限。","citation":"Darley & Latané, 1968；Fischer et al., 2011","doc":"methodology/L1-心理补充.md","section":"4. 旁观者效应","note":"","doc_mtime":"2026-11-14T17:49:04+08:00","doc_sha1":"e7e804195ba3","evidence":"boundary","evidence_note":"Fischer 2011 元分析显示弱于原研究。","dim":"k1","review_state":"已确认"},{"id":"theory-peak-end","label":"峰值-终值规则","type":"theory","layer":"layer-seen","status":"supported","definition":"人对一段经历的评价取决于峰值与结尾，不是平均。原研究是疼痛/体验实验，外推到 30 秒视频属于类比，不是验证。","citation":"Kahneman et al., 1993","doc":"methodology/L1-心理补充.md","section":"5. 观众心理","note":"","doc_mtime":"2026-11-14T17:49:04+08:00","doc_sha1":"e7e804195ba3","evidence":"boundary","evidence_note":"基于疼痛实验，外推到短视频是类比。","dim":"k1","review_state":"已确认"},{"id":"a-name-single-exit","label":"点名 + 单一出口 + 私信前 20 个互动者","type":"action","layer":"layer-closed","status":"supported","definition":"泛问「你们怎么看」会触发旁观者效应；改成点名（「如果你也在做 XX，回我一句」）、只留一个动作、主动私信前 20 个互动者，把公共场合变成一对一。","citation":"","doc":"methodology/L1-心理补充.md","section":"4. 旁观者效应·动作","note":"","doc_mtime":"2026-11-14T17:49:04+08:00","doc_sha1":"e7e804195ba3","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"a-peak-ending","label":"一条只设一个峰值，结尾给判断句","type":"action","layer":"layer-seen","status":"supported","definition":"峰值放在反常那一刻；结尾必须是判断句，不能是「就这样」；不用平淡收尾音乐。","citation":"","doc":"methodology/L1-心理补充.md","section":"5. 观众心理·动作","note":"","doc_mtime":"2026-11-14T17:49:04+08:00","doc_sha1":"e7e804195ba3","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-dou-plus","label":"DOU+ / 千川机制","type":"theory","layer":"layer-closed","status":"supported","definition":"DOU+ 给单条买曝光、按曝光计费；千川按转化目标出价（oCPM）。功能与计费方式有官方文档，起投门槛、成本区间、涨粉成本全部未获取。","citation":"巨量引擎文档【官方】；价格为【经验帖】或未获取","doc":"methodology/L1-矩阵与投放.md","section":"二、DOU+ 与千川","note":"","doc_mtime":"2026-11-14T17:48:53+08:00","doc_sha1":"24007923891c","evidence":"none","evidence_note":"功能与计费有官方文档；起投金额、涨粉成本、千川日预算未获取。","dim":"k1","review_state":"已确认"},{"id":"theory-republish","label":"判重与搬运边界","type":"theory","layer":null,"status":"supported","definition":"平台有重复内容/搬运处罚条款，但相似度阈值不公开。可观测信号：同素材、同封面、同文案、批量发。同一素材多号发，重拍比重剪安全。","citation":"《社区自律公约》【官方】+ 经验【经验帖】","doc":"methodology/L1-矩阵与投放.md","section":"一、矩阵与赛马","note":"","doc_mtime":"2026-11-14T17:48:53+08:00","doc_sha1":"24007923891c","evidence":"none","evidence_note":"判重阈值平台不公开，只能靠可观测信号判断。","dim":"k1","review_state":"已确认"},{"id":"a-matrix-backup","label":"1 主号 + 1 备份号","type":"action","layer":"layer-found","status":"supported","definition":"一个人只维护主号 + 备份号，不做 3 个以上；备份号发同题材不同案例，不发同一条内容；一机一号。","citation":"","doc":"methodology/L1-矩阵与投放.md","section":"一、几个号合适","note":"","doc_mtime":"2026-11-14T17:48:53+08:00","doc_sha1":"24007923891c","evidence":"inferred","evidence_note":"","dim":"k1","review_state":"已确认"},{"id":"theory-completion-baseline","label":"完播率可比口径","type":"theory","layer":"layer-seen","status":"supported","definition":"完播率只在「同账号、同时长、同类型」内可比。行业没有合格线，也不该用别人的数字当基准；正确做法是建自己的历史中位数。","citation":"本项目方法（平台未公布口径）","doc":"methodology/L1-完播口径.md","section":"全文","note":"口径本身是推断：平台未公布完播率计算方式，只能确认「看的是完整播放比例」。","doc_mtime":"2026-11-14T17:49:11+08:00","doc_sha1":"87165e5e12e9","evidence":"inferred","evidence_note":"平台未公布完播口径，只确认「完整播放比例」。","dim":"k1","review_state":"已确认"},{"id":"a-own-baseline","label":"建自己的历史表","type":"action","layer":"layer-seen","status":"supported","definition":"按「类型 × 时长」记 5 秒完播与完播率，取历史中位数，新条只跟自己的中位数比；连续 3 条低于中位数 30% 才判这条不行。","citation":"","doc":"methodology/L1-完播口径.md","section":"三、怎么用","note":"","doc_mtime":"2026-11-14T17:49:11+08:00","doc_sha1":"87165e5e12e9","evidence":"inferred","evidence_note":"","dim":"k5","review_state":"已确认"},{"id":"layer-seen","order":1,"name":"被看见","problem":"让系统把你推给对的人，且他们没在前 3 秒划走。","success":"5 秒完播率 ≥50%，完播率与同长度同类可比；评论区出现具体追问而不只是「没看懂」。","death":"开头自我介绍；标题写品类词；一条开三个缺口；日更但题材乱跳。","if_broken":"后面五层全部归零——没人看见，记忆、信任、成交都没有输入。","doc":"methodology/00-操盘主干.md","section":"第一层：被看见","type":"layer","status":"supported","note":"","label":"被看见","doc_mtime":"2026-11-14T17:28:29+08:00","doc_sha1":"35a704b0f70b","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"layer-remembered","order":2,"name":"被记住","problem":"看完之后，观众能用一个词或一句话说出你是谁。","success":"评论区有人用你的句式接话，或直接叫出定位词；主页访问率持续上升。","death":"每期换题材；今天讲技术、明天讲创业；口号一周一改。","if_broken":"播放再高也换不来私信，第三层的信任没有对象可依附。","doc":"methodology/00-操盘主干.md","section":"第二层：被记住","type":"layer","status":"supported","note":"","label":"被记住","doc_mtime":"2026-11-14T17:28:29+08:00","doc_sha1":"35a704b0f70b","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"layer-trusted","order":3,"name":"被信任","problem":"让观众相信这个人说的话有依据，且他真做过。","success":"评论区出现 L2（求方法）或 L1（求定制/问价）原话；私信里出现「我看了你那条 XX」。","death":"只讲信息不给判断；全是成功案例；出现一次效果承诺。","if_broken":"第四层即使发生，找到的只是一个报价页——没有信任的询价会直接进入比价。","doc":"methodology/00-操盘主干.md","section":"第三层：被信任","type":"layer","status":"supported","note":"","label":"被信任","doc_mtime":"2026-11-14T17:28:29+08:00","doc_sha1":"35a704b0f70b","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"layer-found","order":4,"name":"被找到","problem":"有人真想解决这个问题时，能在哪找到你，且找到的是「人」不是「号」。","success":"私信第一句出现「我搜 XX 找到你的」；主页访问→私信转化率可手工计算。","death":"简介写满形容词没有事实；置顶是自我介绍；所有标题只写反常。","if_broken":"需求发生时找不到入口，第三层积累的信任无法兑现。","doc":"methodology/00-操盘主干.md","section":"第四层：被找到","type":"layer","status":"supported","note":"","label":"被找到","doc_mtime":"2026-11-14T17:28:29+08:00","doc_sha1":"35a704b0f70b","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"layer-closed","order":5,"name":"被成交","problem":"把「有兴趣」变成「有报价、有订单」。","success":"有效私信数（出现多少钱/能不能做）≥3 条；报价数、成单数、客单价可手工记。","death":"一上来甩报价；同时要四个动作；承诺效果；客户名单留在平台里。","if_broken":"第六层没有交付事实可引用，整个链路退化成流量生意。","doc":"methodology/00-操盘主干.md","section":"第五层：被成交","type":"layer","status":"supported","note":"","label":"被成交","doc_mtime":"2026-11-14T17:28:29+08:00","doc_sha1":"35a704b0f70b","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"},{"id":"layer-referred","order":6,"name":"被转介绍","problem":"让交付过的客户愿意公开说一句，并带来下一个客户。","success":"老客户主动推荐数 ≥1；公开评价 ≥3 条。","death":"交付完即失联；只敢要好话；把转介绍做成返佣。","if_broken":"每一单都要重新买流量，账号永远停在获客阶段，没有复利。","doc":"methodology/00-操盘主干.md","section":"第六层：被转介绍","type":"layer","status":"supported","note":"","label":"被转介绍","doc_mtime":"2026-11-14T17:28:29+08:00","doc_sha1":"35a704b0f70b","evidence":"inferred","evidence_note":"","dim":"k2","review_state":"已确认"}],"edges":[{"id":"e1","source":"theory-recall-ranking","target":"layer-seen","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e2","source":"theory-explore-exploit","target":"layer-seen","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e3","source":"theory-traffic-pool","target":"layer-seen","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e4","source":"theory-interest-recommend","target":"layer-seen","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e5","source":"theory-cold-start","target":"layer-seen","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e6","source":"theory-curiosity-gap","target":"layer-seen","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e7","source":"theory-high-arousal","target":"layer-seen","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e8","source":"theory-rec-flow","target":"layer-seen","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e9","source":"theory-search-flow","target":"layer-found","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e10","source":"theory-free-traffic-three","target":"layer-found","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e11","source":"theory-positioning","target":"layer-remembered","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e12","source":"theory-usp","target":"layer-remembered","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e13","source":"theory-cbbe","target":"layer-remembered","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e14","source":"theory-availability","target":"layer-remembered","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e15","source":"theory-slogan","target":"layer-remembered","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e16","source":"theory-mere-exposure","target":"layer-remembered","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e17","source":"theory-meme","target":"layer-remembered","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e18","source":"theory-parasocial","target":"layer-trusted","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e19","source":"theory-narrative-transport","target":"layer-trusted","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e20","source":"theory-central-route","target":"layer-trusted","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e21","source":"theory-peripheral-route","target":"layer-seen","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e22","source":"theory-social-proof","target":"layer-trusted","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e23","source":"theory-prestige-status","target":"layer-trusted","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e24","source":"theory-carnegie","target":"layer-trusted","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e25","source":"theory-attention-commodity","target":"layer-found","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e26","source":"theory-two-step-flow","target":"layer-found","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e27","source":"theory-private-domain","target":"layer-found","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e28","source":"theory-anchoring","target":"layer-closed","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e29","source":"theory-loss-frame","target":"layer-closed","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e30","source":"theory-dual-system","target":"layer-closed","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e31","source":"theory-fcb","target":"layer-closed","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e32","source":"theory-social-exchange","target":"layer-closed","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e33","source":"theory-reciprocal-altruism","target":"layer-closed","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e34","source":"theory-performance-ad","target":"layer-closed","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e35","source":"theory-interest-ecommerce","target":"layer-closed","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e36","source":"theory-north-star","target":"layer-closed","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e37","source":"theory-nps-referral","target":"layer-referred","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e38","source":"model-monetization-forms","target":"layer-closed","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e39","source":"theory-homepage-packaging","target":"layer-found","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e40","source":"theory-diversion-boundary","target":"layer-found","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e41","source":"theory-goffman","target":"layer-trusted","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e42","source":"theory-assetization","target":"layer-remembered","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e43","source":"theory-crisis-pr","target":"layer-trusted","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e44","source":"theory-stp","target":"layer-remembered","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e45","source":"theory-competitive-map","target":"layer-remembered","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e46","source":"theory-pricing-methods","target":"layer-closed","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e47","source":"theory-negotiation","target":"layer-closed","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e48","source":"theory-productization","target":"layer-closed","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e49","source":"theory-cross-platform-rewrite","target":"layer-found","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e50","source":"theory-community-na","target":"layer-found","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e51","source":"theory-rumor-coldstart","target":"layer-seen","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e52","source":"theory-rumor-8s","target":"layer-seen","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e53","source":"theory-asch","target":"layer-trusted","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e54","source":"theory-foot-in-door","target":"layer-closed","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e55","source":"theory-bystander","target":"layer-closed","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e56","source":"theory-peak-end","target":"layer-seen","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e57","source":"theory-dou-plus","target":"layer-closed","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e58","source":"theory-completion-baseline","target":"layer-seen","type":"belongs","note":"归属依据：六层主干 / 理论到操盘动作映射表"},{"id":"e59","source":"theory-recall-ranking","target":"a-same-topic-first5","type":"drives","note":"题材不清则召回阶段没你；三个词连续 5 条不换"},{"id":"e60","source":"theory-explore-exploit","target":"a-one-variable","type":"drives","note":"每条只改一个变量，系统和你才分辨得出哪版有效"},{"id":"e61","source":"theory-cold-start","target":"a-same-topic-first5","type":"drives","note":"初始人群依赖内容标签"},{"id":"e62","source":"theory-cold-start","target":"a-two-day-cadence","type":"drives","note":"同质内容高频发布可能被判低质/重复"},{"id":"e63","source":"theory-curiosity-gap","target":"a-anomaly-first3s","type":"drives","note":"开头 = 一个具体事实 + 一个反常"},{"id":"e64","source":"theory-curiosity-gap","target":"a-one-gap","type":"drives","note":"开两个缺口 = 一个都记不住"},{"id":"e65","source":"theory-high-arousal","target":"a-anomaly-first3s","type":"drives","note":"只用「敬畏/意外」，落点是它有自己的边界"},{"id":"e66","source":"theory-rec-flow","target":"a-two-titles","type":"drives","note":"推荐版标题写反常"},{"id":"e67","source":"theory-search-flow","target":"a-two-titles","type":"drives","note":"搜索版标题写问题词，晚 3–7 天发"},{"id":"e68","source":"theory-free-traffic-three","target":"a-share-to-peers","type":"drives","note":"社交一腿靠同行群，不靠抖音"},{"id":"e69","source":"theory-peripheral-route","target":"a-peripheral-first3s","type":"drives","note":"前 3 秒看信源与气氛，中段再上论据"},{"id":"e70","source":"theory-positioning","target":"a-bio-identity","type":"drives","note":"占一个空位，不抢「AI 博主」"},{"id":"e71","source":"theory-positioning","target":"a-bio-three-lines","type":"drives","note":"身份、事实、入口三行写死，30 天不动"},{"id":"e72","source":"theory-usp","target":"a-number-each","type":"drives","note":"每条结尾一句可验证的话"},{"id":"e73","source":"theory-cbbe","target":"a-assoc-words","type":"drives","note":"单一维度反复强化才形成强联想"},{"id":"e74","source":"theory-cbbe","target":"a-bio-three-lines","type":"drives","note":"简介里只放这三个词"},{"id":"e75","source":"theory-availability","target":"a-assoc-words","type":"drives","note":"反复同一场景，让「想起你」先于「比较你」"},{"id":"e76","source":"theory-slogan","target":"a-main-slogan","type":"drives","note":"短、可复读、指向一个利益"},{"id":"e77","source":"theory-mere-exposure","target":"a-fixed-intro","type":"drives","note":"形式重复，内容不重复"},{"id":"e78","source":"theory-mere-exposure","target":"a-two-day-cadence","type":"drives","note":"间隔太密会提前进入倒 U 的下降段"},{"id":"e79","source":"theory-meme","target":"a-fixed-phrase","type":"drives","note":"固定句式是唯一能带来 UGC 的结构"},{"id":"e80","source":"theory-parasocial","target":"a-face-to-camera","type":"drives","note":"对镜头说话 = 打破第四面墙"},{"id":"e81","source":"theory-parasocial","target":"a-admit-failure","type":"drives","note":"私人细节让关系从内容转向人"},{"id":"e82","source":"theory-parasocial","target":"a-fixed-intro","type":"drives","note":"固定开场让「又是他」发生在 1 秒内"},{"id":"e83","source":"theory-narrative-transport","target":"a-story-first","type":"drives","note":"故事在前、道理在后，降低反驳"},{"id":"e84","source":"theory-narrative-transport","target":"a-first-person-now","type":"drives","note":"第一人称现在时，传输更强"},{"id":"e85","source":"theory-central-route","target":"a-number-each","type":"drives","note":"B 端高卷入，看论据"},{"id":"e86","source":"theory-central-route","target":"a-refutable-claim","type":"drives","note":"可反驳的判断才是论据"},{"id":"e87","source":"theory-social-proof","target":"a-real-review","type":"drives","note":"真实评价是最强证据"},{"id":"e88","source":"theory-social-proof","target":"a-review-to-pin","type":"drives","note":"评价进置顶，成为后来者的证据"},{"id":"e89","source":"theory-prestige-status","target":"a-not-expert-intro","type":"drives","note":"展示我能干，不宣告我厉害"},{"id":"e90","source":"theory-prestige-status","target":"a-no-peer-bashing","type":"drives","note":"贬低是支配型动作"},{"id":"e91","source":"theory-carnegie","target":"a-client-situation","type":"drives","note":"谈对方的利益，不谈自己的成就"},{"id":"e92","source":"theory-carnegie","target":"a-reply-restate","type":"drives","note":"让对方觉得被听见"},{"id":"e93","source":"theory-attention-commodity","target":"a-dm-only-asset","type":"drives","note":"把一次性注意力转成可联系的人"},{"id":"e94","source":"theory-attention-commodity","target":"a-own-contact-list","type":"drives","note":"客户名单必须自己攥"},{"id":"e95","source":"theory-attention-commodity","target":"a-no-irrelevant-ads","type":"drives","note":"卖错一次，人设变成恰饭号"},{"id":"e96","source":"theory-two-step-flow","target":"a-share-to-peers","type":"drives","note":"B 端信息经同行中转"},{"id":"e97","source":"theory-private-domain","target":"a-minimal-private","type":"drives","note":"公域获客、私域承接，不做社群运营"},{"id":"e98","source":"theory-anchoring","target":"a-anchor-quote","type":"drives","note":"先出现的数字影响后续判断"},{"id":"e99","source":"theory-anchoring","target":"a-quote-onepager","type":"drives","note":"把范围与付款节点写死，减少来回议价"},{"id":"e100","source":"theory-loss-frame","target":"a-loss-frame","type":"drives","note":"同一事实换说法，选择会变"},{"id":"e101","source":"theory-dual-system","target":"a-no-number-opening","type":"drives","note":"开头不激活慢系统"},{"id":"e102","source":"theory-fcb","target":"a-info-emotion-73","type":"drives","note":"高卷入理性，信息为主"},{"id":"e103","source":"theory-social-exchange","target":"a-dm-first-scene","type":"drives","note":"把互动成本降到最低"},{"id":"e104","source":"theory-social-exchange","target":"a-binary-comment","type":"drives","note":"二选一比开放题成本低"},{"id":"e105","source":"theory-social-exchange","target":"a-one-cta","type":"drives","note":"同时要四个动作等于成本翻四倍"},{"id":"e106","source":"theory-social-exchange","target":"a-promise-reply","type":"drives","note":"把回报变得确定"},{"id":"e107","source":"theory-reciprocal-altruism","target":"a-first3-no-cta","type":"drives","note":"先给三次再提要求"},{"id":"e108","source":"theory-reciprocal-altruism","target":"a-low-cost-gift","type":"drives","note":"给完还留一个动作"},{"id":"e109","source":"theory-reciprocal-altruism","target":"a-judgment-only","type":"drives","note":"步骤留下，才有私信的理由"},{"id":"e110","source":"theory-performance-ad","target":"a-no-ads-first15","type":"drives","note":"没有转化回传，oCPM 学不到人群"},{"id":"e111","source":"theory-interest-ecommerce","target":"a-no-cart","type":"drives","note":"高客单 B 端不在小黄车成交"},{"id":"e112","source":"theory-north-star","target":"a-dm-log","type":"drives","note":"每周记有效私信数"},{"id":"e113","source":"theory-nps-referral","target":"a-ask-review","type":"drives","note":"客户数 <50，改要一句可公开评价"},{"id":"e114","source":"theory-nps-referral","target":"a-no-referral-gift","type":"drives","note":"K 因子无统计意义，返佣会伤关系"},{"id":"e115","source":"theory-rfm","target":"a-dm-log","type":"drives","note":"替代方案：手工私信表，不上系统"},{"id":"e116","source":"theory-ab-test","target":"a-no-ab","type":"drives","note":"几百播放无统计功效，延后"},{"id":"e117","source":"model-public-boundary","target":"a-judgment-only","type":"drives","note":"公开内容只交付判断"},{"id":"e118","source":"model-public-boundary","target":"a-dm-only-asset","type":"drives","note":"步骤留作私域交换物"},{"id":"e119","source":"model-compliance","target":"a-compliance-4q","type":"drives","note":"发布前四问"},{"id":"e120","source":"model-compliance","target":"a-blur-client","type":"drives","note":"客户信息比搬运更危险"},{"id":"e121","source":"model-compliance","target":"a-no-effect-promise","type":"drives","note":"效果承诺属虚假宣传"},{"id":"e122","source":"model-monetization-forms","target":"a-service-only","type":"drives","note":"前 6 个月只做接服务"},{"id":"e123","source":"model-monetization-forms","target":"a-quote-onepager","type":"drives","note":"报价口径统一写进一页纸"},{"id":"e124","source":"model-monetization-forms","target":"a-no-equity","type":"drives","note":"不接股权换服务"},{"id":"e125","source":"model-six-layers","target":"a-same-topic-first5","type":"drives","note":"第 1 层不成立，后面全黑"},{"id":"e126","source":"model-six-layers","target":"a-bio-three-lines","type":"drives","note":"第 4 层断了，信任停在关注"},{"id":"e127","source":"model-review-8col","target":"a-review-8col","type":"drives","note":"8 列就够，列多了变成看数据"},{"id":"e128","source":"model-review-8col","target":"a-review-order","type":"drives","note":"判定顺序固定，先开头后观点"},{"id":"e129","source":"model-review-8col","target":"a-topic-twice","type":"drives","note":"同一选题最多试两次"},{"id":"e130","source":"theory-homepage-packaging","target":"a-avatar-set","type":"drives","note":"主页五件套，验收标准是 3 秒能说出你是谁"},{"id":"e131","source":"theory-homepage-packaging","target":"a-bio-three-lines","type":"drives","note":"三行写死：身份 / 做过什么 / 入口"},{"id":"e132","source":"theory-homepage-packaging","target":"a-pin-case","type":"drives","note":"置顶三条：案例、判断力、服务说明"},{"id":"e133","source":"theory-homepage-packaging","target":"a-no-contact-public","type":"drives","note":"五件套里不包含联系方式"},{"id":"e134","source":"theory-diversion-boundary","target":"a-no-contact-public","type":"drives","note":"公开区只引发对话，联系方式进私信"},{"id":"e135","source":"theory-diversion-boundary","target":"a-ladder","type":"drives","note":"四个入口各自能做什么，按阶梯走"},{"id":"e136","source":"theory-funnel-six","target":"a-weekly-focus","type":"drives","note":"每周只盯损耗最大的一段"},{"id":"e137","source":"theory-funnel-six","target":"a-reply-2h","type":"drives","note":"第 5 段的动作最便宜，先做"},{"id":"e138","source":"theory-platform-structure","target":"a-platform-priority","type":"drives","note":"抖音要量、视频号要人"},{"id":"e139","source":"theory-platform-structure","target":"a-xhs-graphic","type":"drives","note":"小红书靠搜索，标题即搜索词"},{"id":"e140","source":"theory-goffman","target":"a-face-to-camera","type":"drives","note":"前台只演判断与现场，不演能力"},{"id":"e141","source":"theory-ip-lifecycle","target":"a-main-slogan","type":"drives","note":"识别期只做固定句式与固定题材"},{"id":"e142","source":"theory-ip-lifecycle","target":"a-same-topic-first5","type":"drives","note":"0–1 万粉阶段不做多题材"},{"id":"e143","source":"theory-ip-lifecycle","target":"a-same-agent-limit4","type":"drives","note":"纵深也要有边界，超过 4 条换案例"},{"id":"e144","source":"theory-assetization","target":"a-asset-four","type":"drives","note":"每条至少沉淀四样之一"},{"id":"e145","source":"theory-crisis-pr","target":"a-crisis-four-step","type":"drives","note":"四步处置，三条禁忌"},{"id":"e146","source":"theory-stp","target":"a-positioning-statement","type":"drives","note":"定位陈述写进简介第一行"},{"id":"e147","source":"theory-stp","target":"a-boss-three-questions","type":"drives","note":"老板只问三件事：多少钱、像不像、谁在用"},{"id":"e148","source":"theory-stp","target":"a-payment-willingness-3q","type":"drives","note":"先判断他已经在为什么付钱"},{"id":"e149","source":"theory-competitive-map","target":"a-deep-onsite-only","type":"drives","note":"只占「深 + 到场」一格"},{"id":"e150","source":"theory-competitive-map","target":"a-positioning-statement","type":"drives","note":"空位描述就是定位语"},{"id":"e151","source":"theory-three-choices","target":"a-platform-priority","type":"drives","note":"三个选择互相耦合，先定平台"},{"id":"e152","source":"theory-pricing-methods","target":"a-cost-first-pricing","type":"drives","note":"先算底线，再报价值价"},{"id":"e153","source":"theory-pricing-methods","target":"a-log-hours","type":"drives","note":"没有工时就没有成本底线"},{"id":"e154","source":"theory-negotiation","target":"a-scope-not-price","type":"drives","note":"降范围不降价"},{"id":"e155","source":"theory-negotiation","target":"a-refuse-five","type":"drives","note":"五条拒单标准"},{"id":"e156","source":"theory-negotiation","target":"a-negotiation-anchor","type":"drives","note":"锚在客户省了多少"},{"id":"e157","source":"theory-productization","target":"a-scope-io","type":"drives","note":"按输入-输出划范围"},{"id":"e158","source":"theory-productization","target":"a-revision-cap","type":"drives","note":"两轮修改上限写进合同"},{"id":"e159","source":"theory-risk-hedge","target":"a-risk-hedge","type":"drives","note":"四类风险各自对冲"},{"id":"e160","source":"theory-risk-hedge","target":"a-client-concentration","type":"drives","note":"单客户占比 ≤40%"},{"id":"e161","source":"theory-cross-platform-rewrite","target":"a-xhs-graphic","type":"drives","note":"同一判断句改成图文，占搜索位"},{"id":"e162","source":"theory-dou-plus","target":"a-no-ads-first15","type":"drives","note":"没有转化回传，投了只是买播放"},{"id":"e163","source":"theory-republish","target":"a-matrix-backup","type":"drives","note":"重拍比重剪安全；备份号不发同一条"},{"id":"e164","source":"theory-completion-baseline","target":"a-own-baseline","type":"drives","note":"只跟自己同类同时长的中位数比"},{"id":"e165","source":"theory-asch","target":"a-real-review","type":"drives","note":"公开的多数意见压制个人判断，但要真实"},{"id":"e166","source":"theory-asch","target":"a-pinned-self-comment","type":"drives","note":"先自己回一条有信息量的，定调"},{"id":"e167","source":"theory-foot-in-door","target":"a-ladder","type":"drives","note":"小请求先行，不跳级"},{"id":"e168","source":"theory-bystander","target":"a-name-single-exit","type":"drives","note":"点名 + 单一出口，责任不分散"},{"id":"e169","source":"theory-peak-end","target":"a-peak-ending","type":"drives","note":"峰值 + 判断句结尾"},{"id":"e170","source":"theory-cold-start","target":"a-material-audit-15","type":"drives","note":"少于 15 个反常就不开工"},{"id":"e171","source":"theory-recall-ranking","target":"a-topic-tags","type":"drives","note":"话题参与召回，但要垂类清楚"},{"id":"e172","source":"model-compliance","target":"a-publish-sop","type":"drives","note":"发布前四问写在 SOP 第一步"},{"id":"e173","source":"theory-explore-exploit","target":"a-weekly-rhythm","type":"drives","note":"每周一条测试条，只改一个变量"},{"id":"e174","source":"model-review-8col","target":"a-weekly-review","type":"drives","note":"周一 30 分钟五步复盘"},{"id":"e175","source":"model-review-8col","target":"a-trigger-adjust","type":"drives","note":"按阈值触发，不按心情"},{"id":"e176","source":"model-review-8col","target":"a-fixed-slot","type":"drives","note":"时段固定，复盘才排得掉时间因素"},{"id":"e177","source":"theory-social-exchange","target":"a-comment-templates","type":"drives","note":"降低回复成本，提高回报确定性"},{"id":"e178","source":"theory-carnegie","target":"a-comment-templates","type":"drives","note":"让对方保住面子"},{"id":"e179","source":"theory-parasocial","target":"a-reply-2h","type":"drives","note":"回复是关系的维护动作"},{"id":"e180","source":"theory-anchoring","target":"a-negotiation-anchor","type":"drives","note":"先给一个可核对的大数字"},{"id":"e181","source":"model-monetization-forms","target":"a-takeorder-sop","type":"drives","note":"接单八步固定下来"},{"id":"e182","source":"model-monetization-forms","target":"a-cashflow-rules","type":"drives","note":"预付 50% 才开工"},{"id":"e183","source":"theory-central-route","target":"a-quote-two-materials","type":"drives","note":"给论据：报价单 + 最像的案例"},{"id":"e184","source":"theory-interest-recommend","target":"a-same-topic-first5","type":"drives","note":"标签决定初始人群"},{"id":"e185","source":"theory-traffic-pool","target":"a-same-topic-first5","type":"drives","note":"层级口径不可信，只按「标签准」执行"},{"id":"e186","source":"theory-aida","target":"a-story-first","type":"drives","note":"只借「四件事都要有」，不借顺序"},{"id":"e187","source":"theory-aarrr","target":"a-weekly-focus","type":"drives","note":"只保留获取与收入两段"},{"id":"e188","source":"theory-k-factor","target":"a-no-referral-gift","type":"drives","note":"客户数 <50，K 因子不成立"},{"id":"e189","source":"model-sampling-bounds","target":"a-weekly-review","type":"drives","note":"四问答不上来就只写「样本内观察」"},{"id":"e190","source":"model-direction-switch","target":"a-trigger-adjust","type":"drives","note":"四个判据触发切换，不按心情"},{"id":"e191","source":"model-anomaly-types","target":"a-material-audit-15","type":"drives","note":"六型各存 2–3 个真实案例"},{"id":"e192","source":"theory-three-choices","target":"a-deep-onsite-only","type":"drives","note":"选了「深 + 到场」就不能接不到场的活"},{"id":"e193","source":"theory-rumor-coldstart","target":"a-same-topic-first5","type":"drives","note":"传闻不执行，只做同题材标签"},{"id":"e194","source":"theory-rumor-saima","target":"a-matrix-backup","type":"drives","note":"矩阵不是赛马，备份号只防封"},{"id":"e195","source":"theory-rumor-8s","target":"a-anomaly-first3s","type":"drives","note":"不按 8 秒设计，只按前 3 秒定性"},{"id":"e196","source":"a-same-topic-first5","target":"m-plays","type":"measures","note":"标签准 → 分发规模"},{"id":"e197","source":"a-same-topic-first5","target":"m-same-audience","type":"measures","note":"只追同类人看完，不追进池"},{"id":"e198","source":"a-anomaly-first3s","target":"m-5s-completion","type":"measures","note":"钩子成立与否"},{"id":"e199","source":"a-anomaly-first3s","target":"m-2s-bounce","type":"measures","note":"第一帧/第一句是否成立"},{"id":"e200","source":"a-anomaly-first3s","target":"m-3s-retention","type":"measures","note":"算法推不推的第一判据"},{"id":"e201","source":"a-one-gap","target":"m-completion","type":"measures","note":"缺口不合上，中段就掉"},{"id":"e202","source":"a-cut-rhythm","target":"m-completion","type":"measures","note":"画面静止是掉完播的主要原因"},{"id":"e203","source":"a-cut-rhythm","target":"m-avg-watch","type":"measures","note":"掉点位置对应切点"},{"id":"e204","source":"a-speech-pace","target":"m-5s-completion","type":"measures","note":"语速与断句影响前 5 秒"},{"id":"e205","source":"a-audio-floor","target":"m-avg-watch","type":"measures","note":"糊音/看不清会让人提前划走"},{"id":"e206","source":"a-one-variable","target":"m-completion","type":"measures","note":"变量可控才谈得上归因"},{"id":"e207","source":"a-peripheral-first3s","target":"m-5s-completion","type":"measures","note":"前 3 秒建立可信，人才留着"},{"id":"e208","source":"a-no-number-opening","target":"m-2s-bounce","type":"measures","note":"数字堆叠抬高跳出"},{"id":"e209","source":"a-bio-identity","target":"m-profile-visits","type":"measures","note":"简介第一行决定要不要点进主页"},{"id":"e210","source":"a-main-slogan","target":"m-brand-search","type":"measures","note":"口号重复多了才会有人搜"},{"id":"e211","source":"a-assoc-words","target":"m-profile-visits","type":"measures","note":"联想集中 → 主页访问上升"},{"id":"e212","source":"a-fixed-phrase","target":"m-comments","type":"measures","note":"句式可套用 → 评论接话"},{"id":"e213","source":"a-fixed-phrase","target":"m-identity-recall","type":"measures","note":"有人用你的句式接话"},{"id":"e214","source":"a-fixed-intro","target":"m-profile-visits","type":"measures","note":"识别成本降低 → 认人"},{"id":"e215","source":"a-two-day-cadence","target":"m-completion","type":"measures","note":"频率过高会进曝光下降段"},{"id":"e216","source":"a-number-each","target":"m-demand-signal","type":"measures","note":"论据足够才有人问方法/问价"},{"id":"e217","source":"a-refutable-claim","target":"m-comments","type":"measures","note":"有观点才有评论"},{"id":"e218","source":"a-admit-failure","target":"m-demand-signal","type":"measures","note":"可信度来自不完美"},{"id":"e219","source":"a-face-to-camera","target":"m-profile-visits","type":"measures","note":"露脸才有人点主页认人"},{"id":"e220","source":"a-reply-restate","target":"m-comments","type":"measures","note":"被听见 → 继续互动"},{"id":"e221","source":"a-judgment-only","target":"m-demand-signal","type":"measures","note":"判断招来「我也遇到过」，步骤招来「求源码」"},{"id":"e222","source":"a-judgment-only","target":"m-favorites","type":"measures","note":"信息型内容收藏 > 点赞"},{"id":"e223","source":"a-real-review","target":"m-effective-dm","type":"measures","note":"真实评价降低询价门槛"},{"id":"e224","source":"a-not-expert-intro","target":"m-profile-visits","type":"measures","note":"声望型展示 → 愿意点进来看你是谁"},{"id":"e225","source":"a-story-first","target":"m-completion","type":"measures","note":"故事撑住中段"},{"id":"e226","source":"a-first-person-now","target":"m-demand-signal","type":"measures","note":"传输带来的是对你的记忆"},{"id":"e227","source":"a-bio-three-lines","target":"m-profile-to-dm","type":"measures","note":"入口写清楚 → 访问转私信"},{"id":"e228","source":"a-pin-case","target":"m-effective-dm","type":"measures","note":"案例替代自我介绍"},{"id":"e229","source":"a-two-titles","target":"m-search-dm","type":"measures","note":"搜索版标题命中问题词"},{"id":"e230","source":"a-share-to-peers","target":"m-effective-dm","type":"measures","note":"同行转群带来的私信更意向明确"},{"id":"e231","source":"a-dm-only-asset","target":"m-effective-dm","type":"measures","note":"留了私信理由"},{"id":"e232","source":"a-dm-only-asset","target":"m-contact-list","type":"measures","note":"一次性注意力转成可联系人"},{"id":"e233","source":"a-own-contact-list","target":"m-contact-list","type":"measures","note":"名单条数"},{"id":"e234","source":"a-minimal-private","target":"m-dm-to-wechat","type":"measures","note":"承接结构越简单，加微率越高"},{"id":"e235","source":"a-anchor-quote","target":"m-close-rate","type":"measures","note":"锚点让人在快系统里选"},{"id":"e236","source":"a-anchor-quote","target":"m-order-value","type":"measures","note":"锚点决定客单价落点"},{"id":"e237","source":"a-loss-frame","target":"m-2s-bounce","type":"measures","note":"损失框架降低跳出"},{"id":"e238","source":"a-info-emotion-73","target":"m-demand-signal","type":"measures","note":"信息占比够，才有人问价"},{"id":"e239","source":"a-dm-first-scene","target":"m-dm-to-wechat","type":"measures","note":"第一轮门槛低，愿意继续聊"},{"id":"e240","source":"a-first3-no-cta","target":"m-effective-dm","type":"measures","note":"先给三次，私信质量更高"},{"id":"e241","source":"a-low-cost-gift","target":"m-effective-dm","type":"measures","note":"给完留动作"},{"id":"e242","source":"a-one-cta","target":"m-comments","type":"measures","note":"只提一个动作，执行率才高"},{"id":"e243","source":"a-one-cta","target":"m-effective-dm","type":"measures","note":"入口唯一，私信不漏"},{"id":"e244","source":"a-binary-comment","target":"m-comments","type":"measures","note":"二选一降低评论成本"},{"id":"e245","source":"a-binary-comment","target":"m-demand-signal","type":"measures","note":"选择题能筛出真实场景"},{"id":"e246","source":"a-promise-reply","target":"m-comments","type":"measures","note":"承诺有回音 → 继续评论"},{"id":"e247","source":"a-no-ads-first15","target":"m-effective-dm","type":"measures","note":"自然流量先跑出问价样本"},{"id":"e248","source":"a-quote-onepager","target":"m-close-rate","type":"measures","note":"范围写死，减少议价流失"},{"id":"e249","source":"a-service-only","target":"m-close-rate","type":"measures","note":"只做能交付的形态"},{"id":"e250","source":"a-dm-log","target":"m-price-dm","type":"measures","note":"每周记问价条数"},{"id":"e251","source":"a-dm-log","target":"m-effective-dm","type":"measures","note":"北极星可手工统计"},{"id":"e252","source":"a-ask-review","target":"m-public-reviews","type":"measures","note":"交付当天索要"},{"id":"e253","source":"a-review-to-pin","target":"m-effective-dm","type":"measures","note":"证据前置，询价更直接"},{"id":"e254","source":"a-quarterly-touch","target":"m-referrals","type":"measures","note":"不问单的触达带来主动推荐"},{"id":"e255","source":"a-compliance-4q","target":"m-5s-completion","type":"measures","note":"违规内容会被限流，直接归零"},{"id":"e256","source":"a-blur-client","target":"m-completion","type":"measures","note":"客户信息暴露会引发举报/下架"},{"id":"e257","source":"a-review-8col","target":"m-completion","type":"measures","note":"复盘表的核心列"},{"id":"e258","source":"a-review-8col","target":"m-5s-completion","type":"measures","note":"复盘表的核心列"},{"id":"e259","source":"a-review-8col","target":"m-comments","type":"measures","note":"复盘表的核心列"},{"id":"e260","source":"a-review-8col","target":"m-effective-dm","type":"measures","note":"唯一的商业指标单列"},{"id":"e261","source":"a-review-order","target":"m-profile-visits","type":"measures","note":"第三顺位才看人设"},{"id":"e262","source":"a-topic-twice","target":"m-plays","type":"measures","note":"两次不成即弃，避免无效重拍"},{"id":"e263","source":"a-avatar-set","target":"m-profile-visits","type":"measures","note":"头像可辨 → 点进主页"},{"id":"e264","source":"a-bio-three-lines","target":"m-homepage-3s","type":"measures","note":"三行决定 3 秒识别"},{"id":"e265","source":"a-no-contact-public","target":"m-plays","type":"measures","note":"公开区写联系方式会触发限流"},{"id":"e266","source":"a-weekly-focus","target":"m-funnel-rates","type":"measures","note":"每周只测一段的转化率"},{"id":"e267","source":"a-xhs-graphic","target":"m-search-dm","type":"measures","note":"图文占搜索位，带来搜索私信"},{"id":"e268","source":"a-asset-four","target":"m-demand-signal","type":"measures","note":"资产里有客户问题，才会有人接话"},{"id":"e269","source":"a-positioning-statement","target":"m-identity-recall","type":"measures","note":"定位语被复述"},{"id":"e270","source":"a-boss-three-questions","target":"m-demand-signal","type":"measures","note":"回答了老板三问，评论才会具体"},{"id":"e271","source":"a-payment-willingness-3q","target":"m-close-rate","type":"measures","note":"支付意愿判断准，成交率上升"},{"id":"e272","source":"a-deep-onsite-only","target":"m-close-rate","type":"measures","note":"只接能交付的活"},{"id":"e273","source":"a-cashflow-rules","target":"m-payment-cycle","type":"measures","note":"预付 + 尾款 7 天"},{"id":"e274","source":"a-cost-first-pricing","target":"m-gross-margin","type":"measures","note":"成本底线决定毛利下限"},{"id":"e275","source":"a-log-hours","target":"m-gross-margin","type":"measures","note":"真实工时校正毛利"},{"id":"e276","source":"a-weekly-rhythm","target":"m-completion","type":"measures","note":"精品条撑完播，测试条找开头"},{"id":"e277","source":"a-same-agent-limit4","target":"m-completion","type":"measures","note":"超过 4 条开始审美疲劳"},{"id":"e278","source":"a-comment-templates","target":"m-comments","type":"measures","note":"回复质量影响继续评论"},{"id":"e279","source":"a-pinned-self-comment","target":"m-comments","type":"measures","note":"置顶自评定调"},{"id":"e280","source":"a-ladder","target":"m-effective-dm","type":"measures","note":"不跳级，私信质量更高"},{"id":"e281","source":"a-scope-not-price","target":"m-close-rate","type":"measures","note":"不降价保住价值锚"},{"id":"e282","source":"a-refuse-five","target":"m-close-rate","type":"measures","note":"拒掉不该接的，成交质量上升"},{"id":"e283","source":"a-material-audit-15","target":"m-completion","type":"measures","note":"素材够，前 10 条不断更"},{"id":"e284","source":"a-publish-sop","target":"m-5s-completion","type":"measures","note":"标题/封面/话题决定前 5 秒"},{"id":"e285","source":"a-topic-tags","target":"m-plays","type":"measures","note":"垂类话题帮助召回"},{"id":"e286","source":"a-reply-2h","target":"m-comments","type":"measures","note":"2 小时内回复率 100%"},{"id":"e287","source":"a-weekly-review","target":"m-completion","type":"measures","note":"每周只改一个变量"},{"id":"e288","source":"a-trigger-adjust","target":"m-effective-dm","type":"measures","note":"阈值触发投流与停更"},{"id":"e289","source":"a-takeorder-sop","target":"m-close-rate","type":"measures","note":"首响与报价节奏固定"},{"id":"e290","source":"a-quote-two-materials","target":"m-close-rate","type":"measures","note":"两样材料降低决策成本"},{"id":"e291","source":"a-scope-io","target":"m-close-rate","type":"measures","note":"范围写死，议价空间小"},{"id":"e292","source":"a-revision-cap","target":"m-gross-margin","type":"measures","note":"无限修改是亏损第一来源"},{"id":"e293","source":"a-negotiation-anchor","target":"m-order-value","type":"measures","note":"锚定客单价落点"},{"id":"e294","source":"a-risk-hedge","target":"m-contact-list","type":"measures","note":"落地页与联系人表，平台之外也有名单"},{"id":"e295","source":"a-client-concentration","target":"m-client-share","type":"measures","note":"单客户占比表"},{"id":"e296","source":"a-dm-log","target":"m-quote-ratio","type":"measures","note":"问价比例可手工统计"},{"id":"e297","source":"a-own-baseline","target":"m-3s-retention","type":"measures","note":"跟自己历史中位数比"},{"id":"e298","source":"a-peak-ending","target":"m-completion","type":"measures","note":"结尾给判断句，减少中途划走"},{"id":"e299","source":"a-name-single-exit","target":"m-comments","type":"measures","note":"点名比泛问更容易得到回应"},{"id":"e300","source":"a-matrix-backup","target":"m-plays","type":"measures","note":"备份号不同案例，避免判重"},{"id":"e301","source":"theory-reciprocal-altruism","target":"model-public-boundary","type":"cites","note":"互惠利他原文：这正是内容模型里「教程是私域转化物」的理论依据"},{"id":"e302","source":"model-monetization-forms","target":"model-public-boundary","type":"cites","note":"经营篇原文：呼应内容模型——教程是私域转化物"},{"id":"e303","source":"model-anomaly-types","target":"model-public-boundary","type":"cites","note":"选题库填表要求：判断里不能出现操作步骤"},{"id":"e304","source":"model-six-layers","target":"model-compliance","type":"cites","note":"总纲把违规红线列为横切约束：不属于任何一层，但每层都受它限制"},{"id":"e305","source":"model-six-layers","target":"model-review-8col","type":"cites","note":"总纲把复盘方法列为横切的测量工具"},{"id":"e306","source":"model-review-8col","target":"theory-ab-test","type":"cites","note":"复盘方法原文：播放几百时差异全在噪声里，见增长篇"},{"id":"e307","source":"theory-positioning","target":"a-positioning-statement","type":"cites","note":"定位把「能把 AI 讲成人话」当作身份核心，落成一句话陈述"},{"id":"e308","source":"model-public-boundary","target":"model-monetization-forms","type":"cites","note":"公开内容边界的关联节指向变现判断"},{"id":"e309","source":"theory-homepage-packaging","target":"theory-diversion-boundary","type":"cites","note":"主页包装篇把联系方式单独拆成转化路径一节"},{"id":"e310","source":"theory-funnel-six","target":"model-six-layers","type":"cites","note":"漏斗六段与六层主干一一对应，见总纲"},{"id":"e311","source":"theory-platform-structure","target":"theory-cross-platform-rewrite","type":"cites","note":"七大平台对照的结论直接推到跨平台改写"},{"id":"e312","source":"model-compliance","target":"theory-republish","type":"cites","note":"判重与搬运边界同属社区公约条款"},{"id":"e313","source":"model-six-layers","target":"gap-publish-frequency","type":"cites","note":"总纲第 1 层要求两天一更，但最优频次无独立篇"},{"id":"e314","source":"layer-seen","target":"layer-remembered","type":"depends","note":"5 秒完播成立 + 固定识别元素，否则没人看到结尾"},{"id":"e315","source":"layer-remembered","target":"layer-trusted","type":"depends","note":"记住之后还愿意看第二条，否则信任从零开始"},{"id":"e316","source":"layer-trusted","target":"layer-found","type":"depends","note":"有信任 + 有入口，否则信任停在「关注」"},{"id":"e317","source":"layer-found","target":"layer-closed","type":"depends","note":"找到的是人 + 有案例，否则主页空，掉回零"},{"id":"e318","source":"layer-closed","target":"layer-referred","type":"depends","note":"交付完成 + 主动索要评价，否则无事实可转述"}]};
+const TYPE_LABEL = GRAPH.meta.type_labels;
+const STATUS_LABEL = GRAPH.meta.status_labels;
+const EDGE_LABEL = GRAPH.meta.edge_labels;
+const EVIDENCE_LABEL = GRAPH.meta.evidence_labels;
+const DIM_LABEL = GRAPH.meta.dim_labels;
+const DOC_PREFIX = GRAPH.meta.doc_url_prefix;
+const C = {
+  ink:'#23211d', ink2:'#4c4740', metric:'#6f6759', muted:'#8b8375', faint:'#a49b8c',
+  line:'#ded7c9', paper:'#f7f5f0', accent:'#2f5d4f', gap:'#8b8375', ph:'#b5ad9d'
+};
+const PAD = 80, COLW = 240;
+const cols = [0];
+for (let i = 1; i <= 6; i++) cols.push(PAD + (i - 1) * COLW);
+
+const byId = new Map();
+GRAPH.nodes.forEach(n => byId.set(n.id, n));
+const layerById = new Map(GRAPH.layers.map(l => [l.id, l]));
+const nodes = GRAPH.nodes.map((n, i) => {
+  const col = n.type === 'layer' ? (layerById.get(n.id)?.order || 0) : (n.layer ? (layerById.get(n.layer)?.order || 0) : 0);
+  return Object.assign(n, {
+    col, idx: i, x: cols[col] + (Math.random() - .5) * 60, y: 300 + (Math.random() - .5) * 700,
+    vx: 0, vy: 0, visible: true,
+    r: n.type === 'layer' ? 22 : n.type === 'theory' ? 7.5 : n.type === 'action' ? 5.6 : 6.2
+  });
+});
+const edges = GRAPH.edges.map(e => Object.assign({}, e, {
+  s: byId.get(e.source), t: byId.get(e.target)
+})).filter(e => e.s && e.t);
+
+const byLayer = {};
+nodes.forEach(n => { if (n.layer) (byLayer[n.layer] = byLayer[n.layer] || []).push(n); });
+
+/* ---------------- 布局：六列 × 三轨（理论/动作/指标），确定性排布 ---------------- */
+const LANE = { theory: -62, action: 0, metric: 62 };
+function layout() {
+  const deg = {};
+  edges.forEach(e => {
+    deg[e.source] = (deg[e.source] || 0) + 1;
+    deg[e.target] = (deg[e.target] || 0) + 1;
+  });
+  nodes.forEach(n => { n.deg = deg[n.id] || 0; });
+  const byCol = new Map();
+  const layerNodes = [];
+  const shelf = [];
+  nodes.forEach(n => {
+    if (n.type === 'layer') { layerNodes.push(n); return; }
+    if (!n.col) { if (n.visible) shelf.push(n); return; }
+    if (!byCol.has(n.col)) byCol.set(n.col, []);
+    byCol.get(n.col).push(n);
+  });
+  let maxHalf = 120;
+  const laneX = activeLayer ? { theory: -104, action: 0, metric: 104 } : LANE;
+  byCol.forEach((arr, col) => {
+    ['theory', 'action', 'metric'].forEach(t => {
+      const lane = arr.filter(n => n.type === t && n.visible);
+      lane.sort((a, b) => (b.deg || 0) - (a.deg || 0) || a.label.localeCompare(b.label, 'zh'));
+      const gap = activeLayer ? 42 : 26;
+      const total = (lane.length - 1) * gap;
+      maxHalf = Math.max(maxHalf, total / 2);
+      lane.forEach((n, i) => {
+        n.x = cols[col] + laneX[t] + ((i * 13) % 9) - 4;
+        n.y = i * gap - total / 2;
+      });
+      arr.filter(n => n.type === t && !n.visible).forEach(n => { n.x = cols[col] + laneX[t]; n.y = 0; });
+    });
+  });
+  layerNodes.forEach(n => { n.x = cols[n.col]; n.y = -maxHalf - 76; });
+  // 横切 / 未归层：放在底部当书架，避免多占一列宽度
+  const shelfY = maxHalf + 96;
+  shelf.sort((a, b) => (b.deg || 0) - (a.deg || 0) || a.label.localeCompare(b.label, 'zh'));
+  shelf.forEach((n, i) => {
+    n.x = PAD + 40 + (i % 11) * 108;
+    n.y = shelfY + Math.floor(i / 11) * 34;
+  });
+}
+
+/* ---------------- 相机与渲染 ---------------- */
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+let W = 0, H = 0, DPR = 1;
+let scale = .8, camX = 1100, camY = 420;
+let hovered = null, selected = null, activeLayer = null, dragNode = null;
+let labelAll = false;
+let mouse = { x: -1, y: -1, down: false, moved: false, sx: 0, sy: 0 };
+
+function resize() {
+  const rect = cv.getBoundingClientRect();
+  W = rect.width; H = rect.height; DPR = Math.min(2, window.devicePixelRatio || 1);
+  cv.width = W * DPR; cv.height = H * DPR;
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  draw();
+}
+const sx = x => (x - camX) * scale + W / 2;
+const sy = y => (y - camY) * scale + H / 2;
+const wx = x => (x - W / 2) / scale + camX;
+const wy = y => (y - H / 2) / scale + camY;
+
+function shapePath(n, X, Y, r) {
+  ctx.beginPath();
+  if (n.type === 'action') {
+    const s = r * 1.55;
+    ctx.rect(X - s / 2, Y - s / 2, s, s);
+  } else if (n.type === 'metric') {
+    const s = r * 1.5;
+    ctx.moveTo(X, Y - s); ctx.lineTo(X + s, Y); ctx.lineTo(X, Y + s); ctx.lineTo(X - s, Y); ctx.closePath();
+  } else {
+    ctx.arc(X, Y, r, 0, Math.PI * 2);
+  }
+}
+
+function statusKind(n) {
+  if (n.status === 'na') return 'na';
+  if (n.status === 'expected') return 'expected';
+  if (n.status === 'supported' || n.status === 'unverified') return 'ok';
+  return 'gap';
+}
+
+// 证据标记：有出处不标；边界=空心圈；经验推断=实心小方块；未获取=叉；传闻=问号
+function drawEvMark(n, X, Y) {
+  const ev = n.evidence || 'sourced';
+  if (ev === 'sourced') return;
+  const mx = X + n.r * .95, my = Y - n.r * .95;
+  ctx.save();
+  if (ev === 'inferred') {
+    ctx.fillStyle = C.faint;
+    ctx.fillRect(mx - 1.8, my - 1.8, 3.6, 3.6);
+  } else if (ev === 'boundary') {
+    ctx.strokeStyle = C.muted; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(mx, my, 2.8, 0, Math.PI * 2); ctx.stroke();
+  } else if (ev === 'none') {
+    ctx.strokeStyle = '#8a5b3f'; ctx.lineWidth = 1.1;
+    ctx.beginPath();
+    ctx.moveTo(mx - 2.6, my - 2.6); ctx.lineTo(mx + 2.6, my + 2.6);
+    ctx.moveTo(mx + 2.6, my - 2.6); ctx.lineTo(mx - 2.6, my + 2.6);
+    ctx.stroke();
+  } else if (ev === 'rumor') {
+    ctx.fillStyle = '#8a5b3f';
+    ctx.font = '700 8px ' + getComputedStyle(document.body).fontFamily;
+    ctx.textAlign = 'center';
+    ctx.fillText('?', mx, my + 3);
+  }
+  ctx.restore();
+}
+
+function visibleNodes() { return nodes.filter(n => n.visible); }
+
+function neighborsOf(id) {
+  const set = new Set();
+  edges.forEach(e => {
+    if (e.s.id === id) set.add(e.t.id);
+    if (e.t.id === id) set.add(e.s.id);
+  });
+  return set;
+}
+
+let focusSet = null;
+function computeFocus() {
+  const base = selected || hovered || activeLayer;
+  if (!base) { focusSet = null; return; }
+  const id = base.id || base;
+  const set = new Set([id]);
+  if (layerById.has(id)) {
+    nodes.forEach(n => { if (n.layer === id) set.add(n.id); });
+    focusSet = set;
+    return;
+  }
+  edges.forEach(e => {
+    if (e.s.id === id) set.add(e.t.id);
+    if (e.t.id === id) set.add(e.s.id);
+  });
+  focusSet = set;
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, H);
+  computeFocus();
+  const vis = new Set(visibleNodes().map(n => n.id));
+
+  const headers = [];
+  const colNames = [];
+  const visCols = new Set();
+  nodes.forEach(n => { if (n.visible && n.col) visCols.add(n.col); });
+  GRAPH.layers.forEach(l => colNames.push({ col: l.order, name: `第 ${l.order} 层 · ${l.name}`, layer: l }));
+  colNames.forEach(cd => {
+    if (!visCols.has(cd.col)) return;
+    if (cd.col > 1) {
+      const x = sx(cols[cd.col]);
+      ctx.strokeStyle = 'rgba(120,110,92,.10)'; ctx.lineWidth = 1;
+      ctx.setLineDash([2, 6]);
+      ctx.beginPath(); ctx.moveTo(x, 74); ctx.lineTo(x, H); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    const st = cd.layer ? cd.layer.stats : null;
+    const x = sx(cols[cd.col]);
+    const narrow = W < 720;
+    ctx.textAlign = 'center';
+    ctx.font = '600 11.5px "Songti SC",serif';
+    ctx.fillStyle = C.accent;
+    ctx.fillText(narrow ? cd.layer.name : cd.name, x, 30);
+    if (st && !narrow) {
+      ctx.font = '10px ' + getComputedStyle(document.body).fontFamily;
+      ctx.fillStyle = C.faint;
+      ctx.fillText(`${st.theory}/${st.action}/${st.metric} · 缺 ${st.missing}${st.na ? ' · 不适 ' + st.na : ''}`, x, 48);
+    }
+    headers.push({ cd, x, y: 40 });
+  });
+  const shelfYs = nodes.filter(n => n.col === 0 && n.visible).map(n => n.y);
+  if (shelfYs.length) {
+    ctx.textAlign = 'left';
+    ctx.font = '600 11px "Songti SC",serif';
+    ctx.fillStyle = C.muted;
+    ctx.fillText('横切 · 未归层（总纲 / 孤岛 / 缺口）', sx(PAD - 10), sy(Math.min(...shelfYs) - 22));
+  }
+
+  // 边
+  ctx.lineCap = 'round';
+  edges.forEach(e => {
+    if (!e.s.visible || !e.t.visible) return;
+    const on = !focusSet || (focusSet.has(e.s.id) && focusSet.has(e.t.id));
+    const x1 = sx(e.s.x), y1 = sy(e.s.y), x2 = sx(e.t.x), y2 = sy(e.t.y);
+    ctx.globalAlpha = on ? 1 : .18;
+    if (e.type === 'belongs') { ctx.strokeStyle = 'rgba(90,82,68,.13)'; ctx.lineWidth = .8; ctx.setLineDash([]); }
+    else if (e.type === 'drives') { ctx.strokeStyle = 'rgba(47,93,79,.42)'; ctx.lineWidth = 1; ctx.setLineDash([]); }
+    else if (e.type === 'measures') { ctx.strokeStyle = 'rgba(140,128,108,.55)'; ctx.lineWidth = .85; ctx.setLineDash([3, 3]); }
+    else if (e.type === 'depends') { ctx.strokeStyle = 'rgba(90,84,70,.5)'; ctx.lineWidth = 2.4; ctx.setLineDash([]); }
+    else { ctx.strokeStyle = 'rgba(120,110,92,.5)'; ctx.lineWidth = .9; ctx.setLineDash([1, 3.5]); }
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    ctx.setLineDash([]);
+    if (e.type === 'drives' || e.type === 'depends') {
+      const t = .62;
+      const ax = x1 + (x2 - x1) * t, ay = y1 + (y2 - y1) * t;
+      const ang = Math.atan2(y2 - y1, x2 - x1), L = 5;
+      ctx.fillStyle = e.type === 'drives' ? 'rgba(47,93,79,.55)' : 'rgba(90,84,70,.55)';
+      ctx.beginPath();
+      ctx.moveTo(ax, ay);
+      ctx.lineTo(ax - L * Math.cos(ang - .4), ay - L * Math.sin(ang - .4));
+      ctx.lineTo(ax - L * Math.cos(ang + .4), ay - L * Math.sin(ang + .4));
+      ctx.closePath(); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  });
+
+  // 节点
+  nodes.forEach(n => {
+    if (!n.visible) return;
+    const X = sx(n.x), Y = sy(n.y);
+    if (X < -80 || X > W + 80 || Y < -80 || Y > H + 80) return;
+    const dim = focusSet && !focusSet.has(n.id);
+    ctx.globalAlpha = dim ? .22 : 1;
+    const kind = statusKind(n);
+    const isSel = selected && selected.id === n.id;
+    const isHov = hovered && hovered.id === n.id;
+
+    if (n.type === 'layer') {
+      const st = layerById.get(n.id)?.stats || {};
+      ctx.beginPath(); ctx.arc(X, Y, n.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(251,250,246,.92)'; ctx.fill();
+      ctx.strokeStyle = C.accent; ctx.lineWidth = isSel ? 2.6 : 1.6; ctx.stroke();
+      ctx.beginPath(); ctx.arc(X, Y, n.r - 5, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(47,93,79,.22)'; ctx.lineWidth = 1; ctx.stroke();
+      ctx.textAlign = 'center';
+      ctx.font = '600 12px "Songti SC",serif';
+      ctx.fillStyle = C.accent;
+      ctx.fillText(layerById.get(n.id).name, X, Y + 4);
+      ctx.font = '9.5px ' + getComputedStyle(document.body).fontFamily;
+      ctx.fillStyle = C.faint;
+      ctx.fillText(`缺 ${st.missing || 0}${st.na ? ' · 不适 ' + st.na : ''}`, X, Y + n.r + 13);
+    } else {
+      shapePath(n, X, Y, n.r * (isSel ? 1.25 : isHov ? 1.12 : 1));
+      if (kind === 'ok') {
+        ctx.fillStyle = n.type === 'theory' ? C.ink : n.type === 'action' ? C.ink2 : C.metric;
+        ctx.fill();
+        if (n.status === 'unverified') {
+          ctx.beginPath(); ctx.arc(X, Y, n.r + 4, 0, Math.PI * 2);
+          ctx.setLineDash([1.5, 2.5]); ctx.strokeStyle = C.muted; ctx.lineWidth = 1; ctx.stroke(); ctx.setLineDash([]);
+        }
+      } else if (kind === 'na') {
+        ctx.fillStyle = 'rgba(251,250,246,.9)'; ctx.fill();
+        ctx.strokeStyle = C.muted; ctx.lineWidth = 1.1; ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(X - n.r * .8, Y + n.r * .8); ctx.lineTo(X + n.r * .8, Y - n.r * .8);
+        ctx.strokeStyle = 'rgba(139,131,117,.75)'; ctx.lineWidth = 1; ctx.stroke();
+      } else {
+        ctx.fillStyle = 'rgba(251,250,246,.9)'; ctx.fill();
+        ctx.strokeStyle = kind === 'expected' ? C.ph : '#8a5b3f';
+        ctx.lineWidth = kind === 'expected' ? 1.2 : 1.5;
+        ctx.setLineDash([2, 2]); ctx.stroke(); ctx.setLineDash([]);
+      }
+      if (isSel) {
+        ctx.beginPath(); ctx.arc(X, Y, n.r + 7, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(47,93,79,.55)'; ctx.lineWidth = 1; ctx.stroke();
+      }
+      if (scale > .85 || isSel || isHov) drawEvMark(n, X, Y);
+    }
+
+    // 标签：默认只显示层级、缺口、悬停/选中及其邻居；放大后才显示全部，避免叠字
+    const labelOn =
+      n.type === 'layer' ? false :
+      isSel || isHov ||
+      (n.status !== 'supported' && n.status !== 'unverified') ||
+      labelAll || scale > 1.7;
+    if (labelOn) {
+      ctx.textAlign = 'left';
+      const fs = n.type === 'theory' ? 10.5 : 9.5;
+      ctx.font = `${fs}px ${getComputedStyle(document.body).fontFamily}`;
+      const lx = X + n.r + 5, ly = Y + 3.5;
+      ctx.lineWidth = 3; ctx.strokeStyle = C.paper;
+      ctx.strokeText(n.label, lx, ly);
+      ctx.fillStyle = kind === 'ok' ? (dim ? C.faint : C.ink2) : (kind === 'expected' ? C.faint : '#7a6a56');
+      ctx.fillText(n.label, lx, ly);
+    }
+    ctx.globalAlpha = 1;
+  });
+  // headers hitboxes
+  draw._headers = headers;
+  document.getElementById('stats').textContent =
+    `${vis.size} / ${nodes.length} 节点 · ${edges.length} 边 · 缩放 ${Math.round(scale * 100)}%`;
+}
+
+/* ---------------- 命中测试 ---------------- */
+function hit(x, y) {
+  const w = wx(x), h = wy(y);
+  const tol = 8 / scale;
+  let best = null, bestD = Infinity;
+  nodes.forEach(n => {
+    if (!n.visible) return;
+    const r = n.r + tol + (n.type === 'layer' ? 4 : 0);
+    const d = Math.hypot(n.x - w, n.y - h);
+    if (d <= r && d < bestD) { best = n; bestD = d; }
+  });
+  return best;
+}
+function hitHeader(x, y) {
+  const hs = draw._headers || [];
+  for (const hd of hs) {
+    if (Math.abs(x - hd.x) < 46 && y > 14 && y < 66) return hd.cd;
+  }
+  return null;
+}
+
+/* ---------------- 右侧面板 ---------------- */
+const panel = document.getElementById('panel');
+
+function nodeTypeLabel(n) { return TYPE_LABEL[n.type] || n.type; }
+function statusBadge(n) {
+  const cls = 'badge st-' + n.status;
+  return `<span class="${cls}">${STATUS_LABEL[n.status] || n.status}</span>`;
+}
+function layerName(id) { return layerById.get(id)?.name || '未归层'; }
+function docLink(n, text) {
+  if (!n.doc) return text || '—';
+  const href = DOC_PREFIX + n.doc.split('/').map(encodeURIComponent).join('/');
+  return `<a href="${href}" target="_blank">${text || n.doc}</a>`;
+}
+function relBtn(n, why, arrow) {
+  return `<button data-goto="${n.id}"><span class="arrow">${arrow || '→'}</span>${n.label}${why ? `<span class="why">${why}</span>` : ''}</button>`;
+}
+
+function renderEmpty() {
+  const m = GRAPH.meta;
+  panel.innerHTML = `
+    <div class="empty">
+      <h2>这张图回答什么</h2>
+      点左侧任意一层，或点图上的大圆圈，看这一层现在有几个理论、几个动作、几个指标、缺几个，以及这一层的证据构成。<br><br>
+      点任意小点看它的定义、证据分级、出处、文档路径和关联动作。赭色虚线圈是缺口；带斜线的灰圈是「主动判不适用」；节点右上角的小标记表示证据等级——这决定它能不能对外引用。
+      <div class="sec-t">当前规模</div>
+      <div class="statgrid">
+        <div><b>${m.node_count}</b><span>节点</span></div>
+        <div><b>${m.edge_count}</b><span>边</span></div>
+        <div class="miss"><b>${m.missing_total}</b><span>缺口</span></div>
+        <div class="na"><b>${m.na_total}</b><span>不适用</span></div>
+      </div>
+      <div class="sec-t">证据构成</div>
+      <div class="evbar">${['sourced','boundary','inferred','none','rumor'].map(k =>
+        `<span class="${k}">${EVIDENCE_LABEL[k]} ${m.evidence_counts[k] || 0}</span>`).join('')}</div>
+      <div class="sec-t">六层缺口分布</div>
+      <div class="grouplist">
+        ${GRAPH.layers.map(l => `<button data-layer="${l.id}">${l.order} ${l.name}<span class="m">缺 ${l.stats.missing}</span></button>`).join('')}
+      </div>
+      <div class="sec-t">生成时间</div>
+      <div class="kv">${m.generated_at}</div>
+    </div>`;
+}
+
+function renderNode(n) {
+  const ins = edges.filter(e => e.t.id === n.id);
+  const outs = edges.filter(e => e.s.id === n.id);
+  const parts = [];
+  parts.push(`<div class="kicker">${nodeTypeLabel(n)}${n.type !== 'layer' ? ' · ' + layerName(n.layer) : ''}</div>`);
+  parts.push(`<h2 class="title">${n.label}</h2>`);
+  parts.push(`<div class="badges">${statusBadge(n)}
+    <span class="badge ev-${n.evidence}">${EVIDENCE_LABEL[n.evidence] || ''}</span>
+    <span class="badge">${DIM_LABEL[n.dim] || ''}</span>
+    ${n.review_state ? `<span class="badge">${n.review_state}</span>` : ''}
+    ${n.type === 'layer' ? '' : `<span class="badge">${layerName(n.layer)}</span>`}</div>`);
+  parts.push(`<p class="def">${n.definition}</p>`);
+
+  if (n.evidence) {
+    const evText = n.evidence === 'sourced'
+      ? '有出处，可以直接引用（出处见下）。'
+      : n.evidence === 'boundary'
+        ? '有出处，但引用时必须带限制条件。'
+        : n.evidence === 'inferred'
+          ? '经验推断 / 项目规则，不能说成「数据表明」。'
+          : n.evidence === 'none'
+            ? '数据不存在或拿不到，不要对外引用。'
+            : '传闻，不作为依据；图上用问号标出。';
+    parts.push(`<div class="sec-t">证据分级</div>
+      <div class="kv">${evText}${n.evidence_note ? '<br>' + n.evidence_note : ''}</div>`);
+  }
+
+  if (n.status === 'expected') {
+    parts.push(`<div class="sec-t">为什么这里是空的</div><div class="kv">${n.note || ''}</div>`);
+    const partial = (n.partial || []).map(id => byId.get(id)).filter(Boolean);
+    if (partial.length) {
+      parts.push(`<div class="sec-t">部分相关（但没覆盖这个位置）</div><div class="rel">`);
+      partial.forEach(p => parts.push(relBtn(p, '只覆盖了一部分', '≈')));
+      parts.push(`</div>`);
+    }
+    parts.push(`<div class="sec-t">怎么补</div><div class="kv">在 knowledge/ 里补一篇文档，回到 work/curated_nodes.py 加节点，重跑 extract.py。</div>`);
+  }
+
+  if (n.citation) parts.push(`<div class="sec-t">出处</div><div class="kv">${n.citation}</div>`);
+  if (n.doc) {
+    parts.push(`<div class="sec-t">文档</div><div class="docbox">
+      ${docLink(n)}<br>
+      ${n.section ? '节次：' + n.section + '<br>' : ''}
+      最后修改：${n.doc_mtime || '—'}
+    </div>`);
+  }
+  if (n.status === 'na') {
+    parts.push(`<div class="sec-t">为什么判不适用</div><div class="kv">${n.note || ''}</div>`);
+  } else if (n.status === 'unverified' && n.note) {
+    parts.push(`<div class="sec-t">待确认原因</div><div class="kv">${n.note}</div>`);
+  } else if (n.note && n.status !== 'expected') {
+    parts.push(`<div class="sec-t">备注</div><div class="kv">${n.note}</div>`);
+  }
+
+  const drivesOut = outs.filter(e => e.type === 'drives');
+  const drivesIn = ins.filter(e => e.type === 'drives');
+  const measOut = outs.filter(e => e.type === 'measures');
+  const measIn = ins.filter(e => e.type === 'measures');
+  const cites = [...ins, ...outs].filter(e => e.type === 'cites');
+
+  if (drivesOut.length) {
+    parts.push(`<div class="sec-t">驱动这些动作</div><div class="rel">`);
+    drivesOut.forEach(e => parts.push(relBtn(e.t, e.note)));
+    parts.push(`</div>`);
+  }
+  if (drivesIn.length) {
+    parts.push(`<div class="sec-t">由这些理论驱动</div><div class="rel">`);
+    drivesIn.forEach(e => parts.push(relBtn(e.s, e.note, '←')));
+    parts.push(`</div>`);
+  }
+  if (measOut.length) {
+    parts.push(`<div class="sec-t">影响这些指标</div><div class="rel">`);
+    measOut.forEach(e => parts.push(relBtn(e.t, e.note)));
+    parts.push(`</div>`);
+  }
+  if (measIn.length) {
+    parts.push(`<div class="sec-t">被这些动作影响</div><div class="rel">`);
+    measIn.forEach(e => parts.push(relBtn(e.s, e.note, '←')));
+    parts.push(`</div>`);
+  }
+  if (n.type === 'layer') {
+    const l = layerById.get(n.id);
+    parts.push(`<div class="sec-t">这一层的统计</div>${statGrid(l.stats)}`);
+  }
+  if (cites.length) {
+    parts.push(`<div class="sec-t">文档引用</div><div class="rel">`);
+    cites.forEach(e => {
+      const other = e.s.id === n.id ? e.t : e.s;
+      parts.push(relBtn(other, e.note, e.s.id === n.id ? '→' : '←'));
+    });
+    parts.push(`</div>`);
+  }
+  panel.innerHTML = parts.join('');
+  panel.classList.add('open');
+}
+
+function statGrid(st) {
+  return `<div class="statgrid">
+    <div><b>${st.theory}</b><span>理论</span></div>
+    <div><b>${st.action}</b><span>动作</span></div>
+    <div><b>${st.metric}</b><span>指标</span></div>
+    <div class="miss"><b>${st.missing}</b><span>缺</span></div>
+  </div>`;
+}
+
+function evBar(st) {
+  const e = st.evidence || {};
+  const order = ['sourced', 'boundary', 'inferred', 'none', 'rumor'];
+  return `<div class="evbar">` + order.map(k =>
+    `<span class="${k}">${EVIDENCE_LABEL[k]} ${e[k] || 0}</span>`).join('') + `</div>`;
+}
+
+function renderLayer(l) {
+  const list = (byLayer[l.id] || []);
+  const group = (t, title) => {
+    const arr = list.filter(n => n.type === t);
+    if (!arr.length) return '';
+    return `<div class="gt">${title}（${arr.length}）</div>` + arr.map(n => {
+      const mark = n.status === 'expected' ? '<span class="e">占位</span>'
+        : n.status !== 'supported' ? `<span class="m">${STATUS_LABEL[n.status]}</span>` : '';
+      return `<button data-goto="${n.id}">${n.label}${mark}</button>`;
+    }).join('');
+  };
+  panel.innerHTML = `
+    <div class="kicker">第 ${l.order} 层</div>
+    <h2 class="title">${l.name}</h2>
+    ${statGrid(l.stats)}
+    <div class="sec-t">这一层的证据构成</div>
+    ${evBar(l.stats)}
+    ${l.stats.na ? `<p class="layertext"><b>不适用 ${l.stats.na}</b><br>这一层有节点被主动判定不适用，不是缺。图上用带斜线的灰圈表示，与赭色虚线的「缺」分开。</p>` : ''}
+    <p class="layertext"><b>要解决的问题</b><br>${l.problem}</p>
+    <p class="layertext"><b>怎么判断成了</b><br>${l.success}</p>
+    <p class="layertext"><b>最常见的死法</b><br>${l.death}</p>
+    <p class="layertext"><b>这层不成立时</b><br>${l.if_broken}</p>
+    <div class="grouplist">
+      ${group('theory', '理论 / 模型')}
+      ${group('action', '动作')}
+      ${group('metric', '指标')}
+    </div>
+    <div class="sec-t">出处</div>
+    <div class="docbox">${docLink(l)}<br>${l.section}</div>`;
+  panel.classList.add('open');
+}
+
+function selectNode(n) {
+  selected = n; hovered = null; activeLayer = null;
+  renderNode(n);
+  syncLayerRows();
+  draw();
+}
+function selectLayer(id) {
+  const l = layerById.get(id);
+  if (!l) return;
+  activeLayer = l; selected = null;
+  renderLayer(l);
+  syncLayerRows();
+  draw();
+}
+function clearSelection() {
+  selected = null; activeLayer = null; hovered = null;
+  renderEmpty(); syncLayerRows(); draw();
+  panel.classList.remove('open');
+}
+
+panel.addEventListener('click', ev => {
+  const go = ev.target.closest('[data-goto]');
+  if (go) { const n = byId.get(go.dataset.goto); if (n) { centerOn(n); selectNode(n); } return; }
+  const lay = ev.target.closest('[data-layer]');
+  if (lay) {
+    selectLayer(lay.dataset.layer);
+    centerLayer(lay.dataset.layer);
+  }
+});
+
+/* ---------------- 筛选 ---------------- */
+const state = {
+  types: new Set(['theory', 'action', 'metric', 'layer']),
+  layers: new Set(GRAPH.layers.map(l => l.id).concat(['none'])),
+  evs: new Set(Object.keys(EVIDENCE_LABEL)),
+  dims: new Set(Object.keys(DIM_LABEL)),
+  gapOnly: false,
+};
+const typeFilters = document.getElementById('typeFilters');
+const layerFilters = document.getElementById('layerFilters');
+const evFilters = document.getElementById('evFilters');
+const dimFilters = document.getElementById('dimFilters');
+
+function countByType(t) { return nodes.filter(n => n.type === t).length; }
+typeFilters.innerHTML = ['theory', 'action', 'metric', 'layer'].map(t => `
+  <label class="frow"><input type="checkbox" data-type="${t}" ${state.types.has(t) ? 'checked' : ''}>
+  <span>${TYPE_LABEL[t]}</span><span class="num">${countByType(t)}</span></label>`).join('');
+
+const evOrder = ['sourced', 'boundary', 'inferred', 'none', 'rumor'];
+evFilters.innerHTML = evOrder.map(k => {
+  const c = nodes.filter(n => (n.evidence || 'sourced') === k).length;
+  return `<label class="frow"><input type="checkbox" data-ev="${k}" checked>
+    <span>${EVIDENCE_LABEL[k]}</span><span class="num">${c}</span></label>`;
+}).join('');
+
+dimFilters.innerHTML = Object.keys(DIM_LABEL).map(k => {
+  const c = nodes.filter(n => n.dim === k).length;
+  return `<label class="frow"><input type="checkbox" data-dim="${k}" checked>
+    <span>${DIM_LABEL[k]}</span><span class="num">${c}</span></label>`;
+}).join('');
+
+const layerRows = [{ id: 'none', name: '横切 / 未归层', stats: null }]
+  .concat(GRAPH.layers.map(l => ({ id: l.id, name: `${l.order} ${l.name}`, stats: l.stats })));
+layerFilters.innerHTML = layerRows.map(r => `
+  <button class="lrow" data-lid="${r.id}">
+    <span class="nm">${r.name}</span>
+    ${r.stats ? `<span class="cnt">${r.stats.theory}/${r.stats.action}/${r.stats.metric} <span class="miss">缺${r.stats.missing}</span>${r.stats.na ? ` <span class="na">不适${r.stats.na}</span>` : ''}</span>` : `<span class="cnt">${nodes.filter(n => !n.layer).length}</span>`}
+  </button>`).join('');
+
+function syncLayerRows() {
+  layerFilters.querySelectorAll('.lrow').forEach(b => {
+    b.classList.toggle('on', !!(activeLayer && b.dataset.lid === activeLayer.id) ||
+      !!(selected && (selected.layer || 'none') === b.dataset.lid));
+  });
+}
+
+function applyFilters() {
+  nodes.forEach(n => {
+    let v = state.types.has(n.type);
+    if (v) v = state.evs.has(n.evidence || 'sourced');
+    if (v) v = state.dims.has(n.dim || 'k2');
+    if (v && state.gapOnly) {
+      v = ['missing', 'mentioned', 'expected'].indexOf(n.status) >= 0 ||
+          ['none', 'rumor'].indexOf(n.evidence) >= 0;
+    }
+    if (v) {
+      if (n.type === 'layer') v = state.layers.has(n.id);
+      else v = state.layers.has(n.layer || 'none');
+    }
+    n.visible = v;
+  });
+  layout();
+  draw();
+}
+
+typeFilters.addEventListener('change', ev => {
+  const t = ev.target.dataset.type;
+  if (!t) return;
+  ev.target.checked ? state.types.add(t) : state.types.delete(t);
+  applyFilters();
+});
+evFilters.addEventListener('change', ev => {
+  const k = ev.target.dataset.ev;
+  if (!k) return;
+  ev.target.checked ? state.evs.add(k) : state.evs.delete(k);
+  applyFilters();
+});
+dimFilters.addEventListener('change', ev => {
+  const k = ev.target.dataset.dim;
+  if (!k) return;
+  ev.target.checked ? state.dims.add(k) : state.dims.delete(k);
+  applyFilters();
+});
+layerFilters.addEventListener('click', ev => {
+  const b = ev.target.closest('.lrow');
+  if (!b) return;
+  const id = b.dataset.lid;
+  if (id === 'none') {
+    // 只显示横切
+    state.layers = new Set(['none']);
+    if (selected && selected.layer) selected = null;
+    activeLayer = null; renderEmpty(); syncLayerRows(); applyFilters();
+    return;
+  }
+  // 再点一次已选中的层：回到六层全显
+  if (activeLayer && activeLayer.id === id && state.layers.size === 1) {
+    state.layers = new Set(GRAPH.layers.map(l => l.id).concat(['none']));
+    activeLayer = null; selected = null;
+    renderEmpty(); syncLayerRows(); applyFilters(); draw();
+    return;
+  }
+  selectLayer(id);
+  state.layers = new Set([id]);
+  applyFilters();
+  centerLayer(id);
+});
+document.getElementById('gapOnly').addEventListener('change', ev => {
+  state.gapOnly = ev.target.checked;
+  applyFilters();
+});
+
+/* ---------------- 搜索 ---------------- */
+const q = document.getElementById('q');
+const results = document.getElementById('results');
+function doSearch() {
+  const v = q.value.trim().toLowerCase();
+  if (!v) { results.classList.remove('on'); results.innerHTML = ''; return; }
+  const hits = nodes.filter(n =>
+    n.label.toLowerCase().includes(v) ||
+    (n.definition || '').toLowerCase().includes(v) ||
+    (n.citation || '').toLowerCase().includes(v)
+  ).slice(0, 10);
+  results.innerHTML = hits.map(n =>
+    `<button data-hit="${n.id}">${n.label}<span class="rt">${nodeTypeLabel(n)} · ${layerName(n.layer)}</span></button>`
+  ).join('') || `<button disabled>没有匹配</button>`;
+  results.classList.add('on');
+}
+q.addEventListener('input', doSearch);
+q.addEventListener('keydown', ev => {
+  if (ev.key === 'Enter') {
+    const first = results.querySelector('[data-hit]');
+    if (first) { const n = byId.get(first.dataset.hit); centerOn(n); selectNode(n); results.classList.remove('on'); q.blur(); }
+  }
+  if (ev.key === 'Escape') { results.classList.remove('on'); q.blur(); }
+});
+results.addEventListener('click', ev => {
+  const b = ev.target.closest('[data-hit]');
+  if (!b) return;
+  const n = byId.get(b.dataset.hit);
+  centerOn(n); selectNode(n); results.classList.remove('on');
+});
+
+/* ---------------- 交互 ---------------- */
+function centerOn(n) {
+  scale = Math.max(scale, 1.15);
+  camX = n.x; camY = n.y;
+  draw();
+}
+function centerLayer(id) {
+  const v = nodes.filter(n => n.visible && (n.layer === id || n.id === id));
+  if (!v.length) return;
+  let x1 = Infinity, x2 = -Infinity, y1 = Infinity, y2 = -Infinity;
+  v.forEach(n => {
+    x1 = Math.min(x1, n.x); x2 = Math.max(x2, n.x);
+    y1 = Math.min(y1, n.y); y2 = Math.max(y2, n.y);
+  });
+  scale = Math.max(.3, Math.min(1.5, Math.min((W - 60) / (x2 - x1 + 220), (H - 90) / (y2 - y1 + 190))));
+  camX = (x1 + x2) / 2; camY = (y1 + y2) / 2;
+  draw();
+}
+function fitView() {
+  const vis = visibleNodes();
+  if (!vis.length) return;
+  let x1 = Infinity, x2 = -Infinity, y1 = Infinity, y2 = -Infinity;
+  vis.forEach(n => { x1 = Math.min(x1, n.x); x2 = Math.max(x2, n.x); y1 = Math.min(y1, n.y); y2 = Math.max(y2, n.y); });
+  const bw = x2 - x1 + 300, bh = y2 - y1 + 220;
+  scale = Math.min(.95, Math.min((W - 40) / bw, (H - 80) / bh));
+  scale = Math.max(.24, scale);
+  camX = (x1 + x2) / 2; camY = (y1 + y2) / 2 + 6;
+  draw();
+}
+function resetView() {
+  scale = W < 700 ? Math.min(.72, (W - 24) / 1420) : .72;
+  camX = (cols[1] + cols[6]) / 2; camY = 40;
+  clearSelection(); applyFilters();
+  renderEmpty();
+}
+
+cv.addEventListener('mousedown', ev => {
+  const r = cv.getBoundingClientRect();
+  mouse.down = true; mouse.moved = false;
+  mouse.sx = ev.clientX - r.left; mouse.sy = ev.clientY - r.top;
+  cv.classList.add('dragging');
+});
+cv.addEventListener('mousemove', ev => {
+  const r = cv.getBoundingClientRect();
+  const x = ev.clientX - r.left, y = ev.clientY - r.top;
+  if (mouse.down) {
+    const dx = x - mouse.sx, dy = y - mouse.sy;
+    if (Math.abs(dx) + Math.abs(dy) > 3) mouse.moved = true;
+    camX -= dx / scale; camY -= dy / scale;
+    mouse.sx = x; mouse.sy = y;
+    draw();
+    return;
+  }
+  const h = hit(x, y);
+  const hd = h ? null : hitHeader(x, y);
+  cv.style.cursor = h ? 'pointer' : 'grab';
+  if (h !== hovered) { hovered = h; draw(); }
+  if (!h && hd) cv.style.cursor = 'pointer';
+});
+window.addEventListener('mouseup', ev => {
+  if (!mouse.down) return;
+  mouse.down = false;
+  cv.classList.remove('dragging');
+  if (mouse.moved) return;
+  const r = cv.getBoundingClientRect();
+  const x = ev.clientX - r.left, y = ev.clientY - r.top;
+  if (x < 0 || y < 0 || x > W || y > H) return;
+  const n = hit(x, y);
+  if (n) { selectNode(n); return; }
+  const hd = hitHeader(x, y);
+  if (hd) { if (hd.layer) { selectLayer(hd.layer.id); state.layers = new Set([hd.layer.id]); applyFilters(); } return; }
+  clearSelection();
+});
+cv.addEventListener('wheel', ev => {
+  ev.preventDefault();
+  const r = cv.getBoundingClientRect();
+  const mx = ev.clientX - r.left, my = ev.clientY - r.top;
+  const bwx = wx(mx), bwy = wy(my);
+  const k = Math.exp(-ev.deltaY * 0.0016);
+  scale = Math.max(.18, Math.min(3.2, scale * k));
+  camX = bwx - (mx - W / 2) / scale;
+  camY = bwy - (my - H / 2) / scale;
+  draw();
+}, { passive: false });
+
+document.getElementById('btnFit').addEventListener('click', fitView);
+document.getElementById('btnReset').addEventListener('click', resetView);
+document.getElementById('btnLabels').addEventListener('click', ev => {
+  labelAll = !labelAll;
+  ev.target.style.color = labelAll ? '#2f5d4f' : '';
+  ev.target.style.borderColor = labelAll ? '#2f5d4f' : '';
+  draw();
+});
+document.getElementById('mFilter').addEventListener('click', () => document.getElementById('side').classList.toggle('open'));
+document.getElementById('mDetail').addEventListener('click', () => panel.classList.toggle('open'));
+window.addEventListener('keydown', ev => {
+  if (ev.key === '/' && document.activeElement !== q) { ev.preventDefault(); q.focus(); }
+  if (ev.key === 'Escape') clearSelection();
+});
+window.addEventListener('resize', resize);
+
+/* ---------------- 启动 ---------------- */
+document.getElementById('metaline').textContent =
+  `${GRAPH.meta.node_count} 节点 / ${GRAPH.meta.edge_count} 边 · ${GRAPH.meta.docs_scanned} 篇文档`;
+resize();
+layout();
+applyFilters();
+resize();
+resetView();
+syncLayerRows();
+// 深链：#layer-seen 或 #theory-positioning
+if (location.hash.length > 1) {
+  const n = byId.get(decodeURIComponent(location.hash.slice(1)));
+  if (n) {
+    state.layers = new Set([n.type === 'layer' ? n.id : (n.layer || 'none')]);
+    layerFilters.querySelectorAll('.lrow').forEach(() => {});
+    applyFilters();
+    if (n.type === 'layer') { selectLayer(n.id); centerLayer(n.id); } else { centerOn(n); selectNode(n); }
+  }
+}
+</script>
+</body>
+</html>

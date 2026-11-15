@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent 业务架构 · 三个角色怎么分工</title>
+<style>
+  :root{
+    --bg:#f6f4ee; --paper:#fbfaf6; --ink:#1e2320; --muted:#6c716c;
+    --line:#d8d3c6; --accent:#1f5c4a; --accent-soft:#e6efe9;
+    --warn:#8a5a1f; --warn-soft:#f4ecdf; --bad:#8a3a34; --bad-soft:#f3e6e4;
+    --code:#5b615c;
+  }
+  [data-theme="dark"]{
+    --bg:#15181a; --paper:#1c2022; --ink:#e8e7e1; --muted:#9aa09b;
+    --line:#333a3c; --accent:#79c3a4; --accent-soft:#1e2f29;
+    --warn:#d3a86a; --warn-soft:#2e271b; --bad:#d58f88; --bad-soft:#2f2221;
+    --code:#a4aba5;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#15181a; --paper:#1c2022; --ink:#e8e7e1; --muted:#9aa09b;
+      --line:#333a3c; --accent:#79c3a4; --accent-soft:#1e2f29;
+      --warn:#d3a86a; --warn-soft:#2e271b; --bad:#d58f88; --bad-soft:#2f2221;
+      --code:#a4aba5;
+    }
+  }
+  *{box-sizing:border-box}
+  html{color-scheme:light dark}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif;font-size:14px;line-height:1.7;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4{font-family:"Songti SC","Noto Serif SC",Georgia,serif;font-weight:600}
+  a{color:var(--accent)}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--bg);border:1px solid var(--line);border-radius:2px;padding:0 4px;font-size:.88em;color:var(--code);word-break:break-all}
+  .wrap{max-width:1320px;margin:0 auto;padding:18px 24px 70px}
+  .top{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;border-bottom:2px solid var(--ink);padding-bottom:11px}
+  .kicker{margin:0 0 3px;font-size:10.5px;letter-spacing:.18em;color:var(--muted)}
+  h1{margin:0;font-size:clamp(21px,2.5vw,28px);line-height:1.3}
+  .lede{margin:4px 0 0;font-size:11.8px;color:var(--muted);max-width:780px}
+  .lede b{color:var(--ink)}
+  .facts{display:flex;gap:18px;flex:0 0 auto;padding-bottom:2px}
+  .fact b{display:block;font-family:"Songti SC",Georgia,serif;font-size:18px;line-height:1.2;color:var(--accent)}
+  .fact span{display:block;font-size:9.8px;color:var(--muted);margin-top:1px;white-space:nowrap}
+
+  .canvas{height:calc(100vh - 182px);min-height:610px;display:flex;flex-direction:column;gap:9px;margin-top:9px}
+  .roles{flex:0 0 150px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;min-height:0}
+  .role{background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:9px 11px;min-width:0}
+  .role .who{font-size:9.5px;letter-spacing:.08em;color:var(--accent)}
+  .role h3{margin:0 0 3px;font-size:15px;line-height:1.35}
+  .role .duty{margin:0 0 4px;font-size:10.6px;line-height:1.5;color:var(--ink)}
+  .role .not{margin:0;font-size:9.8px;line-height:1.45;color:var(--muted)}
+  .role .not b{color:var(--bad);font-weight:600}
+  .role.ctrl{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent-soft)}
+
+  .flow{flex:1;min-height:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:9px}
+  .hand{position:relative;display:flex;flex-direction:column;background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:9px 9px 8px;min-width:0}
+  .hand.stop{border-top:3px solid var(--bad);padding-top:7px}
+  .hand .no{font-family:"Songti SC",Georgia,serif;font-size:9.5px;letter-spacing:.12em;color:var(--accent)}
+  .hand h4{margin:1px 0 4px;font-size:12.4px;line-height:1.35;padding-right:26px}
+  .hand .owner{display:inline-block;font-size:8.8px;padding:0 5px;border-radius:2px;background:var(--accent-soft);color:var(--accent);margin-bottom:5px;white-space:nowrap}
+  .hand .owner.user{background:var(--warn-soft);color:var(--warn)}
+  .hand .owner.sub{background:var(--bg);color:var(--muted);border:1px solid var(--line)}
+  .hand p{margin:0;font-size:9.8px;line-height:1.5;color:var(--muted)}
+  .hand .prod{margin-top:auto;padding-top:5px;font-size:8.8px;line-height:1.4;color:var(--code);border-top:1px dashed var(--line);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-all}
+  .hand .stopbadge{position:absolute;top:7px;right:7px;font-size:8.6px;line-height:1.6;color:var(--bad);border:1px solid var(--bad);background:var(--bad-soft);padding:0 4px;border-radius:2px}
+  .hand:not(:last-child)::after{content:"›";position:absolute;right:-8px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--line);background:var(--bg);padding:0 1px;z-index:2}
+
+  .outputs{flex:0 0 124px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;min-height:0}
+  .out{background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:8px 10px;min-width:0}
+  .out .tag{font-size:9px;letter-spacing:.08em;color:var(--accent)}
+  .out h4{margin:0 0 3px;font-size:12.4px}
+  .out p{margin:0;font-size:9.8px;line-height:1.5;color:var(--muted)}
+  .out .path{display:block;margin-top:3px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:8.6px;color:var(--code);word-break:break-all}
+  .out.fs{border-style:dashed}
+
+  .stopline{flex:0 0 30px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;border:1px solid var(--bad);background:var(--bad-soft);border-radius:3px;padding:2px 10px;font-size:9.8px;color:var(--muted)}
+  .stopline b{color:var(--bad);font-size:10.4px;white-space:nowrap}
+  .stopline span{white-space:nowrap}
+  .legend{flex:0 0 16px;display:flex;gap:14px;flex-wrap:wrap;font-size:9.4px;color:var(--muted)}
+  .legend i{display:inline-block;width:9px;height:9px;margin-right:4px;vertical-align:0}
+  .lg-accent{background:var(--accent)}
+  .lg-bad{background:var(--bad)}
+  .lg-line{background:var(--paper);border:1px solid var(--line)}
+
+  .read{margin-top:8px;font-size:10.8px;color:var(--muted);border-left:2px solid var(--accent);padding-left:9px}
+  .read b{color:var(--accent)}
+
+  .details{margin-top:40px;border-top:1px solid var(--line);padding-top:8px}
+  .details h2{font-size:19px;margin:0 0 4px}
+  .details .sub{font-size:11.5px;color:var(--muted);margin:0 0 14px}
+  details{border-top:1px solid var(--line);padding:10px 0}
+  summary{cursor:pointer;font-size:13.5px;font-weight:600;list-style:none;display:flex;align-items:center;gap:8px}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"+";font-family:ui-monospace,monospace;color:var(--accent);font-size:15px;width:14px}
+  details[open] summary::before{content:"−"}
+  details .body{padding:12px 0 4px 22px}
+  .table-wrap{overflow-x:auto;border:1px solid var(--line);margin-top:10px}
+  table{width:100%;border-collapse:collapse;font-size:11.7px;background:var(--paper);min-width:720px}
+  th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6}
+  th{background:var(--bg);font-size:11px;white-space:nowrap}
+  tr:last-child td{border-bottom:0}
+  td code{font-size:9.8px}
+  ul.notes{margin:10px 0 0;padding-left:18px;font-size:12px;color:var(--muted)}
+  ul.notes li{margin-bottom:5px}
+  ul.notes b{color:var(--ink)}
+  .toggle{position:fixed;right:14px;top:10px;z-index:9;background:var(--paper);border:1px solid var(--line);color:var(--muted);font:inherit;font-size:10.5px;padding:3px 8px;border-radius:2px;cursor:pointer}
+  .toggle:hover{color:var(--accent);border-color:var(--accent)}
+  @media (max-width:1080px){
+    .canvas{height:auto;min-height:0}
+    .roles{grid-template-columns:1fr;flex-basis:auto}
+    .flow{grid-template-columns:repeat(2,minmax(0,1fr));flex-basis:auto}
+    .outputs{grid-template-columns:1fr;flex-basis:auto}
+    .hand:not(:last-child)::after{display:none}
+    .facts{display:none}
+  }
+  @media (max-width:560px){
+    .wrap{padding:12px 12px 60px}
+    .flow{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<button class="toggle" id="themeBtn" type="button">切换主题</button>
+<div class="wrap">
+
+<div class="top">
+  <div>
+    <p class="kicker">Agent 业务架构 / 操盘手本人 / 2026-11-15</p>
+    <h1>三个角色怎么分工，一件事经几道手</h1>
+    <p class="lede">这不是内容流水线，是<b>用户—主控 agent—子会话</b>的分工与交接。图上每个角色都写了「不做什么」；红色「停」标的是必须停下来问人的位置。</p>
+  </div>
+  <div class="facts">
+    <div class="fact"><b>3 角色</b><span>用户 / 主控 / 子会话</span></div>
+    <div class="fact"><b>7 道手</b><span>一句话到交付</span></div>
+    <div class="fact"><b>4 类停人</b><span>拍板/材料/花钱/冲突</span></div>
+    <div class="fact"><b>3 个出口</b><span>给你看/我用/飞书</span></div>
+  </div>
+</div>
+
+<div class="canvas">
+
+  <div class="roles">
+    <div class="role">
+      <span class="who">角色 A / 决策</span>
+      <h3>用户</h3>
+      <p class="duty">定方向、拍板、授权、给只有你能给的材料、做实测。</p>
+      <p class="not"><b>不做：</b>查库、写稿、跑脚本、验数。这些不该回到你手上。</p>
+    </div>
+    <div class="role ctrl">
+      <span class="who">角色 B / 判断与验收</span>
+      <h3>主控 agent</h3>
+      <p class="duty">查底座、出判断、拆活、派子会话、验数、交付；对结果负责。</p>
+      <p class="not"><b>不做：</b>替你决定「我是谁」、出镜、掏钱拍板、冒充法务。</p>
+    </div>
+    <div class="role">
+      <span class="who">角色 C / 执行</span>
+      <h3>子会话</h3>
+      <p class="duty">取件筛查、入库写库、经验采集、飞书读写；按主线派的一次性任务干。</p>
+      <p class="not"><b>不做：</b>拍板、改主控结论、直接对你交付、常驻待命。</p>
+    </div>
+  </div>
+
+  <div class="flow">
+    <div class="hand stop">
+      <span class="no">01</span><span class="stopbadge">停</span>
+      <h4>一句话需求</h4>
+      <span class="owner user">用户</span>
+      <p>给目标、给材料、给边界。说不清就先问，不猜。</p>
+      <div class="prod">会话消息 / 附件</div>
+    </div>
+    <div class="hand">
+      <span class="no">02</span>
+      <h4>判任务类型</h4>
+      <span class="owner">主控</span>
+      <p>判断 / 执行 / 取件 / 入库 / 采集 / 飞书写表，先归类再动手。</p>
+      <div class="prod">内部路由，不产出文件</div>
+    </div>
+    <div class="hand stop">
+      <span class="no">03</span><span class="stopbadge">停</span>
+      <h4>查底座</h4>
+      <span class="owner">主控</span>
+      <p>rag 检索、catalog、经验库、记忆；命中要带路径＋位置＋质量档。</p>
+      <div class="prod">rag.py / catalog.csv / experience.csv</div>
+    </div>
+    <div class="hand">
+      <span class="no">04</span>
+      <h4>拆活派发</h4>
+      <span class="owner">主控 → 子会话</span>
+      <p>按线派：取件筛查、入库写库、经验采集、飞书表；一次一单。</p>
+      <div class="prod">子会话任务说明</div>
+    </div>
+    <div class="hand stop">
+      <span class="no">05</span><span class="stopbadge">停</span>
+      <h4>执行</h4>
+      <span class="owner sub">子会话</span>
+      <p>拉数据、切段入库、写表、采经验；不回改主线结论。</p>
+      <div class="prod">中间产物 / 台账 / 飞书行</div>
+    </div>
+    <div class="hand stop">
+      <span class="no">06</span><span class="stopbadge">停</span>
+      <h4>验数与自驳</h4>
+      <span class="owner">主控</span>
+      <p>现场数、跑四道闸、自驳三轮；数对不上或撑不住就退回。</p>
+      <div class="prod">check_gate / copy / e0 / data</div>
+    </div>
+    <div class="hand">
+      <span class="no">07</span>
+      <h4>交付</h4>
+      <span class="owner">主控</span>
+      <p>结论给你看，底座留我用，飞书只写推进表与结论。</p>
+      <div class="prod">05-给你看 / 04-知识底座 / 飞书</div>
+    </div>
+  </div>
+
+  <div class="outputs">
+    <div class="out">
+      <span class="tag">出口 1 / 结论</span>
+      <h4>给你看</h4>
+      <p>一屏一个结论，能截图发人；只给判断、依据强度、下一步，不塞路径。</p>
+      <span class="path">05-给你看/01–06.md · 会话回复</span>
+    </div>
+    <div class="out">
+      <span class="tag">出口 2 / 查询底座</span>
+      <h4>我自己用</h4>
+      <p>带路径、编号、原文、质量档；供下一次判断检索，不对外。</p>
+      <span class="path">04-知识底座/00-我用-检索入口.md · rag/kbase.db · catalog · experience</span>
+    </div>
+    <div class="out fs">
+      <span class="tag">出口 3 / 协同</span>
+      <h4>飞书只留两类</h4>
+      <p>推进表（任务状态、日志、台账）＋结论；过程稿、草稿、中间分析不上飞书。</p>
+      <span class="path">SOP base 11 表 · 三源齐备度 · 道法术器 base</span>
+    </div>
+  </div>
+
+  <div class="stopline">
+    <b>四类必须停：</b>
+    <span>① 该行状态是「待你确认」</span>
+    <span>② 缺只有你能给的材料（证件/真名/案例授权/扫码）</span>
+    <span>③ 要花钱或签字</span>
+    <span>④ 表内两条规则冲突</span>
+  </div>
+
+  <div class="legend">
+    <span><i class="lg-accent"></i>主控（判断与验收）</span>
+    <span><i class="lg-line"></i>用户 / 子会话</span>
+    <span><i class="lg-bad"></i>停：必须问人，不许自动往下走</span>
+    <span>今天真正无人值守的只有检索与脚本闸；派活、验数、交付仍是主控会话里人盯着跑。</span>
+  </div>
+
+</div>
+
+<div class="read"><b>读法：</b>先看上面三个角色各自「做什么、不做什么」；再从左到右看 01→07 七道手，红色「停」是必须问人的位置；最后看下面三个出口——结论给你、底座留我、飞书只留推进表与结论。第二屏是逐步责任表、自动化程度和口径差异。</div>
+
+<div class="details">
+  <h2>第二屏：分工细账</h2>
+  <p class="sub">主图只留角色与交接；这里写清每一步谁负责、产出什么、什么条件下必须停。</p>
+
+  <details open>
+    <summary>一、七道手逐步责任表</summary>
+    <div class="body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="width:36px">#</th><th style="width:110px">这一步</th><th style="width:110px">谁负责</th><th>具体动作</th><th style="width:180px">产出</th><th style="width:200px">什么情况下停</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>一句话需求</td><td>用户</td><td>说目标、给材料、划边界；缺什么由主控一次问清，不逐条追问。</td><td>会话消息、附件</td><td>缺只有你能给的材料；涉及拍板、花钱、签字。</td></tr>
+            <tr><td>2</td><td>判任务类型</td><td>主控</td><td>分到判断 / 执行 / 取件 / 入库 / 采集 / 飞书写表六类；判断类先查库。</td><td>内部路由，无文件</td><td>任务跨了上游未完成层 → 报卡点，不硬做。</td></tr>
+            <tr><td>3</td><td>查底座</td><td>主控</td><td><code>rag.py search</code> 自然问句、<code>catalog</code> 按格找料、<code>experience</code> 查等级、记忆查既往决定。</td><td>命中：路径＋段号／条号＋质量档</td><td>库内无依据 → 只能写「库内无依据」，不许用印象补。</td></tr>
+            <tr><td>4</td><td>拆活派发</td><td>主控 → 子会话</td><td>按四条线派：取件筛查、入库写库、经验采集、飞书表；一次一单，带验收条件。</td><td>子会话任务说明</td><td>子会话无权拍板；遇到边界只能回报，不自行改方向。</td></tr>
+            <tr><td>5</td><td>执行</td><td>子会话</td><td>拉元数据、切段入库、写飞书行、采经验；只改自己那一段。</td><td>中间产物、台账、飞书行</td><td>结果不齐、数对不上、命中不确定 → 退回重做或标未验证。</td></tr>
+            <tr><td>6</td><td>验数与自驳</td><td>主控</td><td>现场数（sqlite / csv / 文件数）、跑四道闸、判断自驳三轮、审查闸逐条回看。</td><td>校验输出、修正后的结论</td><td>数对不上、闸不过、三轮后仍站不住 → 撤回，不交付。</td></tr>
+            <tr><td>7</td><td>交付</td><td>主控</td><td>结论写「给你看」；底座更新留在「我自己用」；飞书只写推进表与结论。</td><td>结论页、底座更新、飞书行</td><td>未验证、未数过、依赖未满足 → 不报完成，只报卡在哪。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>二、两个产物面与飞书边界</summary>
+    <div class="body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="width:120px">面</th><th>放什么</th><th>不放什么</th><th style="width:260px">真实位置</th></tr></thead>
+          <tbody>
+            <tr><td>给你看（结论）</td><td>结论、判断、依据强度、下一步；一屏一个，能截图发人。</td><td>路径、编号、原文长段、过程稿。</td><td><code>05-给你看/01–06.md</code>、会话回复、两张架构图</td></tr>
+            <tr><td>我自己用（底座）</td><td>路径、编号、原文摘录、质量档、检索入口、审计账。</td><td>不对外转发；不替代原文。</td><td><code>04-知识底座/00-我用-检索入口.md</code>、<code>rag/kbase.db</code>、<code>catalog/</code>、<code>experience/</code></td></tr>
+            <tr><td>飞书（协同）</td><td><b>只留两类</b>：推进表（状态、日志、台账）＋结论（三源齐备度、道法术器）。</td><td>过程稿、草稿、中间分析、未验证结论。</td><td>SOP base <code>QSqGbh…</code> 11 表；<code>三源齐备度</code>；道法术器 base</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="notes">
+        <li><b>为什么飞书只留两类：</b>飞书是协同面，不是知识库。过程稿留在本地底座，避免两处版本打架。</li>
+        <li><b>现状：</b>推进表有 11 个 table id；道法术器 base 只有导出 ndjson，本地没有连接配置；书籍采集清单在另一个 base。</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>三、实际自动化程度（不画成全自动）</summary>
+    <div class="body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="width:150px">环节</th><th style="width:90px">实际状态</th><th>证据</th></tr></thead>
+          <tbody>
+            <tr><td>检索与无答案判定</td><td>自动</td><td><code>rag.py search</code>：三路召回，不过线直接报「库内无相关内容」。</td></tr>
+            <tr><td>四道校验闸</td><td>自动</td><td><code>check_gate.py</code>、<code>check_copy.py</code>、<code>check_e0.py</code>、<code>check_data.py</code>。</td></tr>
+            <tr><td>取件筛查 / 入库</td><td>半自动</td><td>子会话按任务跑；命中不确定要人核，入库后要人抽查。</td></tr>
+            <tr><td>经验采集</td><td>半自动</td><td>AI 按格式录入，E1/E2/E3 升级由人核来源独立性。</td></tr>
+            <tr><td>判断与自驳</td><td>人盯着跑</td><td>AI 出草稿与三轮自驳，最终采信在主控会话里由人确认。</td></tr>
+            <tr><td>派活与收活</td><td>人触发</td><td>今天没有常驻调度器；主控按需创建子会话，完成即结束。</td></tr>
+            <tr><td>飞书写表</td><td>半自动</td><td><code>log_task.py</code> 调 <code>lark-cli</code>；字段静默失败要回读确认。</td></tr>
+            <tr><td>定时任务</td><td>未证</td><td>只有 <code>AGENTS.md</code> 第 122 行文字记录（ID <code>a169593e</code>），无本地调度配置与运行日志。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>四、必须停下来问人的四类（现行规则）</summary>
+    <div class="body">
+      <ul class="notes">
+        <li><b>① 待你确认：</b>SOP 表里状态为「待你确认」的行，主控不许自行往下推。</li>
+        <li><b>② 缺你的材料：</b>证件、真名、案例授权、扫码登录——只有你能给，穷尽替代方案后一次提出。</li>
+        <li><b>③ 花钱或签字：</b>采购、投流、封面工具、正版书，全部先报再动。</li>
+        <li><b>④ 规则冲突：</b>表内两条规则打架时停下报冲突，不静默选一条。</li>
+      </ul>
+      <ul class="notes">
+        <li><b>当前待拍板：</b>账号类型（接活操盘手／卖工具的人）、第一条选题、199 诊断挂不挂、是否采购与投流、第一个真实案例。</li>
+        <li><b>不该问人的：</b>查库、写稿、跑脚本、数条数、格式整理——这些回到用户手上就是主控失职。</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>五、与上一版图的关系（改名留档）</summary>
+    <div class="body">
+      <ul class="notes">
+        <li><b>上一版画错了主体：</b>画的是「账号生意怎么跑」和「项目作业链」，不是操盘手 agent 本身。</li>
+        <li><b>留档位置：</b><code>account-business-pipeline.html</code>（账号业务流水线）、<code>project-ops-chain.html</code>（项目作业链）。不删，只改名。</li>
+        <li><b>本页只回答：</b>三个角色怎么分、一件事经几道手、哪里必须停、产物分几个面。</li>
+      </ul>
+    </div>
+  </details>
+</div>
+
+</div>
+<script>
+(function(){
+  var btn=document.getElementById('themeBtn'), root=document.documentElement;
+  function cur(){var t=root.getAttribute('data-theme');if(t)return t;return window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+  btn.addEventListener('click',function(){root.setAttribute('data-theme',cur()==='dark'?'light':'dark');});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+[
+  {"name":"项目","type":"text"},
+  {"name":"旧说法","type":"text"},
+  {"name":"新说法","type":"text"},
+  {"name":"为什么","type":"text"},
+  {"name":"用在哪","type":"text"}
+]

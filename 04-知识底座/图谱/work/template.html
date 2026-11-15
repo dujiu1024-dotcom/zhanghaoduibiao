@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>知识图谱 · FDE 抖音账号</title>
+<style>
+:root{
+  --paper:#f7f5f0; --paper-2:#fbfaf6; --panel:#f3f0e9;
+  --ink:#23211d; --ink-2:#4a463f; --muted:#7d766a; --faint:#a49b8c;
+  --line:#ded7c9; --line-2:#cec6b6;
+  --accent:#2f5d4f;
+  --serif:"Songti SC","Source Han Serif SC","Noto Serif CJK SC","STSong",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sans);font-size:13px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+button,input{font-family:inherit;font-size:inherit;color:inherit}
+button{background:none;border:none;cursor:pointer}
+a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(47,93,79,.28)}
+a:hover{border-bottom-color:var(--accent)}
+
+#app{display:grid;grid-template-columns:264px minmax(0,1fr) 348px;height:100vh;overflow:hidden}
+
+/* ---------- 左侧 ---------- */
+#side{
+  border-right:1px solid var(--line);padding:22px 18px 16px;
+  overflow-y:auto;background:var(--paper);display:flex;flex-direction:column;gap:18px;
+}
+.brand h1{font-family:var(--serif);font-size:21px;font-weight:600;letter-spacing:.06em;margin:0 0 4px}
+.brand .sub{margin:0;color:var(--muted);font-size:11.5px;letter-spacing:.03em}
+.search{position:relative}
+.search input{
+  width:100%;padding:7px 9px;border:1px solid var(--line-2);background:var(--paper-2);
+  border-radius:2px;outline:none;
+}
+.search input:focus{border-color:var(--accent)}
+#results{position:absolute;top:100%;left:0;right:0;z-index:20;background:var(--paper-2);
+  border:1px solid var(--line-2);border-top:none;max-height:260px;overflow-y:auto;display:none}
+#results.on{display:block}
+#results button{display:block;width:100%;text-align:left;padding:6px 9px;border-bottom:1px solid var(--line);font-size:12px}
+#results button:hover{background:var(--panel)}
+#results .rt{color:var(--faint);font-size:10.5px;margin-left:6px}
+
+section h2{
+  font-family:var(--serif);font-size:12px;font-weight:600;letter-spacing:.12em;
+  color:var(--muted);margin:0 0 8px;text-transform:none;
+}
+.filters{display:flex;flex-direction:column;gap:5px}
+.frow{display:flex;align-items:center;gap:8px;padding:2px 0;font-size:12.5px;color:var(--ink-2)}
+.frow input{accent-color:var(--accent);margin:0;width:13px;height:13px}
+.frow .num{margin-left:auto;color:var(--faint);font-size:11px;font-variant-numeric:tabular-nums}
+.lrow{
+  display:flex;align-items:baseline;gap:6px;width:100%;text-align:left;
+  padding:4px 5px;margin-left:-5px;border-radius:2px;font-size:12.5px;color:var(--ink-2);
+}
+.lrow:hover{background:var(--panel)}
+.lrow.on{background:#e8eee9;color:var(--accent)}
+.lrow .nm{font-family:var(--serif);font-size:13px}
+.lrow .cnt{margin-left:auto;color:var(--faint);font-size:10.5px;font-variant-numeric:tabular-nums}
+.lrow .miss{color:#8a5b3f}
+.lrow .na{color:#8b8375}
+.switch{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2);cursor:pointer}
+.switch input{accent-color:var(--accent);margin:0}
+.legend{font-size:11.5px;color:var(--muted)}
+.legend .li{display:flex;align-items:center;gap:8px;margin:5px 0}
+.legend svg{flex:0 0 34px}
+.legend .sh{flex:0 0 34px;display:flex;justify-content:center}
+.foot{margin-top:auto;padding-top:10px;border-top:1px solid var(--line);color:var(--faint);font-size:10.5px;line-height:1.7}
+.foot b{font-weight:600;color:var(--muted)}
+
+/* ---------- 画布 ---------- */
+#stage{position:relative;overflow:hidden;background:var(--paper)}
+#cv{display:block;width:100%;height:100%;cursor:grab}
+#cv.dragging{cursor:grabbing}
+#topbar{position:absolute;top:auto;bottom:34px;right:14px;display:flex;gap:6px;align-items:center}
+#topbar button{
+  border:1px solid var(--line-2);background:rgba(251,250,246,.9);
+  padding:4px 9px;border-radius:2px;color:var(--ink-2);font-size:11.5px;
+}
+#topbar button:hover{border-color:var(--accent);color:var(--accent)}
+#hint{position:absolute;left:14px;bottom:12px;color:var(--faint);font-size:10.5px;letter-spacing:.02em;pointer-events:none}
+#stats{position:absolute;right:14px;bottom:12px;color:var(--faint);font-size:10.5px;font-variant-numeric:tabular-nums}
+
+/* ---------- 右侧 ---------- */
+#panel{
+  border-left:1px solid var(--line);background:var(--panel);overflow-y:auto;padding:20px 20px 40px;
+}
+#panel .empty{color:var(--muted);font-size:12px;line-height:1.9}
+#panel .empty h2{font-family:var(--serif);font-size:17px;font-weight:600;color:var(--ink);margin:0 0 10px}
+.kicker{font-size:10.5px;letter-spacing:.16em;color:var(--faint);margin-bottom:6px}
+#panel h2.title{font-family:var(--serif);font-size:20px;line-height:1.35;font-weight:600;margin:0 0 10px}
+.badges{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+.badge{font-size:10.5px;padding:2px 6px;border:1px solid var(--line-2);border-radius:2px;color:var(--muted);background:var(--paper-2)}
+.badge.st-missing,.badge.st-mentioned,.badge.st-unverified,.badge.st-expected{border-color:#c8b49f;color:#8a5b3f}
+.badge.st-supported{border-color:#b6c8bd;color:var(--accent)}
+.badge.st-na{border-color:#b9b2a4;color:var(--muted);border-style:solid;background:#ece9e2}
+.badge.ev-sourced{border-color:#b6c8bd;color:var(--accent)}
+.badge.ev-boundary{border-color:#c9c1b1;color:#6d6353}
+.badge.ev-inferred{border-color:#c9c1b1;color:#6d6353;background:#efebe3}
+.badge.ev-none{border-color:#c8a98e;color:#8a5b3f}
+.badge.ev-rumor{border-color:#c8a98e;color:#8a5b3f;border-style:dashed}
+.evbar{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 12px}
+.evbar span{font-size:10.5px;border:1px solid var(--line-2);padding:2px 6px;border-radius:2px;color:var(--muted);background:var(--paper-2)}
+.evbar span.none,.evbar span.rumor{border-color:#c8a98e;color:#8a5b3f}
+.statgrid.na b{color:#8b8375}
+.def{font-size:13px;line-height:1.85;color:var(--ink-2);margin:0 0 16px}
+.sec-t{font-size:10.5px;letter-spacing:.14em;color:var(--faint);margin:18px 0 6px}
+.kv{font-size:12px;line-height:1.75;color:var(--ink-2);margin:0 0 4px}
+.kv .k{color:var(--faint);display:inline-block;min-width:52px}
+.docbox{border-left:2px solid var(--line-2);padding:6px 0 6px 10px;font-size:11.5px;color:var(--muted);line-height:1.8;word-break:break-all}
+.rel{display:flex;flex-direction:column;gap:3px}
+.rel button{text-align:left;font-size:12px;color:var(--ink-2);padding:3px 0;border-bottom:1px dashed transparent}
+.rel button:hover{color:var(--accent);border-bottom-color:rgba(47,93,79,.3)}
+.rel .arrow{color:var(--faint);margin-right:5px;font-size:10.5px}
+.rel .why{display:block;color:var(--faint);font-size:10.5px;line-height:1.5;margin-top:1px}
+.statgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin:6px 0 14px}
+.statgrid div{background:var(--paper-2);padding:9px 4px;text-align:center}
+.statgrid b{display:block;font-family:var(--serif);font-size:19px;font-weight:600;line-height:1.2}
+.statgrid span{font-size:10px;color:var(--faint);letter-spacing:.06em}
+.statgrid div.miss b{color:#8a5b3f}
+.layertext{font-size:12px;line-height:1.85;color:var(--ink-2);margin:0 0 8px}
+.layertext b{color:var(--muted);font-weight:600;font-size:11px;letter-spacing:.06em}
+.grouplist{margin-top:4px}
+.grouplist .gt{font-size:10.5px;color:var(--faint);letter-spacing:.1em;margin:10px 0 3px}
+.grouplist button{display:block;width:100%;text-align:left;font-size:12px;color:var(--ink-2);padding:2px 0}
+.grouplist button:hover{color:var(--accent)}
+.grouplist .m{color:#8a5b3f;font-size:10px;margin-left:4px}
+.grouplist .e{color:var(--faint);font-size:10px;margin-left:4px}
+
+#mobileBar{display:none}
+@media (max-width:980px){
+  #app{grid-template-columns:1fr;height:100dvh}
+  #side{
+    position:absolute;z-index:30;top:0;left:0;bottom:0;width:270px;
+    transform:translateX(-101%);transition:transform .16s ease;border-right:1px solid var(--line-2);
+  }
+  #side.open{transform:none}
+  #panel{
+    position:absolute;z-index:25;left:0;right:0;bottom:0;max-height:58dvh;
+    border-left:none;border-top:1px solid var(--line-2);transform:translateY(101%);
+    transition:transform .16s ease;padding:16px 16px 28px;
+  }
+  #panel.open{transform:none}
+  #mobileBar{
+    display:flex;gap:6px;position:absolute;bottom:12px;left:12px;z-index:26;
+  }
+  #mobileBar button{border:1px solid var(--line-2);background:rgba(251,250,246,.94);padding:5px 10px;border-radius:2px;font-size:11.5px}
+  #topbar{left:auto;right:12px}
+  #hint{display:none}
+  #stats{display:none}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <aside id="side">
+    <div class="brand">
+      <h1>知识图谱</h1>
+      <p class="sub">FDE 抖音账号 · 六层主干 · 缺口可见</p>
+    </div>
+    <div class="search">
+      <input id="q" placeholder="搜索节点（按 / 聚焦）" autocomplete="off">
+      <div id="results"></div>
+    </div>
+    <section>
+      <h2>节点类型</h2>
+      <div class="filters" id="typeFilters"></div>
+    </section>
+    <section>
+      <h2>层级（点一层看缺口）</h2>
+      <div class="filters" id="layerFilters"></div>
+    </section>
+    <section>
+      <h2>证据分级（能不能对外引用）</h2>
+      <div class="filters" id="evFilters"></div>
+    </section>
+    <section>
+      <h2>知识维度</h2>
+      <div class="filters" id="dimFilters"></div>
+    </section>
+    <section>
+      <label class="switch"><input type="checkbox" id="gapOnly"> 只看缺口 / 仅参考·可转述</label>
+    </section>
+    <section class="legend">
+      <h2>读法</h2>
+      <div class="li"><span class="sh"><svg width="14" height="14"><circle cx="7" cy="7" r="5" fill="#23211d"/></svg></span>理论 / 模型</div>
+      <div class="li"><span class="sh"><svg width="14" height="14"><rect x="3" y="3" width="9" height="9" fill="#4c4740"/></svg></span>动作</div>
+      <div class="li"><span class="sh"><svg width="14" height="14"><path d="M7 3 L11 7 L7 11 L3 7 Z" fill="#6f6759"/></svg></span>指标</div>
+      <div class="li"><span class="sh"><svg width="14" height="14"><circle cx="7" cy="7" r="6" fill="none" stroke="#2f5d4f" stroke-width="1.6"/></svg></span>层级</div>
+      <div class="li"><span class="sh"><svg width="14" height="14"><circle cx="7" cy="7" r="5" fill="none" stroke="#8b8375" stroke-width="1.4" stroke-dasharray="2 2"/></svg></span>缺口（文档提到但没展开 / 缺失）</div>
+      <div class="li"><span class="sh"><svg width="14" height="14"><circle cx="7" cy="7" r="5" fill="none" stroke="#8b8375" stroke-width="1"/><line x1="3" y1="11" x2="11" y2="3" stroke="#8b8375" stroke-width="1"/></svg></span>不适用（主动判定不做）</div>
+      <div class="li"><span class="sh"><svg width="14" height="14"><circle cx="7" cy="7" r="5" fill="none" stroke="#b5ad9d" stroke-width="1.2" stroke-dasharray="2 2"/><text x="7" y="10" font-size="7" text-anchor="middle" fill="#a49b8c">空</text></svg></span>占位（应有但全库没有）</div>
+      <div class="li"><span class="sh"><svg width="14" height="14"><rect x="9" y="2" width="4" height="4" fill="#a49b8c"/></svg></span>证据：实心小块 = 经验推断</div>
+      <div class="li"><span class="sh"><svg width="14" height="14"><circle cx="11" cy="4" r="2.6" fill="none" stroke="#8b8375"/></svg></span>证据：空心圈 = 需注意边界</div>
+      <div class="li"><span class="sh"><svg width="14" height="14"><path d="M8 1 L14 7 M14 1 L8 7" stroke="#8a5b3f" stroke-width="1.1"/></svg></span>证据：叉 = 未获取</div>
+      <div class="li"><span class="sh"><svg width="14" height="14"><text x="9" y="9" font-size="9" font-weight="700" fill="#8a5b3f">?</text></svg></span>证据：问号 = 传闻</div>
+      <div class="li"><svg width="34" height="8"><line x1="0" y1="4" x2="34" y2="4" stroke="#2f5d4f" stroke-opacity=".55" stroke-width="1.2"/></svg>驱动</div>
+      <div class="li"><svg width="34" height="8"><line x1="0" y1="4" x2="34" y2="4" stroke="#a9a192" stroke-width="1" stroke-dasharray="3 3"/></svg>度量</div>
+      <div class="li"><svg width="34" height="8"><line x1="0" y1="4" x2="34" y2="4" stroke="#6f6a5e" stroke-width="2.2" stroke-opacity=".55"/></svg>依赖（前层→后层）</div>
+      <div class="li"><svg width="34" height="8"><line x1="0" y1="4" x2="34" y2="4" stroke="#8b8375" stroke-width="1" stroke-dasharray="1 3"/></svg>引用</div>
+    </section>
+    <div class="foot">
+      <b>状态</b>：已有文档支撑 / 只有提及没有展开 / 缺失 / 待确认。<br>
+      <b>数据</b>：<span id="metaline"></span><br>
+      <b>口径</b>：节点只从 knowledge/ 抽取，不编造；归属拿不准的标「待确认」，不硬连边。
+    </div>
+  </aside>
+
+  <main id="stage">
+    <canvas id="cv"></canvas>
+    <div id="mobileBar">
+      <button id="mFilter">筛选</button>
+      <button id="mDetail">详情</button>
+    </div>
+    <div id="topbar">
+      <button id="btnFit">适应窗口</button>
+      <button id="btnReset">回到总览</button>
+      <button id="btnLabels">显示标签</button>
+    </div>
+    <div id="hint">拖拽平移 · 滚轮缩放 · 点节点看详情 · 点层级看缺口</div>
+    <div id="stats"></div>
+  </main>
+
+  <aside id="panel"></aside>
+</div>
+
+<script>
+const GRAPH = __GRAPH_JSON__;
+const TYPE_LABEL = GRAPH.meta.type_labels;
+const STATUS_LABEL = GRAPH.meta.status_labels;
+const EDGE_LABEL = GRAPH.meta.edge_labels;
+const EVIDENCE_LABEL = GRAPH.meta.evidence_labels;
+const DIM_LABEL = GRAPH.meta.dim_labels;
+const DOC_PREFIX = GRAPH.meta.doc_url_prefix;
+const C = {
+  ink:'#23211d', ink2:'#4c4740', metric:'#6f6759', muted:'#8b8375', faint:'#a49b8c',
+  line:'#ded7c9', paper:'#f7f5f0', accent:'#2f5d4f', gap:'#8b8375', ph:'#b5ad9d'
+};
+const PAD = 80, COLW = 240;
+const cols = [0];
+for (let i = 1; i <= 6; i++) cols.push(PAD + (i - 1) * COLW);
+
+const byId = new Map();
+GRAPH.nodes.forEach(n => byId.set(n.id, n));
+const layerById = new Map(GRAPH.layers.map(l => [l.id, l]));
+const nodes = GRAPH.nodes.map((n, i) => {
+  const col = n.type === 'layer' ? (layerById.get(n.id)?.order || 0) : (n.layer ? (layerById.get(n.layer)?.order || 0) : 0);
+  return Object.assign(n, {
+    col, idx: i, x: cols[col] + (Math.random() - .5) * 60, y: 300 + (Math.random() - .5) * 700,
+    vx: 0, vy: 0, visible: true,
+    r: n.type === 'layer' ? 22 : n.type === 'theory' ? 7.5 : n.type === 'action' ? 5.6 : 6.2
+  });
+});
+const edges = GRAPH.edges.map(e => Object.assign({}, e, {
+  s: byId.get(e.source), t: byId.get(e.target)
+})).filter(e => e.s && e.t);
+
+const byLayer = {};
+nodes.forEach(n => { if (n.layer) (byLayer[n.layer] = byLayer[n.layer] || []).push(n); });
+
+/* ---------------- 布局：六列 × 三轨（理论/动作/指标），确定性排布 ---------------- */
+const LANE = { theory: -62, action: 0, metric: 62 };
+function layout() {
+  const deg = {};
+  edges.forEach(e => {
+    deg[e.source] = (deg[e.source] || 0) + 1;
+    deg[e.target] = (deg[e.target] || 0) + 1;
+  });
+  nodes.forEach(n => { n.deg = deg[n.id] || 0; });
+  const byCol = new Map();
+  const layerNodes = [];
+  const shelf = [];
+  nodes.forEach(n => {
+    if (n.type === 'layer') { layerNodes.push(n); return; }
+    if (!n.col) { if (n.visible) shelf.push(n); return; }
+    if (!byCol.has(n.col)) byCol.set(n.col, []);
+    byCol.get(n.col).push(n);
+  });
+  let maxHalf = 120;
+  const laneX = activeLayer ? { theory: -104, action: 0, metric: 104 } : LANE;
+  byCol.forEach((arr, col) => {
+    ['theory', 'action', 'metric'].forEach(t => {
+      const lane = arr.filter(n => n.type === t && n.visible);
+      lane.sort((a, b) => (b.deg || 0) - (a.deg || 0) || a.label.localeCompare(b.label, 'zh'));
+      const gap = activeLayer ? 42 : 26;
+      const total = (lane.length - 1) * gap;
+      maxHalf = Math.max(maxHalf, total / 2);
+      lane.forEach((n, i) => {
+        n.x = cols[col] + laneX[t] + ((i * 13) % 9) - 4;
+        n.y = i * gap - total / 2;
+      });
+      arr.filter(n => n.type === t && !n.visible).forEach(n => { n.x = cols[col] + laneX[t]; n.y = 0; });
+    });
+  });
+  layerNodes.forEach(n => { n.x = cols[n.col]; n.y = -maxHalf - 76; });
+  // 横切 / 未归层：放在底部当书架，避免多占一列宽度
+  const shelfY = maxHalf + 96;
+  shelf.sort((a, b) => (b.deg || 0) - (a.deg || 0) || a.label.localeCompare(b.label, 'zh'));
+  shelf.forEach((n, i) => {
+    n.x = PAD + 40 + (i % 11) * 108;
+    n.y = shelfY + Math.floor(i / 11) * 34;
+  });
+}
+
+/* ---------------- 相机与渲染 ---------------- */
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+let W = 0, H = 0, DPR = 1;
+let scale = .8, camX = 1100, camY = 420;
+let hovered = null, selected = null, activeLayer = null, dragNode = null;
+let labelAll = false;
+let mouse = { x: -1, y: -1, down: false, moved: false, sx: 0, sy: 0 };
+
+function resize() {
+  const rect = cv.getBoundingClientRect();
+  W = rect.width; H = rect.height; DPR = Math.min(2, window.devicePixelRatio || 1);
+  cv.width = W * DPR; cv.height = H * DPR;
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  draw();
+}
+const sx = x => (x - camX) * scale + W / 2;
+const sy = y => (y - camY) * scale + H / 2;
+const wx = x => (x - W / 2) / scale + camX;
+const wy = y => (y - H / 2) / scale + camY;
+
+function shapePath(n, X, Y, r) {
+  ctx.beginPath();
+  if (n.type === 'action') {
+    const s = r * 1.55;
+    ctx.rect(X - s / 2, Y - s / 2, s, s);
+  } else if (n.type === 'metric') {
+    const s = r * 1.5;
+    ctx.moveTo(X, Y - s); ctx.lineTo(X + s, Y); ctx.lineTo(X, Y + s); ctx.lineTo(X - s, Y); ctx.closePath();
+  } else {
+    ctx.arc(X, Y, r, 0, Math.PI * 2);
+  }
+}
+
+function statusKind(n) {
+  if (n.status === 'na') return 'na';
+  if (n.status === 'expected') return 'expected';
+  if (n.status === 'supported' || n.status === 'unverified') return 'ok';
+  return 'gap';
+}
+
+// 证据标记：有出处不标；边界=空心圈；经验推断=实心小方块；未获取=叉；传闻=问号
+function drawEvMark(n, X, Y) {
+  const ev = n.evidence || 'sourced';
+  if (ev === 'sourced') return;
+  const mx = X + n.r * .95, my = Y - n.r * .95;
+  ctx.save();
+  if (ev === 'inferred') {
+    ctx.fillStyle = C.faint;
+    ctx.fillRect(mx - 1.8, my - 1.8, 3.6, 3.6);
+  } else if (ev === 'boundary') {
+    ctx.strokeStyle = C.muted; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(mx, my, 2.8, 0, Math.PI * 2); ctx.stroke();
+  } else if (ev === 'none') {
+    ctx.strokeStyle = '#8a5b3f'; ctx.lineWidth = 1.1;
+    ctx.beginPath();
+    ctx.moveTo(mx - 2.6, my - 2.6); ctx.lineTo(mx + 2.6, my + 2.6);
+    ctx.moveTo(mx + 2.6, my - 2.6); ctx.lineTo(mx - 2.6, my + 2.6);
+    ctx.stroke();
+  } else if (ev === 'rumor') {
+    ctx.fillStyle = '#8a5b3f';
+    ctx.font = '700 8px ' + getComputedStyle(document.body).fontFamily;
+    ctx.textAlign = 'center';
+    ctx.fillText('?', mx, my + 3);
+  }
+  ctx.restore();
+}
+
+function visibleNodes() { return nodes.filter(n => n.visible); }
+
+function neighborsOf(id) {
+  const set = new Set();
+  edges.forEach(e => {
+    if (e.s.id === id) set.add(e.t.id);
+    if (e.t.id === id) set.add(e.s.id);
+  });
+  return set;
+}
+
+let focusSet = null;
+function computeFocus() {
+  const base = selected || hovered || activeLayer;
+  if (!base) { focusSet = null; return; }
+  const id = base.id || base;
+  const set = new Set([id]);
+  if (layerById.has(id)) {
+    nodes.forEach(n => { if (n.layer === id) set.add(n.id); });
+    focusSet = set;
+    return;
+  }
+  edges.forEach(e => {
+    if (e.s.id === id) set.add(e.t.id);
+    if (e.t.id === id) set.add(e.s.id);
+  });
+  focusSet = set;
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, H);
+  computeFocus();
+  const vis = new Set(visibleNodes().map(n => n.id));
+
+  const headers = [];
+  const colNames = [];
+  const visCols = new Set();
+  nodes.forEach(n => { if (n.visible && n.col) visCols.add(n.col); });
+  GRAPH.layers.forEach(l => colNames.push({ col: l.order, name: `第 ${l.order} 层 · ${l.name}`, layer: l }));
+  colNames.forEach(cd => {
+    if (!visCols.has(cd.col)) return;
+    if (cd.col > 1) {
+      const x = sx(cols[cd.col]);
+      ctx.strokeStyle = 'rgba(120,110,92,.10)'; ctx.lineWidth = 1;
+      ctx.setLineDash([2, 6]);
+      ctx.beginPath(); ctx.moveTo(x, 74); ctx.lineTo(x, H); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    const st = cd.layer ? cd.layer.stats : null;
+    const x = sx(cols[cd.col]);
+    const narrow = W < 720;
+    ctx.textAlign = 'center';
+    ctx.font = '600 11.5px "Songti SC",serif';
+    ctx.fillStyle = C.accent;
+    ctx.fillText(narrow ? cd.layer.name : cd.name, x, 30);
+    if (st && !narrow) {
+      ctx.font = '10px ' + getComputedStyle(document.body).fontFamily;
+      ctx.fillStyle = C.faint;
+      ctx.fillText(`${st.theory}/${st.action}/${st.metric} · 缺 ${st.missing}${st.na ? ' · 不适 ' + st.na : ''}`, x, 48);
+    }
+    headers.push({ cd, x, y: 40 });
+  });
+  const shelfYs = nodes.filter(n => n.col === 0 && n.visible).map(n => n.y);
+  if (shelfYs.length) {
+    ctx.textAlign = 'left';
+    ctx.font = '600 11px "Songti SC",serif';
+    ctx.fillStyle = C.muted;
+    ctx.fillText('横切 · 未归层（总纲 / 孤岛 / 缺口）', sx(PAD - 10), sy(Math.min(...shelfYs) - 22));
+  }
+
+  // 边
+  ctx.lineCap = 'round';
+  edges.forEach(e => {
+    if (!e.s.visible || !e.t.visible) return;
+    const on = !focusSet || (focusSet.has(e.s.id) && focusSet.has(e.t.id));
+    const x1 = sx(e.s.x), y1 = sy(e.s.y), x2 = sx(e.t.x), y2 = sy(e.t.y);
+    ctx.globalAlpha = on ? 1 : .18;
+    if (e.type === 'belongs') { ctx.strokeStyle = 'rgba(90,82,68,.13)'; ctx.lineWidth = .8; ctx.setLineDash([]); }
+    else if (e.type === 'drives') { ctx.strokeStyle = 'rgba(47,93,79,.42)'; ctx.lineWidth = 1; ctx.setLineDash([]); }
+    else if (e.type === 'measures') { ctx.strokeStyle = 'rgba(140,128,108,.55)'; ctx.lineWidth = .85; ctx.setLineDash([3, 3]); }
+    else if (e.type === 'depends') { ctx.strokeStyle = 'rgba(90,84,70,.5)'; ctx.lineWidth = 2.4; ctx.setLineDash([]); }
+    else { ctx.strokeStyle = 'rgba(120,110,92,.5)'; ctx.lineWidth = .9; ctx.setLineDash([1, 3.5]); }
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    ctx.setLineDash([]);
+    if (e.type === 'drives' || e.type === 'depends') {
+      const t = .62;
+      const ax = x1 + (x2 - x1) * t, ay = y1 + (y2 - y1) * t;
+      const ang = Math.atan2(y2 - y1, x2 - x1), L = 5;
+      ctx.fillStyle = e.type === 'drives' ? 'rgba(47,93,79,.55)' : 'rgba(90,84,70,.55)';
+      ctx.beginPath();
+      ctx.moveTo(ax, ay);
+      ctx.lineTo(ax - L * Math.cos(ang - .4), ay - L * Math.sin(ang - .4));
+      ctx.lineTo(ax - L * Math.cos(ang + .4), ay - L * Math.sin(ang + .4));
+      ctx.closePath(); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  });
+
+  // 节点
+  nodes.forEach(n => {
+    if (!n.visible) return;
+    const X = sx(n.x), Y = sy(n.y);
+    if (X < -80 || X > W + 80 || Y < -80 || Y > H + 80) return;
+    const dim = focusSet && !focusSet.has(n.id);
+    ctx.globalAlpha = dim ? .22 : 1;
+    const kind = statusKind(n);
+    const isSel = selected && selected.id === n.id;
+    const isHov = hovered && hovered.id === n.id;
+
+    if (n.type === 'layer') {
+      const st = layerById.get(n.id)?.stats || {};
+      ctx.beginPath(); ctx.arc(X, Y, n.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(251,250,246,.92)'; ctx.fill();
+      ctx.strokeStyle = C.accent; ctx.lineWidth = isSel ? 2.6 : 1.6; ctx.stroke();
+      ctx.beginPath(); ctx.arc(X, Y, n.r - 5, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(47,93,79,.22)'; ctx.lineWidth = 1; ctx.stroke();
+      ctx.textAlign = 'center';
+      ctx.font = '600 12px "Songti SC",serif';
+      ctx.fillStyle = C.accent;
+      ctx.fillText(layerById.get(n.id).name, X, Y + 4);
+      ctx.font = '9.5px ' + getComputedStyle(document.body).fontFamily;
+      ctx.fillStyle = C.faint;
+      ctx.fillText(`缺 ${st.missing || 0}${st.na ? ' · 不适 ' + st.na : ''}`, X, Y + n.r + 13);
+    } else {
+      shapePath(n, X, Y, n.r * (isSel ? 1.25 : isHov ? 1.12 : 1));
+      if (kind === 'ok') {
+        ctx.fillStyle = n.type === 'theory' ? C.ink : n.type === 'action' ? C.ink2 : C.metric;
+        ctx.fill();
+        if (n.status === 'unverified') {
+          ctx.beginPath(); ctx.arc(X, Y, n.r + 4, 0, Math.PI * 2);
+          ctx.setLineDash([1.5, 2.5]); ctx.strokeStyle = C.muted; ctx.lineWidth = 1; ctx.stroke(); ctx.setLineDash([]);
+        }
+      } else if (kind === 'na') {
+        ctx.fillStyle = 'rgba(251,250,246,.9)'; ctx.fill();
+        ctx.strokeStyle = C.muted; ctx.lineWidth = 1.1; ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(X - n.r * .8, Y + n.r * .8); ctx.lineTo(X + n.r * .8, Y - n.r * .8);
+        ctx.strokeStyle = 'rgba(139,131,117,.75)'; ctx.lineWidth = 1; ctx.stroke();
+      } else {
+        ctx.fillStyle = 'rgba(251,250,246,.9)'; ctx.fill();
+        ctx.strokeStyle = kind === 'expected' ? C.ph : '#8a5b3f';
+        ctx.lineWidth = kind === 'expected' ? 1.2 : 1.5;
+        ctx.setLineDash([2, 2]); ctx.stroke(); ctx.setLineDash([]);
+      }
+      if (isSel) {
+        ctx.beginPath(); ctx.arc(X, Y, n.r + 7, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(47,93,79,.55)'; ctx.lineWidth = 1; ctx.stroke();
+      }
+      if (scale > .85 || isSel || isHov) drawEvMark(n, X, Y);
+    }
+
+    // 标签：默认只显示层级、缺口、悬停/选中及其邻居；放大后才显示全部，避免叠字
+    const labelOn =
+      n.type === 'layer' ? false :
+      isSel || isHov ||
+      (n.status !== 'supported' && n.status !== 'unverified') ||
+      labelAll || scale > 1.7;
+    if (labelOn) {
+      ctx.textAlign = 'left';
+      const fs = n.type === 'theory' ? 10.5 : 9.5;
+      ctx.font = `${fs}px ${getComputedStyle(document.body).fontFamily}`;
+      const lx = X + n.r + 5, ly = Y + 3.5;
+      ctx.lineWidth = 3; ctx.strokeStyle = C.paper;
+      ctx.strokeText(n.label, lx, ly);
+      ctx.fillStyle = kind === 'ok' ? (dim ? C.faint : C.ink2) : (kind === 'expected' ? C.faint : '#7a6a56');
+      ctx.fillText(n.label, lx, ly);
+    }
+    ctx.globalAlpha = 1;
+  });
+  // headers hitboxes
+  draw._headers = headers;
+  document.getElementById('stats').textContent =
+    `${vis.size} / ${nodes.length} 节点 · ${edges.length} 边 · 缩放 ${Math.round(scale * 100)}%`;
+}
+
+/* ---------------- 命中测试 ---------------- */
+function hit(x, y) {
+  const w = wx(x), h = wy(y);
+  const tol = 8 / scale;
+  let best = null, bestD = Infinity;
+  nodes.forEach(n => {
+    if (!n.visible) return;
+    const r = n.r + tol + (n.type === 'layer' ? 4 : 0);
+    const d = Math.hypot(n.x - w, n.y - h);
+    if (d <= r && d < bestD) { best = n; bestD = d; }
+  });
+  return best;
+}
+function hitHeader(x, y) {
+  const hs = draw._headers || [];
+  for (const hd of hs) {
+    if (Math.abs(x - hd.x) < 46 && y > 14 && y < 66) return hd.cd;
+  }
+  return null;
+}
+
+/* ---------------- 右侧面板 ---------------- */
+const panel = document.getElementById('panel');
+
+function nodeTypeLabel(n) { return TYPE_LABEL[n.type] || n.type; }
+function statusBadge(n) {
+  const cls = 'badge st-' + n.status;
+  return `<span class="${cls}">${STATUS_LABEL[n.status] || n.status}</span>`;
+}
+function layerName(id) { return layerById.get(id)?.name || '未归层'; }
+function docLink(n, text) {
+  if (!n.doc) return text || '—';
+  const href = DOC_PREFIX + n.doc.split('/').map(encodeURIComponent).join('/');
+  return `<a href="${href}" target="_blank">${text || n.doc}</a>`;
+}
+function relBtn(n, why, arrow) {
+  return `<button data-goto="${n.id}"><span class="arrow">${arrow || '→'}</span>${n.label}${why ? `<span class="why">${why}</span>` : ''}</button>`;
+}
+
+function renderEmpty() {
+  const m = GRAPH.meta;
+  panel.innerHTML = `
+    <div class="empty">
+      <h2>这张图回答什么</h2>
+      点左侧任意一层，或点图上的大圆圈，看这一层现在有几个理论、几个动作、几个指标、缺几个，以及这一层的证据构成。<br><br>
+      点任意小点看它的定义、证据分级、出处、文档路径和关联动作。赭色虚线圈是缺口；带斜线的灰圈是「主动判不适用」；节点右上角的小标记表示证据等级——这决定它能不能对外引用。
+      <div class="sec-t">当前规模</div>
+      <div class="statgrid">
+        <div><b>${m.node_count}</b><span>节点</span></div>
+        <div><b>${m.edge_count}</b><span>边</span></div>
+        <div class="miss"><b>${m.missing_total}</b><span>缺口</span></div>
+        <div class="na"><b>${m.na_total}</b><span>不适用</span></div>
+      </div>
+      <div class="sec-t">证据构成</div>
+      <div class="evbar">${['sourced','boundary','inferred','none','rumor'].map(k =>
+        `<span class="${k}">${EVIDENCE_LABEL[k]} ${m.evidence_counts[k] || 0}</span>`).join('')}</div>
+      <div class="sec-t">六层缺口分布</div>
+      <div class="grouplist">
+        ${GRAPH.layers.map(l => `<button data-layer="${l.id}">${l.order} ${l.name}<span class="m">缺 ${l.stats.missing}</span></button>`).join('')}
+      </div>
+      <div class="sec-t">生成时间</div>
+      <div class="kv">${m.generated_at}</div>
+    </div>`;
+}
+
+function renderNode(n) {
+  const ins = edges.filter(e => e.t.id === n.id);
+  const outs = edges.filter(e => e.s.id === n.id);
+  const parts = [];
+  parts.push(`<div class="kicker">${nodeTypeLabel(n)}${n.type !== 'layer' ? ' · ' + layerName(n.layer) : ''}</div>`);
+  parts.push(`<h2 class="title">${n.label}</h2>`);
+  parts.push(`<div class="badges">${statusBadge(n)}
+    <span class="badge ev-${n.evidence}">${EVIDENCE_LABEL[n.evidence] || ''}</span>
+    <span class="badge">${DIM_LABEL[n.dim] || ''}</span>
+    ${n.review_state ? `<span class="badge">${n.review_state}</span>` : ''}
+    ${n.type === 'layer' ? '' : `<span class="badge">${layerName(n.layer)}</span>`}</div>`);
+  parts.push(`<p class="def">${n.definition}</p>`);
+
+  if (n.evidence) {
+    const evText = n.evidence === 'sourced'
+      ? '有出处，可以直接引用（出处见下）。'
+      : n.evidence === 'boundary'
+        ? '有出处，但引用时必须带限制条件。'
+        : n.evidence === 'inferred'
+          ? '经验推断 / 项目规则，不能说成「数据表明」。'
+          : n.evidence === 'none'
+            ? '数据不存在或拿不到，不要对外引用。'
+            : '传闻，不作为依据；图上用问号标出。';
+    parts.push(`<div class="sec-t">证据分级</div>
+      <div class="kv">${evText}${n.evidence_note ? '<br>' + n.evidence_note : ''}</div>`);
+  }
+
+  if (n.status === 'expected') {
+    parts.push(`<div class="sec-t">为什么这里是空的</div><div class="kv">${n.note || ''}</div>`);
+    const partial = (n.partial || []).map(id => byId.get(id)).filter(Boolean);
+    if (partial.length) {
+      parts.push(`<div class="sec-t">部分相关（但没覆盖这个位置）</div><div class="rel">`);
+      partial.forEach(p => parts.push(relBtn(p, '只覆盖了一部分', '≈')));
+      parts.push(`</div>`);
+    }
+    parts.push(`<div class="sec-t">怎么补</div><div class="kv">在 knowledge/ 里补一篇文档，回到 work/curated_nodes.py 加节点，重跑 extract.py。</div>`);
+  }
+
+  if (n.citation) parts.push(`<div class="sec-t">出处</div><div class="kv">${n.citation}</div>`);
+  if (n.doc) {
+    parts.push(`<div class="sec-t">文档</div><div class="docbox">
+      ${docLink(n)}<br>
+      ${n.section ? '节次：' + n.section + '<br>' : ''}
+      最后修改：${n.doc_mtime || '—'}
+    </div>`);
+  }
+  if (n.status === 'na') {
+    parts.push(`<div class="sec-t">为什么判不适用</div><div class="kv">${n.note || ''}</div>`);
+  } else if (n.status === 'unverified' && n.note) {
+    parts.push(`<div class="sec-t">待确认原因</div><div class="kv">${n.note}</div>`);
+  } else if (n.note && n.status !== 'expected') {
+    parts.push(`<div class="sec-t">备注</div><div class="kv">${n.note}</div>`);
+  }
+
+  const drivesOut = outs.filter(e => e.type === 'drives');
+  const drivesIn = ins.filter(e => e.type === 'drives');
+  const measOut = outs.filter(e => e.type === 'measures');
+  const measIn = ins.filter(e => e.type === 'measures');
+  const cites = [...ins, ...outs].filter(e => e.type === 'cites');
+
+  if (drivesOut.length) {
+    parts.push(`<div class="sec-t">驱动这些动作</div><div class="rel">`);
+    drivesOut.forEach(e => parts.push(relBtn(e.t, e.note)));
+    parts.push(`</div>`);
+  }
+  if (drivesIn.length) {
+    parts.push(`<div class="sec-t">由这些理论驱动</div><div class="rel">`);
+    drivesIn.forEach(e => parts.push(relBtn(e.s, e.note, '←')));
+    parts.push(`</div>`);
+  }
+  if (measOut.length) {
+    parts.push(`<div class="sec-t">影响这些指标</div><div class="rel">`);
+    measOut.forEach(e => parts.push(relBtn(e.t, e.note)));
+    parts.push(`</div>`);
+  }
+  if (measIn.length) {
+    parts.push(`<div class="sec-t">被这些动作影响</div><div class="rel">`);
+    measIn.forEach(e => parts.push(relBtn(e.s, e.note, '←')));
+    parts.push(`</div>`);
+  }
+  if (n.type === 'layer') {
+    const l = layerById.get(n.id);
+    parts.push(`<div class="sec-t">这一层的统计</div>${statGrid(l.stats)}`);
+  }
+  if (cites.length) {
+    parts.push(`<div class="sec-t">文档引用</div><div class="rel">`);
+    cites.forEach(e => {
+      const other = e.s.id === n.id ? e.t : e.s;
+      parts.push(relBtn(other, e.note, e.s.id === n.id ? '→' : '←'));
+    });
+    parts.push(`</div>`);
+  }
+  panel.innerHTML = parts.join('');
+  panel.classList.add('open');
+}
+
+function statGrid(st) {
+  return `<div class="statgrid">
+    <div><b>${st.theory}</b><span>理论</span></div>
+    <div><b>${st.action}</b><span>动作</span></div>
+    <div><b>${st.metric}</b><span>指标</span></div>
+    <div class="miss"><b>${st.missing}</b><span>缺</span></div>
+  </div>`;
+}
+
+function evBar(st) {
+  const e = st.evidence || {};
+  const order = ['sourced', 'boundary', 'inferred', 'none', 'rumor'];
+  return `<div class="evbar">` + order.map(k =>
+    `<span class="${k}">${EVIDENCE_LABEL[k]} ${e[k] || 0}</span>`).join('') + `</div>`;
+}
+
+function renderLayer(l) {
+  const list = (byLayer[l.id] || []);
+  const group = (t, title) => {
+    const arr = list.filter(n => n.type === t);
+    if (!arr.length) return '';
+    return `<div class="gt">${title}（${arr.length}）</div>` + arr.map(n => {
+      const mark = n.status === 'expected' ? '<span class="e">占位</span>'
+        : n.status !== 'supported' ? `<span class="m">${STATUS_LABEL[n.status]}</span>` : '';
+      return `<button data-goto="${n.id}">${n.label}${mark}</button>`;
+    }).join('');
+  };
+  panel.innerHTML = `
+    <div class="kicker">第 ${l.order} 层</div>
+    <h2 class="title">${l.name}</h2>
+    ${statGrid(l.stats)}
+    <div class="sec-t">这一层的证据构成</div>
+    ${evBar(l.stats)}
+    ${l.stats.na ? `<p class="layertext"><b>不适用 ${l.stats.na}</b><br>这一层有节点被主动判定不适用，不是缺。图上用带斜线的灰圈表示，与赭色虚线的「缺」分开。</p>` : ''}
+    <p class="layertext"><b>要解决的问题</b><br>${l.problem}</p>
+    <p class="layertext"><b>怎么判断成了</b><br>${l.success}</p>
+    <p class="layertext"><b>最常见的死法</b><br>${l.death}</p>
+    <p class="layertext"><b>这层不成立时</b><br>${l.if_broken}</p>
+    <div class="grouplist">
+      ${group('theory', '理论 / 模型')}
+      ${group('action', '动作')}
+      ${group('metric', '指标')}
+    </div>
+    <div class="sec-t">出处</div>
+    <div class="docbox">${docLink(l)}<br>${l.section}</div>`;
+  panel.classList.add('open');
+}
+
+function selectNode(n) {
+  selected = n; hovered = null; activeLayer = null;
+  renderNode(n);
+  syncLayerRows();
+  draw();
+}
+function selectLayer(id) {
+  const l = layerById.get(id);
+  if (!l) return;
+  activeLayer = l; selected = null;
+  renderLayer(l);
+  syncLayerRows();
+  draw();
+}
+function clearSelection() {
+  selected = null; activeLayer = null; hovered = null;
+  renderEmpty(); syncLayerRows(); draw();
+  panel.classList.remove('open');
+}
+
+panel.addEventListener('click', ev => {
+  const go = ev.target.closest('[data-goto]');
+  if (go) { const n = byId.get(go.dataset.goto); if (n) { centerOn(n); selectNode(n); } return; }
+  const lay = ev.target.closest('[data-layer]');
+  if (lay) {
+    selectLayer(lay.dataset.layer);
+    centerLayer(lay.dataset.layer);
+  }
+});
+
+/* ---------------- 筛选 ---------------- */
+const state = {
+  types: new Set(['theory', 'action', 'metric', 'layer']),
+  layers: new Set(GRAPH.layers.map(l => l.id).concat(['none'])),
+  evs: new Set(Object.keys(EVIDENCE_LABEL)),
+  dims: new Set(Object.keys(DIM_LABEL)),
+  gapOnly: false,
+};
+const typeFilters = document.getElementById('typeFilters');
+const layerFilters = document.getElementById('layerFilters');
+const evFilters = document.getElementById('evFilters');
+const dimFilters = document.getElementById('dimFilters');
+
+function countByType(t) { return nodes.filter(n => n.type === t).length; }
+typeFilters.innerHTML = ['theory', 'action', 'metric', 'layer'].map(t => `
+  <label class="frow"><input type="checkbox" data-type="${t}" ${state.types.has(t) ? 'checked' : ''}>
+  <span>${TYPE_LABEL[t]}</span><span class="num">${countByType(t)}</span></label>`).join('');
+
+const evOrder = ['sourced', 'boundary', 'inferred', 'none', 'rumor'];
+evFilters.innerHTML = evOrder.map(k => {
+  const c = nodes.filter(n => (n.evidence || 'sourced') === k).length;
+  return `<label class="frow"><input type="checkbox" data-ev="${k}" checked>
+    <span>${EVIDENCE_LABEL[k]}</span><span class="num">${c}</span></label>`;
+}).join('');
+
+dimFilters.innerHTML = Object.keys(DIM_LABEL).map(k => {
+  const c = nodes.filter(n => n.dim === k).length;
+  return `<label class="frow"><input type="checkbox" data-dim="${k}" checked>
+    <span>${DIM_LABEL[k]}</span><span class="num">${c}</span></label>`;
+}).join('');
+
+const layerRows = [{ id: 'none', name: '横切 / 未归层', stats: null }]
+  .concat(GRAPH.layers.map(l => ({ id: l.id, name: `${l.order} ${l.name}`, stats: l.stats })));
+layerFilters.innerHTML = layerRows.map(r => `
+  <button class="lrow" data-lid="${r.id}">
+    <span class="nm">${r.name}</span>
+    ${r.stats ? `<span class="cnt">${r.stats.theory}/${r.stats.action}/${r.stats.metric} <span class="miss">缺${r.stats.missing}</span>${r.stats.na ? ` <span class="na">不适${r.stats.na}</span>` : ''}</span>` : `<span class="cnt">${nodes.filter(n => !n.layer).length}</span>`}
+  </button>`).join('');
+
+function syncLayerRows() {
+  layerFilters.querySelectorAll('.lrow').forEach(b => {
+    b.classList.toggle('on', !!(activeLayer && b.dataset.lid === activeLayer.id) ||
+      !!(selected && (selected.layer || 'none') === b.dataset.lid));
+  });
+}
+
+function applyFilters() {
+  nodes.forEach(n => {
+    let v = state.types.has(n.type);
+    if (v) v = state.evs.has(n.evidence || 'sourced');
+    if (v) v = state.dims.has(n.dim || 'k2');
+    if (v && state.gapOnly) {
+      v = ['missing', 'mentioned', 'expected'].indexOf(n.status) >= 0 ||
+          ['none', 'rumor'].indexOf(n.evidence) >= 0;
+    }
+    if (v) {
+      if (n.type === 'layer') v = state.layers.has(n.id);
+      else v = state.layers.has(n.layer || 'none');
+    }
+    n.visible = v;
+  });
+  layout();
+  draw();
+}
+
+typeFilters.addEventListener('change', ev => {
+  const t = ev.target.dataset.type;
+  if (!t) return;
+  ev.target.checked ? state.types.add(t) : state.types.delete(t);
+  applyFilters();
+});
+evFilters.addEventListener('change', ev => {
+  const k = ev.target.dataset.ev;
+  if (!k) return;
+  ev.target.checked ? state.evs.add(k) : state.evs.delete(k);
+  applyFilters();
+});
+dimFilters.addEventListener('change', ev => {
+  const k = ev.target.dataset.dim;
+  if (!k) return;
+  ev.target.checked ? state.dims.add(k) : state.dims.delete(k);
+  applyFilters();
+});
+layerFilters.addEventListener('click', ev => {
+  const b = ev.target.closest('.lrow');
+  if (!b) return;
+  const id = b.dataset.lid;
+  if (id === 'none') {
+    // 只显示横切
+    state.layers = new Set(['none']);
+    if (selected && selected.layer) selected = null;
+    activeLayer = null; renderEmpty(); syncLayerRows(); applyFilters();
+    return;
+  }
+  // 再点一次已选中的层：回到六层全显
+  if (activeLayer && activeLayer.id === id && state.layers.size === 1) {
+    state.layers = new Set(GRAPH.layers.map(l => l.id).concat(['none']));
+    activeLayer = null; selected = null;
+    renderEmpty(); syncLayerRows(); applyFilters(); draw();
+    return;
+  }
+  selectLayer(id);
+  state.layers = new Set([id]);
+  applyFilters();
+  centerLayer(id);
+});
+document.getElementById('gapOnly').addEventListener('change', ev => {
+  state.gapOnly = ev.target.checked;
+  applyFilters();
+});
+
+/* ---------------- 搜索 ---------------- */
+const q = document.getElementById('q');
+const results = document.getElementById('results');
+function doSearch() {
+  const v = q.value.trim().toLowerCase();
+  if (!v) { results.classList.remove('on'); results.innerHTML = ''; return; }
+  const hits = nodes.filter(n =>
+    n.label.toLowerCase().includes(v) ||
+    (n.definition || '').toLowerCase().includes(v) ||
+    (n.citation || '').toLowerCase().includes(v)
+  ).slice(0, 10);
+  results.innerHTML = hits.map(n =>
+    `<button data-hit="${n.id}">${n.label}<span class="rt">${nodeTypeLabel(n)} · ${layerName(n.layer)}</span></button>`
+  ).join('') || `<button disabled>没有匹配</button>`;
+  results.classList.add('on');
+}
+q.addEventListener('input', doSearch);
+q.addEventListener('keydown', ev => {
+  if (ev.key === 'Enter') {
+    const first = results.querySelector('[data-hit]');
+    if (first) { const n = byId.get(first.dataset.hit); centerOn(n); selectNode(n); results.classList.remove('on'); q.blur(); }
+  }
+  if (ev.key === 'Escape') { results.classList.remove('on'); q.blur(); }
+});
+results.addEventListener('click', ev => {
+  const b = ev.target.closest('[data-hit]');
+  if (!b) return;
+  const n = byId.get(b.dataset.hit);
+  centerOn(n); selectNode(n); results.classList.remove('on');
+});
+
+/* ---------------- 交互 ---------------- */
+function centerOn(n) {
+  scale = Math.max(scale, 1.15);
+  camX = n.x; camY = n.y;
+  draw();
+}
+function centerLayer(id) {
+  const v = nodes.filter(n => n.visible && (n.layer === id || n.id === id));
+  if (!v.length) return;
+  let x1 = Infinity, x2 = -Infinity, y1 = Infinity, y2 = -Infinity;
+  v.forEach(n => {
+    x1 = Math.min(x1, n.x); x2 = Math.max(x2, n.x);
+    y1 = Math.min(y1, n.y); y2 = Math.max(y2, n.y);
+  });
+  scale = Math.max(.3, Math.min(1.5, Math.min((W - 60) / (x2 - x1 + 220), (H - 90) / (y2 - y1 + 190))));
+  camX = (x1 + x2) / 2; camY = (y1 + y2) / 2;
+  draw();
+}
+function fitView() {
+  const vis = visibleNodes();
+  if (!vis.length) return;
+  let x1 = Infinity, x2 = -Infinity, y1 = Infinity, y2 = -Infinity;
+  vis.forEach(n => { x1 = Math.min(x1, n.x); x2 = Math.max(x2, n.x); y1 = Math.min(y1, n.y); y2 = Math.max(y2, n.y); });
+  const bw = x2 - x1 + 300, bh = y2 - y1 + 220;
+  scale = Math.min(.95, Math.min((W - 40) / bw, (H - 80) / bh));
+  scale = Math.max(.24, scale);
+  camX = (x1 + x2) / 2; camY = (y1 + y2) / 2 + 6;
+  draw();
+}
+function resetView() {
+  scale = W < 700 ? Math.min(.72, (W - 24) / 1420) : .72;
+  camX = (cols[1] + cols[6]) / 2; camY = 40;
+  clearSelection(); applyFilters();
+  renderEmpty();
+}
+
+cv.addEventListener('mousedown', ev => {
+  const r = cv.getBoundingClientRect();
+  mouse.down = true; mouse.moved = false;
+  mouse.sx = ev.clientX - r.left; mouse.sy = ev.clientY - r.top;
+  cv.classList.add('dragging');
+});
+cv.addEventListener('mousemove', ev => {
+  const r = cv.getBoundingClientRect();
+  const x = ev.clientX - r.left, y = ev.clientY - r.top;
+  if (mouse.down) {
+    const dx = x - mouse.sx, dy = y - mouse.sy;
+    if (Math.abs(dx) + Math.abs(dy) > 3) mouse.moved = true;
+    camX -= dx / scale; camY -= dy / scale;
+    mouse.sx = x; mouse.sy = y;
+    draw();
+    return;
+  }
+  const h = hit(x, y);
+  const hd = h ? null : hitHeader(x, y);
+  cv.style.cursor = h ? 'pointer' : 'grab';
+  if (h !== hovered) { hovered = h; draw(); }
+  if (!h && hd) cv.style.cursor = 'pointer';
+});
+window.addEventListener('mouseup', ev => {
+  if (!mouse.down) return;
+  mouse.down = false;
+  cv.classList.remove('dragging');
+  if (mouse.moved) return;
+  const r = cv.getBoundingClientRect();
+  const x = ev.clientX - r.left, y = ev.clientY - r.top;
+  if (x < 0 || y < 0 || x > W || y > H) return;
+  const n = hit(x, y);
+  if (n) { selectNode(n); return; }
+  const hd = hitHeader(x, y);
+  if (hd) { if (hd.layer) { selectLayer(hd.layer.id); state.layers = new Set([hd.layer.id]); applyFilters(); } return; }
+  clearSelection();
+});
+cv.addEventListener('wheel', ev => {
+  ev.preventDefault();
+  const r = cv.getBoundingClientRect();
+  const mx = ev.clientX - r.left, my = ev.clientY - r.top;
+  const bwx = wx(mx), bwy = wy(my);
+  const k = Math.exp(-ev.deltaY * 0.0016);
+  scale = Math.max(.18, Math.min(3.2, scale * k));
+  camX = bwx - (mx - W / 2) / scale;
+  camY = bwy - (my - H / 2) / scale;
+  draw();
+}, { passive: false });
+
+document.getElementById('btnFit').addEventListener('click', fitView);
+document.getElementById('btnReset').addEventListener('click', resetView);
+document.getElementById('btnLabels').addEventListener('click', ev => {
+  labelAll = !labelAll;
+  ev.target.style.color = labelAll ? '#2f5d4f' : '';
+  ev.target.style.borderColor = labelAll ? '#2f5d4f' : '';
+  draw();
+});
+document.getElementById('mFilter').addEventListener('click', () => document.getElementById('side').classList.toggle('open'));
+document.getElementById('mDetail').addEventListener('click', () => panel.classList.toggle('open'));
+window.addEventListener('keydown', ev => {
+  if (ev.key === '/' && document.activeElement !== q) { ev.preventDefault(); q.focus(); }
+  if (ev.key === 'Escape') clearSelection();
+});
+window.addEventListener('resize', resize);
+
+/* ---------------- 启动 ---------------- */
+document.getElementById('metaline').textContent =
+  `${GRAPH.meta.node_count} 节点 / ${GRAPH.meta.edge_count} 边 · ${GRAPH.meta.docs_scanned} 篇文档`;
+resize();
+layout();
+applyFilters();
+resize();
+resetView();
+syncLayerRows();
+// 深链：#layer-seen 或 #theory-positioning
+if (location.hash.length > 1) {
+  const n = byId.get(decodeURIComponent(location.hash.slice(1)));
+  if (n) {
+    state.layers = new Set([n.type === 'layer' ? n.id : (n.layer || 'none')]);
+    layerFilters.querySelectorAll('.lrow').forEach(() => {});
+    applyFilters();
+    if (n.type === 'layer') { selectLayer(n.id); centerLayer(n.id); } else { centerOn(n); selectNode(n); }
+  }
+}
+</script>
+</body>
+</html>

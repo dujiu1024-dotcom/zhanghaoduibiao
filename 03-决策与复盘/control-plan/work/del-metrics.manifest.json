@@ -1,0 +1,88 @@
+{
+  "manifest_version": "v1",
+  "format": "ndjson",
+  "base_token": "JChjbMdNzaOf2msRkgoc8qK4neb",
+  "table_id": "tbl7Z3cvmMNTDpaF",
+  "rev": 3,
+  "timezone": "Asia/Shanghai",
+  "query_context": {
+    "field_scope": "all_fields",
+    "record_scope": "all_records"
+  },
+  "requested_limit": 100,
+  "records_count": 4,
+  "page_count": 1,
+  "has_more": false,
+  "record_file": "/Users/longyi/project/账号对标/03-决策与复盘/control-plan/work/del-metrics.ndjson",
+  "record_file_size_bytes": 1737,
+  "manifest_file": "/Users/longyi/project/账号对标/03-决策与复盘/control-plan/work/del-metrics.manifest.json",
+  "columns": {
+    "record_id": {
+      "physical_type": "string",
+      "stats": {
+        "max_length": 16
+      },
+      "example": "reczz28ZVNVQ5EjE"
+    },
+    "口径": {
+      "field_id": "fldbU8pYol",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 34
+      },
+      "example": "后台粉丝来源占比：推荐、搜索、主页、投流"
+    },
+    "异常时怎么改": {
+      "field_id": "fld6dcC7uE",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 25
+      },
+      "example": "先查结尾判断和简介承接，不急着换题材"
+    },
+    "异常阈值": {
+      "field_id": "flduBYCMBS",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 18
+      },
+      "example": "低于 20%"
+    },
+    "指标": {
+      "field_id": "flduIhMiMe",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 9
+      },
+      "example": "涨粉"
+    },
+    "数据来源": {
+      "field_id": "fldwKWfbNH",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 16
+      },
+      "example": "作者创作后台"
+    },
+    "每周目标": {
+      "field_id": "fldWRyVu5U",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 59
+      },
+      "example": "推荐不低于 50% 算自然起量；投流占比不高于 50%"
+    }
+  }
+}

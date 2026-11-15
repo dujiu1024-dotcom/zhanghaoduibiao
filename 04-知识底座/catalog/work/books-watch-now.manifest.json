@@ -1,0 +1,147 @@
+{
+  "manifest_version": "v1",
+  "format": "ndjson",
+  "base_token": "QuklbYw7napdOss56HGcvLZWnqb",
+  "table_id": "tblj1FWohIQI4gYB",
+  "rev": 42,
+  "timezone": "Asia/Shanghai",
+  "query_context": {
+    "field_scope": "all_fields",
+    "record_scope": "all_records"
+  },
+  "requested_limit": 2000,
+  "records_count": 592,
+  "page_count": 1,
+  "has_more": false,
+  "record_file": "/Users/longyi/project/账号对标/04-知识底座/catalog/work/books-watch-now.ndjson",
+  "record_file_size_bytes": 324481,
+  "manifest_file": "/Users/longyi/project/账号对标/04-知识底座/catalog/work/books-watch-now.manifest.json",
+  "columns": {
+    "record_id": {
+      "physical_type": "string",
+      "stats": {
+        "max_length": 16
+      },
+      "example": "reczz28Zam65Or9p"
+    },
+    "书籍名称": {
+      "field_id": "fldly3Fu6M",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 134
+      },
+      "example": "文心"
+    },
+    "作者": {
+      "field_id": "fldQ6H1XbM",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 159,
+        "max_length": 372
+      },
+      "example": "—"
+    },
+    "入库时间": {
+      "field_id": "fldzcKh9MJ",
+      "field_type": "datetime",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 199,
+        "min": "2026-11-14T20:36:04.000+08:00",
+        "max": "2026-11-15T16:19:21.000+08:00"
+      },
+      "example": "2026-11-14T21:45:57.000+08:00"
+    },
+    "批次": {
+      "field_id": "fldnLJrN7V",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 433,
+        "max_length": 8
+      },
+      "example": "牛津开放仓库批次"
+    },
+    "是否采集到": {
+      "field_id": "fldmhr6gER",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 0,
+        "max_length": 1,
+        "avg_length": 1
+      },
+      "example": [
+        "待采集"
+      ]
+    },
+    "最后更新时间": {
+      "field_id": "fldA4rv0nN",
+      "field_type": "datetime",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "min": "2026-11-14T22:33:00.000+08:00",
+        "max": "2026-11-15T16:37:00.000+08:00"
+      },
+      "example": "2026-11-14T23:20:00.000+08:00"
+    },
+    "编号": {
+      "field_id": "fldgqJIEud",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 214
+      },
+      "example": "X-01"
+    },
+    "路径": {
+      "field_id": "fldngcLzWZ",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 199,
+        "max_length": 254
+      },
+      "example": "fulltext/books/rhetoric_aristotle.txt"
+    },
+    "遇到问题": {
+      "field_id": "fldxee5rxD",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 155,
+        "max_length": 306
+      },
+      "example": "许可档位 可引用；OAPEN 编号 001"
+    },
+    "采集人": {
+      "field_id": "fldCUskGas",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 199,
+        "max_length": 1,
+        "avg_length": 0.6638513513513513
+      },
+      "example": [
+        "操盘手"
+      ]
+    },
+    "采集时间": {
+      "field_id": "fldDmqcByc",
+      "field_type": "datetime",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 206,
+        "min": "2026-11-14T23:28:00.000+08:00",
+        "max": "2026-11-15T15:27:49.000+08:00"
+      },
+      "example": "2026-11-15T08:20:00.000+08:00"
+    }
+  }
+}

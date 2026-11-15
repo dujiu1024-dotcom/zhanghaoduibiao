@@ -1,0 +1,78 @@
+{
+  "manifest_version": "v1",
+  "format": "ndjson",
+  "base_token": "JChjbMdNzaOf2msRkgoc8qK4neb",
+  "table_id": "tbltIkaCVs2uBOlt",
+  "rev": 2,
+  "timezone": "Asia/Shanghai",
+  "query_context": {
+    "field_scope": "all_fields",
+    "record_scope": "all_records"
+  },
+  "requested_limit": 100,
+  "records_count": 6,
+  "page_count": 1,
+  "has_more": false,
+  "record_file": "/Users/longyi/project/账号对标/03-决策与复盘/control-plan/work/del-weekly.ndjson",
+  "record_file_size_bytes": 1602,
+  "manifest_file": "/Users/longyi/project/账号对标/03-决策与复盘/control-plan/work/del-weekly.manifest.json",
+  "columns": {
+    "record_id": {
+      "physical_type": "string",
+      "stats": {
+        "max_length": 16
+      },
+      "example": "reczz28ZVNZ5QeJh"
+    },
+    "产出": {
+      "field_id": "fldat3Tgwt",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 31
+      },
+      "example": "6 条原始素材：按当周排期分主系列和快反"
+    },
+    "动作": {
+      "field_id": "fldnxxgyAw",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 10
+      },
+      "example": "出剪辑点"
+    },
+    "备注": {
+      "field_id": "fldGXr6uPj",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 24
+      },
+      "example": "同步更新选题池；不从技术找选题"
+    },
+    "时点": {
+      "field_id": "fldYAdFlJJ",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 5
+      },
+      "example": "周一"
+    },
+    "谁来做": {
+      "field_id": "fldDcrI00Z",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 9
+      },
+      "example": "作者"
+    }
+  }
+}

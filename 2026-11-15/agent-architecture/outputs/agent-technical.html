@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent 技术架构 · 真实组件与编排</title>
+<style>
+  :root{
+    --bg:#f6f4ee; --paper:#fbfaf6; --ink:#1e2320; --muted:#6c716c;
+    --line:#d8d3c6; --accent:#1f5c4a; --accent-soft:#e6efe9;
+    --warn:#8a5a1f; --warn-soft:#f4ecdf; --bad:#8a3a34; --bad-soft:#f3e6e4;
+    --code:#5b615c;
+  }
+  [data-theme="dark"]{
+    --bg:#15181a; --paper:#1c2022; --ink:#e8e7e1; --muted:#9aa09b;
+    --line:#333a3c; --accent:#79c3a4; --accent-soft:#1e2f29;
+    --warn:#d3a86a; --warn-soft:#2e271b; --bad:#d58f88; --bad-soft:#2f2221;
+    --code:#a4aba5;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#15181a; --paper:#1c2022; --ink:#e8e7e1; --muted:#9aa09b;
+      --line:#333a3c; --accent:#79c3a4; --accent-soft:#1e2f29;
+      --warn:#d3a86a; --warn-soft:#2e271b; --bad:#d58f88; --bad-soft:#2f2221;
+      --code:#a4aba5;
+    }
+  }
+  *{box-sizing:border-box}
+  html{color-scheme:light dark}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif;font-size:14px;line-height:1.7;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4{font-family:"Songti SC","Noto Serif SC",Georgia,serif;font-weight:600}
+  a{color:var(--accent)}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--bg);border:1px solid var(--line);border-radius:2px;padding:0 4px;font-size:.88em;color:var(--code);word-break:break-all}
+  .wrap{max-width:1340px;margin:0 auto;padding:18px 24px 70px}
+  .top{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;border-bottom:2px solid var(--ink);padding-bottom:11px}
+  .kicker{margin:0 0 3px;font-size:10.5px;letter-spacing:.18em;color:var(--muted)}
+  h1{margin:0;font-size:clamp(21px,2.5vw,28px);line-height:1.3}
+  .lede{margin:4px 0 0;font-size:11.8px;color:var(--muted);max-width:800px}
+  .lede b{color:var(--ink)}
+  .facts{display:flex;gap:18px;flex:0 0 auto;padding-bottom:2px}
+  .fact b{display:block;font-family:"Songti SC",Georgia,serif;font-size:18px;line-height:1.2;color:var(--accent)}
+  .fact span{display:block;font-size:9.8px;color:var(--muted);margin-top:1px;white-space:nowrap}
+
+  .canvas{height:calc(100vh - 190px);min-height:620px;display:flex;flex-direction:column;gap:9px;margin-top:9px}
+  .grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:1fr 1fr;gap:9px}
+  .block{background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:8px 10px;display:flex;flex-direction:column;min-height:0}
+  .block-h{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:4px;margin-bottom:5px}
+  .block-h h3{margin:0;font-size:12.6px}
+  .block-h .st{font-size:8.4px;padding:0 4px;border-radius:2px;white-space:nowrap}
+  .st-ok{background:var(--accent-soft);color:var(--accent)}
+  .st-part{background:var(--warn-soft);color:var(--warn)}
+  .st-bad{background:var(--bad-soft);color:var(--bad)}
+  .items{display:grid;grid-template-columns:1fr 1fr;gap:4px;align-content:start;min-height:0}
+  .item{border:1px solid var(--line);border-radius:2px;padding:3px 6px;background:var(--bg);min-width:0}
+  .item b{display:block;font-size:9.6px;line-height:1.35;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .item span{display:block;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:7.9px;line-height:1.3;color:var(--code);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .item.wide{grid-column:1 / -1}
+  .item.empty{border-style:dashed;border-color:var(--bad);background:var(--bad-soft)}
+  .item.empty b{color:var(--bad)}
+  .block .foot{margin-top:auto;padding-top:4px;font-size:8.6px;color:var(--muted);line-height:1.4}
+
+  .flowstrip{flex:0 0 58px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px}
+  .flowstrip .fs{position:relative;border:1px solid var(--line);background:var(--paper);border-radius:2px;padding:4px 7px;min-width:0}
+  .flowstrip .fs b{display:block;font-size:9.8px}
+  .flowstrip .fs span{display:block;font-size:8.4px;color:var(--muted);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .flowstrip .fs:not(:last-child)::after{content:"›";position:absolute;right:-7px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--line);background:var(--bg);padding:0 1px;z-index:2}
+  .flowstrip .fs.back{border-style:dashed}
+
+  .legend{flex:0 0 16px;display:flex;gap:14px;flex-wrap:wrap;font-size:9.4px;color:var(--muted)}
+  .legend i{display:inline-block;width:9px;height:9px;margin-right:4px;vertical-align:0}
+  .lg-ok{background:var(--accent)}
+  .lg-part{background:var(--warn)}
+  .lg-bad{background:var(--bad)}
+
+  .read{margin-top:8px;font-size:10.8px;color:var(--muted);border-left:2px solid var(--accent);padding-left:9px}
+  .read b{color:var(--accent)}
+
+  .details{margin-top:40px;border-top:1px solid var(--line);padding-top:8px}
+  .details h2{font-size:19px;margin:0 0 4px}
+  .details .sub{font-size:11.5px;color:var(--muted);margin:0 0 14px}
+  details{border-top:1px solid var(--line);padding:10px 0}
+  summary{cursor:pointer;font-size:13.5px;font-weight:600;list-style:none;display:flex;align-items:center;gap:8px}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"+";font-family:ui-monospace,monospace;color:var(--accent);font-size:15px;width:14px}
+  details[open] summary::before{content:"−"}
+  details .body{padding:12px 0 4px 22px}
+  .table-wrap{overflow-x:auto;border:1px solid var(--line);margin-top:10px}
+  table{width:100%;border-collapse:collapse;font-size:11.7px;background:var(--paper);min-width:760px}
+  th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6}
+  th{background:var(--bg);font-size:11px;white-space:nowrap}
+  tr:last-child td{border-bottom:0}
+  td code{font-size:9.8px}
+  ul.notes{margin:10px 0 0;padding-left:18px;font-size:12px;color:var(--muted)}
+  ul.notes li{margin-bottom:5px}
+  ul.notes b{color:var(--ink)}
+  .toggle{position:fixed;right:14px;top:10px;z-index:9;background:var(--paper);border:1px solid var(--line);color:var(--muted);font:inherit;font-size:10.5px;padding:3px 8px;border-radius:2px;cursor:pointer}
+  .toggle:hover{color:var(--accent);border-color:var(--accent)}
+  @media (max-width:1080px){
+    .canvas{height:auto;min-height:0}
+    .grid{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+    .flowstrip{grid-template-columns:repeat(3,1fr);flex-basis:auto}
+    .flowstrip .fs:not(:last-child)::after{display:none}
+    .facts{display:none}
+  }
+  @media (max-width:640px){
+    .wrap{padding:12px 12px 60px}
+    .grid{grid-template-columns:1fr}
+    .items{grid-template-columns:1fr}
+    .flowstrip{grid-template-columns:1fr 1fr}
+  }
+</style>
+</head>
+<body>
+<button class="toggle" id="themeBtn" type="button">切换主题</button>
+<div class="wrap">
+
+<div class="top">
+  <div>
+    <p class="kicker">Agent 技术架构 / 真实组件 / 2026-11-15</p>
+    <h1>六个组件，一条任务流</h1>
+    <p class="lede">每个框都标真实路径或文件名。数字是 2026-11-15 12:20 现场数的：<b>catalog 460 条、kbase 630 篇 / 263,247 段、experience 120 条、sop_tables 11 个</b>。</p>
+  </div>
+  <div class="facts">
+    <div class="fact"><b>6 组件</b><span>编排/工具/记忆/知识/闸/交付</span></div>
+    <div class="fact"><b>4 道闸</b><span>gate/copy/e0/data</span></div>
+    <div class="fact"><b>630 篇</b><span>kbase.db 实测</span></div>
+    <div class="fact"><b>263,247</b><span>段落实测</span></div>
+  </div>
+</div>
+
+<div class="canvas">
+  <div class="grid">
+
+    <div class="block">
+      <div class="block-h"><h3>① 编排层</h3><span class="st st-part">按需派发，非常驻</span></div>
+      <div class="items">
+        <div class="item"><b>主控会话</b><span>当前会话 / 判断·拆活·验收</span></div>
+        <div class="item"><b>子会话 ×4 线</b><span>取件·入库·经验·飞书</span></div>
+        <div class="item"><b>会话间消息</b><span>agent_session_message</span></div>
+        <div class="item"><b>任务拆解</b><span>六类任务路由</span></div>
+        <div class="item wide"><b>编排方式</b><span>主控按需创建子会话；子会话完成即结束，无并发 worker 证据</span></div>
+      </div>
+      <div class="foot">路径：会话工具本身，无本地文件；子会话任务以消息传递。</div>
+    </div>
+
+    <div class="block">
+      <div class="block-h"><h3>② 工具层</h3><span class="st st-ok">在用</span></div>
+      <div class="items">
+        <div class="item"><b>Shell</b><span>命令行 / 计数 / 跑脚本</span></div>
+        <div class="item"><b>文件工具</b><span>Read/Write/Edit/Glob/Grep</span></div>
+        <div class="item"><b>飞书命令行</b><span>lark-cli（非 MCP）</span></div>
+        <div class="item"><b>浏览器</b><span>ego-browser / agent-browser</span></div>
+        <div class="item"><b>网页脚本</b><span>track-positioning/work/*.js ×8</span></div>
+        <div class="item"><b>定时</b><span>schedule（配置未落地）</span></div>
+      </div>
+      <div class="foot">飞书读写由 <code>03-决策与复盘/log_task.py</code> 调 <code>lark-cli</code> 子进程完成。</div>
+    </div>
+
+    <div class="block">
+      <div class="block-h"><h3>③ 记忆层</h3><span class="st st-ok">系统在写</span></div>
+      <div class="items">
+        <div class="item"><b>项目规则</b><span>project_memory.md · 27.9 KB</span></div>
+        <div class="item"><b>用户画像</b><span>user_profile.md · 19.8 KB</span></div>
+        <div class="item"><b>每日主题</b><span>20261115/topics.md · 13 行</span></div>
+        <div class="item"><b>会话记忆</b><span>session_memory_*.jsonl · 今日 57 份</span></div>
+        <div class="item wide"><b>位置</b><span>~/.trae-cn/memory/projects/-Users-longyi-project-------p2-88776322bdfa84989a64/</span></div>
+      </div>
+      <div class="foot">记忆由系统按会话写入；主控启动时读取，不在项目目录内。</div>
+    </div>
+
+    <div class="block">
+      <div class="block-h"><h3>④ 知识底座</h3><span class="st st-part">库在长，账本滞后</span></div>
+      <div class="items">
+        <div class="item"><b>目录 460 条</b><span>catalog/catalog.csv</span></div>
+        <div class="item"><b>生成源</b><span>work/catalog/data1–10.py + build.py</span></div>
+        <div class="item"><b>检索库</b><span>rag/kbase.db · 630 篇 / 263,247 段</span></div>
+        <div class="item"><b>检索器</b><span>rag/rag.py（字面＋标签＋向量）</span></div>
+        <div class="item"><b>限制</b><span>SECONDHAND 86 / INDEX_ONLY 175</span></div>
+        <div class="item"><b>经验</b><span>experience.csv 120 / lore 89</span></div>
+      </div>
+      <div class="foot">可引用 178、仅参考 443；二手与来源不明只给路径＋段号，不吐原句。</div>
+    </div>
+
+    <div class="block">
+      <div class="block-h"><h3>⑤ 校验闸</h3><span class="st st-ok">可跑</span></div>
+      <div class="items">
+        <div class="item"><b>门槛 77 格</b><span>04-知识底座/catalog/check_gate.py</span></div>
+        <div class="item"><b>文案合规</b><span>01-执行包/check_copy.py</span></div>
+        <div class="item"><b>E0 越界</b><span>04-知识底座/experience/check_e0.py</span></div>
+        <div class="item"><b>数据自检</b><span>04-知识底座/catalog/check_data.py</span></div>
+        <div class="item wide"><b>闸后动作</b><span>不过 → 判断撤回 / 文案改到 0 / 四类不用 E0 / 冲突不入库</span></div>
+      </div>
+      <div class="foot">白名单只收误报：<code>01-执行包/check_copy_whitelist.json</code>，五字段留痕。</div>
+    </div>
+
+    <div class="block">
+      <div class="block-h"><h3>⑥ 交付面</h3><span class="st st-part">本地与飞书分工</span></div>
+      <div class="items">
+        <div class="item"><b>飞书 SOP</b><span>sop_tables.json · 11 个 table id</span></div>
+        <div class="item"><b>道法术器</b><span>00/01/02/03/04 base</span></div>
+        <div class="item"><b>本地结论</b><span>05-给你看/01–06.md</span></div>
+        <div class="item"><b>本地执行物</b><span>01-执行包/</span></div>
+        <div class="item"><b>本地图</b><span>2026-11-15/agent-architecture/outputs/</span></div>
+        <div class="item"><b>知识库</b><span>04-知识底座/</span></div>
+      </div>
+      <div class="foot">飞书只留推进表与结论；过程稿留在本地底座。</div>
+    </div>
+
+  </div>
+
+  <div class="flowstrip">
+    <div class="fs"><b>输入</b><span>用户消息 / 附件 / SOP 行</span></div>
+    <div class="fs"><b>编排</b><span>主控判断 → 派子会话</span></div>
+    <div class="fs"><b>工具</b><span>Shell / 文件 / lark-cli / 浏览器</span></div>
+    <div class="fs"><b>记忆＋知识</b><span>memory / rag / catalog / 经验</span></div>
+    <div class="fs"><b>校验</b><span>4 道闸 + 现场数</span></div>
+    <div class="fs back"><b>交付＋回写</b><span>飞书/本地 → 记忆/知识（虚线）</span></div>
+  </div>
+
+  <div class="legend">
+    <span><i class="lg-ok"></i>在用且可跑</span>
+    <span><i class="lg-part"></i>部分落地／需人盯</span>
+    <span><i class="lg-bad"></i>无配置／未证</span>
+    <span>虚线框：文字记录在，配置或运行证据缺</span>
+  </div>
+</div>
+
+<div class="read"><b>读法：</b>先看六个组件各管什么（①编排→⑥交付），再看底部任务流从左到右；然后回到组件找每一步落在哪个路径。第三屏看组件清单、四道闸、记忆写入方式和口径差异。</div>
+
+<div class="details">
+  <h2>第二屏：组件清单与证据</h2>
+  <p class="sub">主图只留组件名与关键路径；这里给每个组件的真实路径、实测数字和状态。</p>
+
+  <details open>
+    <summary>一、六类组件逐项清单</summary>
+    <div class="body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="width:80px">层</th><th style="width:150px">组件</th><th>真实路径 / 标识</th><th style="width:190px">现场实测</th><th style="width:110px">状态</th></tr></thead>
+          <tbody>
+            <tr><td>编排</td><td>主控会话</td><td>当前会话；工具：Agent、send_message_to_session</td><td>判断、拆活、验收都在这里</td><td>在用</td></tr>
+            <tr><td>编排</td><td>子会话四条线</td><td>取件筛查 / 入库写库 / 经验采集 / 飞书表</td><td>按需创建，完成即结束</td><td>半自动</td></tr>
+            <tr><td>工具</td><td>Shell 与文件工具</td><td>Shell、Read、Write、Edit、Glob、Grep</td><td>计数、跑闸、读写文件</td><td>在用</td></tr>
+            <tr><td>工具</td><td>飞书读写</td><td><code>03-决策与复盘/log_task.py</code> → <code>lark-cli</code></td><td>不是 MCP；字段静默失败要回读</td><td>可调用</td></tr>
+            <tr><td>工具</td><td>浏览器</td><td>ego-browser / agent-browser / TRAE-browseruse</td><td><code>track-positioning/work/*.js</code> 8 个脚本</td><td>在用</td></tr>
+            <tr><td>记忆</td><td>项目规则</td><td><code>~/.trae-cn/memory/.../project_memory.md</code></td><td>27.9 KB</td><td>系统写入</td></tr>
+            <tr><td>记忆</td><td>用户画像</td><td><code>~/.trae-cn/memory/user_profile.md</code></td><td>19.8 KB</td><td>系统写入</td></tr>
+            <tr><td>记忆</td><td>每日主题与会话记忆</td><td><code>20261115/topics.md</code>、<code>session_memory_*.jsonl</code></td><td>topics 13 行；今日 57 份会话记忆</td><td>系统写入</td></tr>
+            <tr><td>知识</td><td>目录与生成源</td><td><code>catalog/catalog.csv</code>、<code>work/catalog/data1–10.py</code>、<code>build.py</code></td><td>460 条</td><td>可重建</td></tr>
+            <tr><td>知识</td><td>检索库与检索器</td><td><code>rag/kbase.db</code>、<code>rag/rag.py</code></td><td>630 篇 / 263,247 段；可引用 178</td><td>在用</td></tr>
+            <tr><td>知识</td><td>经验与假设池</td><td><code>experience/experience.csv</code>、<code>industry-lore.csv</code></td><td>120 条 / 89 条</td><td>在用</td></tr>
+            <tr><td>校验</td><td>四道闸</td><td><code>check_gate.py</code>、<code>check_copy.py</code>、<code>check_e0.py</code>、<code>check_data.py</code></td><td>均存在，可跑</td><td>在用</td></tr>
+            <tr><td>交付</td><td>飞书</td><td><code>sop_tables.json</code> 11 个 table id；道法术器 base；书籍清单</td><td>11 个 table id</td><td>半自动</td></tr>
+            <tr><td>交付</td><td>本地出口</td><td><code>05-给你看/</code>、<code>01-执行包/</code>、<code>04-知识底座/</code>、<code>2026-11-15/.../outputs/</code></td><td>6 份结论、5 件执行物、两张图</td><td>在用</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>二、编排方式：主控与子会话怎么接</summary>
+    <div class="body">
+      <ul class="notes">
+        <li><b>主控：</b>收消息 → 判类型 → 查库 → 拆活 → 派子会话 → 收结果 → 验数 → 交付。判断与验收不外包。</li>
+        <li><b>子会话：</b>一次一单，只干被派的那一段（取件、入库、采集、写表），不拍板、不改主控结论。</li>
+        <li><b>通信：</b>主控创建子会话并下发任务；子会话完成后回传结果。会话之间没有共享内存，靠任务说明与回传结果对齐。</li>
+        <li><b>并发：</b>可以同时派多条线，但没有常驻 worker 池；今天 57 份会话记忆说明会话多，不等于持续并行。</li>
+        <li><b>人盯在哪：</b>派活、收活、采信结论、对外交付，仍由主控会话里的人确认。</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>三、知识底座：双路还是三路，以及不可引用限制</summary>
+    <div class="body">
+      <ul class="notes">
+        <li><b>实际是三路：</b><code>rag.py</code> 字面（中文二元字组倒排）＋人工标签＋bge-m3 向量融合；不是双路。阈值 <code>SIM_FLOOR 0.66</code>、跨语言 <code>0.58</code>、OOV <code>0.50</code>。</li>
+        <li><b>无答案：</b>三路都不过线返回「库内无相关内容」，不拿最接近的段落凑答案；放宽阈值才有命中的必须标注。</li>
+        <li><b>质量档：</b><code>可引用</code> / <code>仅参考</code> / <code>历史文本|已废止</code> / <code>不可引用</code>。现库可引用 178、仅参考 443。</li>
+        <li><b>二手：</b><code>SECONDHAND</code> 86 篇、标记「读书笔记（二手）」，只给路径＋段号，不吐原句，排序永远在可引用之后。</li>
+        <li><b>来源不明：</b><code>INDEX_ONLY</code> 175 篇，只作索引，不摘原句、不构成答案；要写进内容须另找可引用出处。</li>
+        <li><b>已废止：</b>保留全文与条号，只用于查沿革，不进 <code>--quality 可引用</code>。</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>四、四道校验闸分别拦什么</summary>
+    <div class="body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="width:120px">闸</th><th style="width:230px">文件</th><th>拦什么</th><th style="width:180px">不过怎么办</th></tr></thead>
+          <tbody>
+            <tr><td>门槛闸</td><td><code>catalog/check_gate.py</code></td><td>77 细类硬底线／合格线／重点线；HARD_TOTAL＝77 写死</td><td>不算已有原文，记缺口</td></tr>
+            <tr><td>合规闸</td><td><code>01-执行包/check_copy.py</code></td><td>硬禁（广告法第九条、公约 13/21/25/32/33/35/37）＋软禁（绝对化细则 102 条）</td><td>硬禁改到 0；软禁转人工</td></tr>
+            <tr><td>E0 闸</td><td><code>experience/check_e0.py</code></td><td>E0 是否进了合规／报价／平台规则／合同四类判断</td><td>该判断作废，四类只认原文</td></tr>
+            <tr><td>数据闸</td><td><code>catalog/check_data.py</code></td><td>重复文档、metadata 缺字段、档位不一致、编号冲突</td><td>不清不入库</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>五、调度与交付面：哪些有配置，哪些只有文字</summary>
+    <div class="body">
+      <ul class="notes">
+        <li><b>SOP 推进：</b><code>AGENTS.md</code> 第 122 行写「每天 20:00，任务 ID <code>a169593e</code>」；项目里找不到调度配置文件，也找不到该任务的运行日志。</li>
+        <li><b>书籍清单监控：</b>有 <code>work/catalog/books-watch*</code> 脚本与多次导出快照；没有证据显示挂在定时器上。</li>
+        <li><b>进度汇报：</b><code>05-给你看/01–06.md</code> 六份在本地；没有找到独立的定时汇报任务。</li>
+        <li><b>飞书 SOP：</b><code>sop_tables.json</code> 登记 t1–t11 共 11 个 table id；<code>17-飞书收拢分类</code> 数出 8 保留＋1 结论＋2 归档＝11。</li>
+        <li><b>道法术器 base：</b>本地只有导出 <code>tbl729RK43eFCWUp_*.ndjson</code>，没有连接配置；导出时间 11-15 11:34，其中 00 知识底座写 478 篇，已落后于当前 630 篇。</li>
+        <li><b>本地交付：</b><code>05-给你看/</code>（结论）、<code>01-执行包/</code>（执行物）、<code>04-知识底座/</code>（底座）、<code>2026-11-15/agent-architecture/outputs/</code>（图）。</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>六、与描述不一致的地方（现场核对）</summary>
+    <div class="body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="width:36px">#</th><th style="width:200px">说法</th><th>实际</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>RAG 双路检索</td><td>实际三路：字面＋人工标签＋向量（<code>rag.py</code> 的 literal / tag / vector）。</td></tr>
+            <tr><td>2</td><td>飞书 MCP</td><td>项目里实际是 <code>lark-cli</code> 子进程，由 <code>log_task.py</code> 调用；没有找到飞书 MCP 配置。</td></tr>
+            <tr><td>3</td><td>kbase 623 篇 / 252,961 段</td><td>12:20 实测 <b>630 篇 / 263,247 段</b>，库在增长；本图用实测数。</td></tr>
+            <tr><td>4</td><td>定时任务在跑</td><td>只有 AGENTS 一行文字记录，无本地调度配置与运行日志，标「未证」。</td></tr>
+            <tr><td>5</td><td>子会话并行</td><td>可按需同时派多条线，但没有常驻 worker；今日 57 份会话记忆不等于持续并发。</td></tr>
+            <tr><td>6</td><td>记忆层是 agent 自己维护</td><td>记忆文件由系统按会话写入；主控启动时读取，不在项目目录内，也不由脚本写。</td></tr>
+            <tr><td>7</td><td>飞书只留推进表与结论</td><td>规则如此；但道法术器 base 只有导出，SOP base 有 11 个 table id，需注意导出与在线可能不同步。</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="notes">
+        <li><b>最重要的：</b>四道闸与检索是自动的；编排、判断采信、交付仍是人在主控会话里盯着跑。图里没有画成无人值守。</li>
+      </ul>
+    </div>
+  </details>
+</div>
+
+</div>
+<script>
+(function(){
+  var btn=document.getElementById('themeBtn'), root=document.documentElement;
+  function cur(){var t=root.getAttribute('data-theme');if(t)return t;return window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+  btn.addEventListener('click',function(){root.setAttribute('data-theme',cur()==='dark'?'light':'dark');});
+})();
+</script>
+</body>
+</html>

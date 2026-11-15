@@ -1,0 +1,50 @@
+{
+  "manifest_version": "v1",
+  "format": "ndjson",
+  "base_token": "JChjbMdNzaOf2msRkgoc8qK4neb",
+  "table_id": "tblLlWDVHrKnYECN",
+  "rev": 3,
+  "timezone": "Asia/Shanghai",
+  "query_context": {
+    "field_scope": "selected_fields",
+    "record_scope": "all_records"
+  },
+  "requested_limit": 10,
+  "records_count": 4,
+  "page_count": 1,
+  "has_more": false,
+  "record_file": "/Users/longyi/project/账号对标/03-决策与复盘/control-plan/work/check-dashboard2.ndjson",
+  "record_file_size_bytes": 285,
+  "manifest_file": "/Users/longyi/project/账号对标/03-决策与复盘/control-plan/work/check-dashboard2.manifest.json",
+  "columns": {
+    "record_id": {
+      "physical_type": "string",
+      "stats": {
+        "max_length": 16
+      },
+      "example": "reczz28ZVT9glCiO"
+    },
+    "发布条数": {
+      "field_id": "fldWu3e2lH",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 0,
+        "min": 4,
+        "max": 14,
+        "avg": 7.5
+      },
+      "example": 8
+    },
+    "周次": {
+      "field_id": "fld7oHW237",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 5
+      },
+      "example": "第 1 周"
+    }
+  }
+}

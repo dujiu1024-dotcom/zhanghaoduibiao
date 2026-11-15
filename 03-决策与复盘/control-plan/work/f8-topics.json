@@ -1,0 +1,7 @@
+[
+  {"name":"周次","type":"text"},
+  {"name":"老板会花钱的麻烦","type":"text"},
+  {"name":"能不能用智能体演示","type":"text"},
+  {"name":"对应内容级别","type":"select","multiple":false,"options":[{"name":"主系列"},{"name":"快反"},{"name":"押爆款"}]},
+  {"name":"状态","type":"select","multiple":false,"options":[{"name":"待验证"},{"name":"可用"},{"name":"已拍"}]}
+]

@@ -1,0 +1,58 @@
+{
+  "manifest_version": "v1",
+  "format": "ndjson",
+  "base_token": "JChjbMdNzaOf2msRkgoc8qK4neb",
+  "table_id": "tblJ7glsQGZlZDR1",
+  "rev": 11,
+  "timezone": "Asia/Shanghai",
+  "query_context": {
+    "field_scope": "selected_fields",
+    "record_scope": "all_records"
+  },
+  "requested_limit": 10,
+  "records_count": 4,
+  "page_count": 1,
+  "has_more": false,
+  "record_file": "/Users/longyi/project/账号对标/03-决策与复盘/control-plan/work/check-ads.ndjson",
+  "record_file_size_bytes": 643,
+  "manifest_file": "/Users/longyi/project/账号对标/03-决策与复盘/control-plan/work/check-ads.manifest.json",
+  "columns": {
+    "record_id": {
+      "physical_type": "string",
+      "stats": {
+        "max_length": 16
+      },
+      "example": "reczz28ZVPwJQ7lu"
+    },
+    "封顶规则": {
+      "field_id": "fldKcvzc9L",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 23
+      },
+      "example": "单周投放不超过当周收入，不许超"
+    },
+    "比例": {
+      "field_id": "fldcLDGKDU",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 7
+      },
+      "example": "50%"
+    },
+    "阶段": {
+      "field_id": "fldIWjdpQU",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 20
+      },
+      "example": "前三单"
+    }
+  }
+}

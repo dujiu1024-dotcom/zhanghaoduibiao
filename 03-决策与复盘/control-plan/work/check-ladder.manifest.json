@@ -1,0 +1,68 @@
+{
+  "manifest_version": "v1",
+  "format": "ndjson",
+  "base_token": "JChjbMdNzaOf2msRkgoc8qK4neb",
+  "table_id": "tblzKTY9AHnw3FDg",
+  "rev": 10,
+  "timezone": "Asia/Shanghai",
+  "query_context": {
+    "field_scope": "selected_fields",
+    "record_scope": "all_records"
+  },
+  "requested_limit": 10,
+  "records_count": 4,
+  "page_count": 1,
+  "has_more": false,
+  "record_file": "/Users/longyi/project/账号对标/03-决策与复盘/control-plan/work/check-ladder.ndjson",
+  "record_file_size_bytes": 1059,
+  "manifest_file": "/Users/longyi/project/账号对标/03-决策与复盘/control-plan/work/check-ladder.manifest.json",
+  "columns": {
+    "record_id": {
+      "physical_type": "string",
+      "stats": {
+        "max_length": 16
+      },
+      "example": "reczz28ZVP2MxA42"
+    },
+    "判据": {
+      "field_id": "fldcdWtdHQ",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 34
+      },
+      "example": "1,000 粉，且至少 3 个问价来自同一类题材"
+    },
+    "时间预期": {
+      "field_id": "fldCBhbxdb",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 21
+      },
+      "example": "首单后 2–3 周【推算】"
+    },
+    "目标": {
+      "field_id": "fldJssyX9T",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 22
+      },
+      "example": "知道哪类题材能带私信"
+    },
+    "阶段": {
+      "field_id": "fldfHpsShO",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 11
+      },
+      "example": "第四级：1 万粉"
+    }
+  }
+}

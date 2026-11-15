@@ -1,0 +1,78 @@
+{
+  "manifest_version": "v1",
+  "format": "ndjson",
+  "base_token": "JChjbMdNzaOf2msRkgoc8qK4neb",
+  "table_id": "tbln30BRBvCtJK2T",
+  "rev": 1,
+  "timezone": "Asia/Shanghai",
+  "query_context": {
+    "field_scope": "all_fields",
+    "record_scope": "all_records"
+  },
+  "requested_limit": 100,
+  "records_count": 10,
+  "page_count": 1,
+  "has_more": false,
+  "record_file": "/Users/longyi/project/账号对标/03-决策与复盘/control-plan/work/del-tbln30BRBvCtJK2T.ndjson",
+  "record_file_size_bytes": 3397,
+  "manifest_file": "/Users/longyi/project/账号对标/03-决策与复盘/control-plan/work/del-tbln30BRBvCtJK2T.manifest.json",
+  "columns": {
+    "record_id": {
+      "physical_type": "string",
+      "stats": {
+        "max_length": 16
+      },
+      "example": "reczz28ZVKYwFrdb"
+    },
+    "具体内容": {
+      "field_id": "fldZC40P0Y",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 49
+      },
+      "example": "15 条乘 288 粉每条，约 4,320 粉"
+    },
+    "动作": {
+      "field_id": "fldCgcEeN1",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 28
+      },
+      "example": "只讲 2–3 个角色，其余做背景"
+    },
+    "机制或依据": {
+      "field_id": "fldOzMIN0R",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 35
+      },
+      "example": "一句话就能让人听懂错位"
+    },
+    "路径/来源": {
+      "field_id": "fld9hj2wRF",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 18
+      },
+      "example": "结论"
+    },
+    "风险": {
+      "field_id": "fldoWlZldX",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 14
+      },
+      "example": "容易自嗨"
+    }
+  }
+}

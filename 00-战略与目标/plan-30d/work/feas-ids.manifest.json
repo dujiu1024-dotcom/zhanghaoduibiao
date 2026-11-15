@@ -1,0 +1,38 @@
+{
+  "manifest_version": "v1",
+  "format": "ndjson",
+  "base_token": "DutFbyBakachRjsSofLcagHGnRh",
+  "table_id": "tbl8tNMga5XoWhK1",
+  "rev": 1,
+  "timezone": "Asia/Shanghai",
+  "query_context": {
+    "field_scope": "selected_fields",
+    "record_scope": "all_records"
+  },
+  "requested_limit": 20,
+  "records_count": 8,
+  "page_count": 1,
+  "has_more": false,
+  "record_file": "/Users/longyi/project/账号对标/00-战略与目标/plan-30d/work/feas-ids.ndjson",
+  "record_file_size_bytes": 510,
+  "manifest_file": "/Users/longyi/project/账号对标/00-战略与目标/plan-30d/work/feas-ids.manifest.json",
+  "columns": {
+    "record_id": {
+      "physical_type": "string",
+      "stats": {
+        "max_length": 16
+      },
+      "example": "reczz28ZTVCTs9Xt"
+    },
+    "维度": {
+      "field_id": "flddMGMgFu",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 13
+      },
+      "example": "素材供给"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+﻿编号,资料名称,类,项,可得性,渠道或原因,验证方式与日期,采集时间,入库时间
+02-18,修辞学 / Rhetoric,二、传播与内容,修辞与说服性写作,已入库,本地 knowledge/sources/fulltext/,2026-11-14 核对,未获取,2026-11-14 20:36:04
+05-26,中华人民共和国民法典·合同编,五、客户运营与转化,合同与回款,已入库,本地 knowledge/sources/fulltext/,2026-11-14 核对,未获取,2026-11-14 20:36:43
+05-38,《微信公众平台运营规范》,五、客户运营与转化,私域承接与微信运营,已入库,本地 knowledge/sources/fulltext/,2026-11-14 核对,未获取,未入库
+05-39,《微信外部链接内容管理规范》,五、客户运营与转化,私域承接与微信运营,已入库,本地 knowledge/sources/fulltext/,2026-11-14 核对,未获取,未入库
+06-01,《抖音社区自律公约》,六、平台与增长,推荐机制,已入库,本地 knowledge/sources/fulltext/,2026-11-14 核对,未获取,2026-11-14 20:37:16
+08-01,《中华人民共和国广告法》,八、风险与治理,广告法与宣传合规,已入库,本地 knowledge/sources/fulltext/,2026-11-14 核对,未获取,2026-11-14 20:36:50
+08-06,《中华人民共和国个人信息保护法》,八、风险与治理,个保法与数据安全,已入库,本地 knowledge/sources/fulltext/,2026-11-14 核对,未获取,2026-11-14 20:35:04
+08-11,《民法典》人格权编（隐私权与个人信息保护）,八、风险与治理,个保法与数据安全,已入库,本地 knowledge/sources/fulltext/,2026-11-14 核对,未获取,未入库
+08-23,《中华人民共和国电子商务法》,八、风险与治理,平台经营合规,已入库,本地 knowledge/sources/fulltext/,2026-11-14 核对,未获取,2026-11-14 20:51:18
+08-24,《中华人民共和国消费者权益保护法》,八、风险与治理,消费者保护,已入库,本地 knowledge/sources/fulltext/,2026-11-14 核对,未获取,2026-11-14 20:51:20
+08-25,《中华人民共和国价格法》,八、风险与治理,价格与促销合规,已入库,本地 knowledge/sources/fulltext/,2026-11-14 核对,未获取,2026-11-14 20:51:21
+08-26,抖音生活服务《虚假宣传—涉及绝对化用语》实施细则,八、风险与治理,违规判定与发布前审（并库原文）,已入库,本地 knowledge/sources/fulltext/,2026-11-14 核对,未获取,未入库
+08-27,yuwen-publish-precheck 官方引文库（82 条）,八、风险与治理,违规判定与发布前审（并库原文）,已入库,本地 knowledge/sources/fulltext/,2026-11-14 核对,未获取,未入库
+06-30,KuaiRec: A Fully-observed Dataset and Insights for Evaluating Recommender Systems,六、平台与增长,工程论文（一手工程源）,免费可得·已验证,arXiv HTML 全文 https://arxiv.org/html/2202.10842v3,打开 HTML 版读到正文（2026-11-14）,未获取,未入库
+06-28,Monolith: Real Time Recommendation System With Collisionless Embedding Table,六、平台与增长,工程论文（一手工程源）,免费可得·已验证,https://arxiv.org/pdf/2209.07663,"HTTP 200，467,091 字节，PDF 已下载（未逐字读）",未获取,未入库
+06-31,KuaiRand: An Unbiased Sequential Recommendation Dataset with Randomly Exposed Videos,六、平台与增长,工程论文（一手工程源）,免费可得·已验证,https://arxiv.org/pdf/2208.08696,"HTTP 200，240,999 字节，PDF 已下载（未逐字读）",未获取,未入库
+06-34,NoteLLM: A Retrievable Large Language Model for Note Recommendation,六、平台与增长,工程论文（一手工程源）,免费可得·已验证,https://arxiv.org/pdf/2403.01744,"HTTP 200，445,538 字节，PDF 已下载（未逐字读）",未获取,未入库
+06-35,Sliding Spectrum Decomposition for Diversified Recommendation,六、平台与增长,工程论文（一手工程源）,免费可得·已验证,https://arxiv.org/pdf/2107.05204,"HTTP 200，473,367 字节，PDF 已下载（未逐字读）",未获取,未入库
+06-08,Methods and Metrics for Cold-Start Recommendations,六、平台与增长,冷启动与账号权重,免费可得·已验证,https://repository.upenn.edu/bitstreams/ac3a57bf-b455-4a21-b2d0-d11321093ea5/download,"HTTP 200，114,670 字节，PDF 已下载（未逐字读）",未获取,未入库
+03-04,The Central Role of the Propensity Score in Observational Studies for Causal Effects,三、判断与思维,统计与因果推断,付费墙·不可得,https://academic.oup.com/biomet/article-pdf/70/1/41/662954/70-1-41.pdf,HTTP 403，OUP 直链需机构订阅,未获取,未入库
+06-02,Deep Neural Networks for YouTube Recommendations,六、平台与增长,推荐机制,付费墙·不可得,http://dl.acm.org/ft_gateway.cfm?id=2959190&type=pdf,HTTP 403，ACM 直链需订阅,未获取,未入库
+02-08,The Agenda-Setting Function of Mass Media,二、传播与内容,议程设置与框架,付费墙·不可得,仅 DOI：https://doi.org/10.1086/267990,OpenAlex 标 CLOSED，无 OA 版本（2026-11-14）,未获取,未入库
+02-09,Framing: Toward Clarification of a Fractured Paradigm,二、传播与内容,议程设置与框架,付费墙·不可得,仅 DOI：https://doi.org/10.1111/j.1460-2466.1993.tb01304.x,OpenAlex 标 CLOSED，无 OA 版本（2026-11-14）,未获取,未入库
+02-13,The Role of Transportation in the Persuasiveness of Public Narratives,二、传播与内容,叙事结构与故事,付费墙·不可得,仅 DOI：https://doi.org/10.1037/0022-3514.79.5.701,OpenAlex 标 CLOSED，无 OA 版本（2026-11-14）,未获取,未入库
+02-20,Politics and the English Language,二、传播与内容,修辞与说服性写作,免费可得·未验证,https://hdl.handle.net/11858/00-001M-0000-002C-4E8A-D,OpenAlex 标 OA；本机打开返回 000（不可达），未取正文,未获取,未入库
+02-31,Predicting the Popularity of Online Content,二、传播与内容,选题与需求信号,付费墙·不可得,仅 DOI：https://doi.org/10.1145/1787234.1787254,OpenAlex 标 CLOSED，无 OA 版本（2026-11-14）,未获取,未入库
+02-35,The Psychology of Curiosity: A Review and Reinterpretation,二、传播与内容,钩子与注意力,付费墙·不可得,仅 DOI：https://doi.org/10.1037/0033-2909.116.1.75,OpenAlex 标 CLOSED，无 OA 版本（2026-11-14）,未获取,未入库
+02-55,Emotional Responses to Music: The Need to Consider Underlying Mechanisms,二、传播与内容,剪辑节奏与声音,付费墙·不可得,仅 DOI：https://doi.org/10.1017/s0140525x08005293,OpenAlex 标 CLOSED，无 OA 版本（2026-11-14）,未获取,未入库
+02-61,Watching Subtitled Television: Automatic Reading Behavior,二、传播与内容,字幕与信息密度,付费墙·不可得,仅 DOI：https://doi.org/10.1177/009365091018005005,OpenAlex 标 CLOSED，无 OA 版本（2026-11-14）,未获取,未入库
+03-09,Practical Guide to Controlled Experiments on the Web,三、判断与思维,实验设计与A/B,付费墙·不可得,仅 DOI：https://doi.org/10.1145/1281192.1281295,OpenAlex 标 CLOSED，无 OA 版本（2026-11-14）,未获取,未入库
+03-14,On the Two Different Aspects of the Representative Method: The Method of Stratified Sampling and the Method of Purposive Selection,三、判断与思维,抽样与样本偏差,付费墙·不可得,仅 DOI：https://doi.org/10.2307/2342192,OpenAlex 标 CLOSED，无 OA 版本（2026-11-14）,未获取,未入库
+03-18,On the Theory of Scales of Measurement,三、判断与思维,指标口径与度量,付费墙·不可得,仅 DOI：https://doi.org/10.1126/science.103.2684.677,OpenAlex 标 CLOSED，无 OA 版本（2026-11-14）,未获取,未入库
+03-21,Convergent and Discriminant Validation by the Multitrait-Multimethod Matrix,三、判断与思维,指标口径与度量,付费墙·不可得,仅 DOI：https://doi.org/10.1037/h0046016,OpenAlex 标 CLOSED，无 OA 版本（2026-11-14）,未获取,未入库
+06-04,The YouTube Video Recommendation System,六、平台与增长,推荐机制,付费墙·不可得,仅 DOI：https://doi.org/10.1145/1864708.1864770,OpenAlex 标 CLOSED，无 OA 版本（2026-11-14）,未获取,未入库
+06-05,Amazon.com Recommendations: Item-to-Item Collaborative Filtering,六、平台与增长,推荐机制,付费墙·不可得,仅 DOI：https://doi.org/10.1109/mic.2003.1167344,OpenAlex 标 CLOSED，无 OA 版本（2026-11-14）,未获取,未入库
+02-61,Watching Subtitled Television: Automatic Reading Behavior,二、传播与内容,字幕与信息密度,付费墙·不可得,https://doi.org/10.1177/009365091018005005,Taylor & Francis 直链 403（2026-11-14）,未获取,未入库

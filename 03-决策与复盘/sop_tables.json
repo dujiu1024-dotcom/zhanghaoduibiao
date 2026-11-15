@@ -1,0 +1,32 @@
+{
+  "base": "QSqGbhVzsaZloIsrNgwcExR6nvb",
+  "t1": "tbltcBCEF37FQSaM",
+  "t2": "tblTrFqhgzhLJYvm",
+  "t3": "tblP6ibvm4IGvdNy",
+  "t4": "tblw5GmCHMtCqLJ6",
+  "t5": "tblpLtaRLkgj5UJa",
+  "t6": "tbljEUGTUqUNLRXz",
+  "t7": "tblZaENO0u55zRmw",
+  "t8": "tblnsGvNcouUUtDp",
+  "t9": "tblH9vhdECVVBry0",
+  "t10": "tbl47ufBKcFaGq43",
+  "t11": "tblHNrpdll522wfI",
+  "voided": {
+    "t11": {
+      "name": "〔已作废〕14 道法术器",
+      "voided_at": "2026-11-15",
+      "replaced_by": {
+        "base": "Bxi2bquZjaEYVjsEDeacFEMNnhh",
+        "tables": {
+          "00 总览": "tbl729RK43eFCWUp",
+          "01 道": "tblNov9xLjYLliYD",
+          "02 法": "tbl4Sp90l1cklFD7",
+          "03 术": "tblLjlPNeqNBgPS9",
+          "04 器 工具清单": "tbl5VXozZvulCIDA"
+        }
+      },
+      "reason": "已改为总览—细分—三级结构，平表不再维护；表与数据留档可查",
+      "feishu_deleted": "2026-11-15 飞书表已删，本地 ndjson 留档于 99-归档/飞书导出-20261115/（tblHNrpdll522wfI_20261115_161951_929.ndjson，62 行，与删除前一致）"
+    }
+  }
+}

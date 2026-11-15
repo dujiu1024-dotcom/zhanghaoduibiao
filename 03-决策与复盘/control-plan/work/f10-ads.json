@@ -1,0 +1,6 @@
+[
+  {"name":"项目","type":"text"},
+  {"name":"规则","type":"text"},
+  {"name":"判据","type":"text"},
+  {"name":"动作","type":"text"}
+]

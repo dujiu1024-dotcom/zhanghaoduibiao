@@ -1,0 +1,1110 @@
+############################################################
+## <另一项目>
+############################################################
+-- file counts --
+     737
+-- by ext (top 12) --
+ 193 md
+ 114 pyc
+ 111 json
+  65 py
+  64 ndjson
+  52 log
+  37 db
+  22 jsonl
+  14 sample
+   3 html
+   3 gitignore
+   3 DS_Store
+-- top-level depth2 --
+<另一项目>
+<另一项目>/intent.py
+<另一项目>/alerts.py
+<另一项目>/启动服务.command
+<另一项目>/clients
+<另一项目>/clients/<客户A>
+<另一项目>/clients/<客户B>
+<另一项目>/vectors.py
+<另一项目>/CONSTITUTION.md
+<另一项目>/console.py
+<另一项目>/tblDzJgHKwa4uVsU_20261112_171725_295.ndjson
+<另一项目>/db.py
+<另一项目>/.screenshots
+<另一项目>/.screenshots/.tmp
+<另一项目>/tools
+<另一项目>/tools/sync_plan.py
+<另一项目>/tools/bench_vectors.py
+<另一项目>/tools/feishu_env.py
+<另一项目>/tools/ruff_legacy.toml
+<另一项目>/tools/debt_check.py
+<另一项目>/tools/__pycache__
+<另一项目>/tools/schedule_wbs.py
+<另一项目>/tools/check_consistency.py
+<另一项目>/tools/migrate_fields.py
+<另一项目>/tools/erd.py
+<另一项目>/tools/coverage_report.py
+<另一项目>/.venv-listener
+<另一项目>/.venv-listener/bin
+<另一项目>/.venv-listener/include
+<另一项目>/.venv-listener/pyvenv.cfg
+<另一项目>/.venv-listener/lib
+<另一项目>/.DS_Store
+<另一项目>/memory.py
+<另一项目>/FDE-OPC-从0到1规划.md
+<另一项目>/agency.py
+<另一项目>/conversation.py
+<另一项目>/.ruff_cache
+<另一项目>/.ruff_cache/0.17.4
+<另一项目>/.ruff_cache/CACHEDIR.TAG
+<另一项目>/.ruff_cache/.gitignore
+-- images/screenshots (maxdepth 5) --
+-- image count --
+      23
+-- git log --
+2026-11-11 接入 Gitee 远程仓库，更新技术栈中的版本控制状态
+2026-11-11 补充技术栈现状、分项计划与 WBS 视图说明
+2026-11-11 初始化 FDE OPC Agent 公司底座：9 角色、任务台账、WBS 与项目文档
+-- git status --
+ M agency.py
+ M agency/config.json
+ M agency/state/agency.db
+ M agents/chief-of-staff/ROLE.md
+ M agents/hr/ROLE.md
+ M agents/ontology.md
+ M "clients/002-FDE\344\270\200\344\272\272\345\205\254\345\217\270/02-\346\226\271\346\241\210\345\257\271\346\257\224.md"
+ M "clients/002-FDE\344\270\200\344\272\272\345\205\254\345\217\270/03-\346\226\271\346\241\210\347\241\256\350\256\244\345\215\225.md"
+ M "clients/002-FDE\344\270\200\344\272\272\345\205\254\345\217\270/04-\351\241\271\347\233\256\350\256\241\345\210\222.md"
+ M "clients/002-FDE\344\270\200\344\272\272\345\205\254\345\217\270/05-\347\233\256\346\240\207\346\200\201\350\256\276\350\256\241.md"
+-- README candidates --
+<另一项目>/CONSTITUTION.md
+<另一项目>/FDE-OPC-从0到1规划.md
+<另一项目>/agents/ontology.md
+<另一项目>/docs/erd.md
+<另一项目>/README.md
+<另一项目>/FDE-OPC-90天执行计划.md
+<另一项目>/templates/诊断报告模板.md
+<另一项目>/templates/报价单模板.md
+<另一项目>/templates/诊断包验证记录.md
+<另一项目>/templates/验收清单模板.md
+<另一项目>/templates/访谈提纲-30分钟.md
+<另一项目>/templates/WBS模板.md
+<另一项目>/templates/定位卡.md
+<另一项目>/templates/对外话术.md
+<另一项目>/templates/确认单模板.md
+<另一项目>/templates/AI就绪度评分卡.md
+<另一项目>/templates/客户诊断问卷.md
+<另一项目>/templates/需求说明模板.md
+<另一项目>/templates/方案对比模板.md
+<另一项目>/templates/诊断报告示例-脱敏.md
+
+############################################################
+## /Users/longyi/WorkBuddy/Agent场景
+############################################################
+-- file counts --
+     123
+-- by ext (top 12) --
+ 120 json
+  48 pyc
+  30 py
+  24 md
+   6 zip
+   4 csv
+   1 txt
+   1 DS_Store
+-- top-level depth2 --
+/Users/longyi/WorkBuddy/Agent场景
+/Users/longyi/WorkBuddy/Agent场景/求职Agent_SOP_执行手册_v1.4.md
+/Users/longyi/WorkBuddy/Agent场景/resume_profiles
+/Users/longyi/WorkBuddy/Agent场景/resume_profiles/王海_20261110.json
+/Users/longyi/WorkBuddy/Agent场景/resume_profiles/王静_20261110.json
+/Users/longyi/WorkBuddy/Agent场景/resume_profiles/郭焕凯_20261110.json
+/Users/longyi/WorkBuddy/Agent场景/求职Agent_审查与SOP_v1.md
+/Users/longyi/WorkBuddy/Agent场景/.screenshots
+/Users/longyi/WorkBuddy/Agent场景/.screenshots/.tmp
+/Users/longyi/WorkBuddy/Agent场景/.DS_Store
+/Users/longyi/WorkBuddy/Agent场景/dist
+/Users/longyi/WorkBuddy/Agent场景/dist/job-search-strategy.zip
+/Users/longyi/WorkBuddy/Agent场景/follow-up-tracker
+/Users/longyi/WorkBuddy/Agent场景/follow-up-tracker/references
+/Users/longyi/WorkBuddy/Agent场景/follow-up-tracker/scripts
+/Users/longyi/WorkBuddy/Agent场景/follow-up-tracker/SKILL.md
+/Users/longyi/WorkBuddy/Agent场景/follow-up-tracker.zip
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/run.py
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/.trae
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/server.py
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/requirements.txt
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/platforms.py
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/connect.py
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/jd.py
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/flow.py
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/__pycache__
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/README.md
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/recruitment-browser-mcp.zip
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/browser_manager.py
+/Users/longyi/WorkBuddy/Agent场景/jd_demo
+/Users/longyi/WorkBuddy/Agent场景/jd_demo/jd_wanghai.json
+/Users/longyi/WorkBuddy/Agent场景/jd_demo/jd_wangjing.json
+/Users/longyi/WorkBuddy/Agent场景/jd_demo/jd_guohuankai.json
+/Users/longyi/WorkBuddy/Agent场景/.workbuddy
+/Users/longyi/WorkBuddy/Agent场景/.workbuddy/memory
+/Users/longyi/WorkBuddy/Agent场景/.workbuddy/skills
+/Users/longyi/WorkBuddy/Agent场景/job-agent
+/Users/longyi/WorkBuddy/Agent场景/job-agent/pipeline
+/Users/longyi/WorkBuddy/Agent场景/job-agent/tools
+-- images/screenshots (maxdepth 5) --
+-- image count --
+       0
+-- git log --
+(no git)
+-- git status --
+-- README candidates --
+/Users/longyi/WorkBuddy/Agent场景/求职Agent_SOP_执行手册_v1.4.md
+/Users/longyi/WorkBuddy/Agent场景/求职Agent_审查与SOP_v1.md
+/Users/longyi/WorkBuddy/Agent场景/follow-up-tracker/SKILL.md
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/README.md
+/Users/longyi/WorkBuddy/Agent场景/job-agent/README.md
+
+############################################################
+## /Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp
+############################################################
+-- file counts --
+      25
+-- by ext (top 12) --
+  14 pyc
+   7 py
+   2 md
+   1 zip
+   1 txt
+-- top-level depth2 --
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/run.py
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/.trae
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/.trae/skills
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/server.py
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/requirements.txt
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/platforms.py
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/connect.py
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/jd.py
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/flow.py
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/__pycache__
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/README.md
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/recruitment-browser-mcp.zip
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/browser_manager.py
+-- images/screenshots (maxdepth 5) --
+-- image count --
+       0
+-- git log --
+(no git)
+-- git status --
+-- README candidates --
+/Users/longyi/WorkBuddy/Agent场景/recruitment-browser-mcp/README.md
+
+############################################################
+## /Users/longyi/project/LangGraph
+############################################################
+-- file counts --
+      53
+-- by ext (top 12) --
+  12 py
+   7 pckl
+   3 json
+   2 bak
+   1 zip
+   1 venv/bin/websockets
+   1 venv/bin/watchfiles
+   1 venv/bin/uvicorn
+   1 venv/bin/python-grpc-tools-protoc
+   1 venv/bin/pip3
+   1 venv/bin/pip
+   1 venv/bin/normalizer
+-- top-level depth2 --
+/Users/longyi/project/LangGraph
+/Users/longyi/project/LangGraph/langgraph.json.bak.20261109225340
+/Users/longyi/project/LangGraph/.langgraph_api
+/Users/longyi/project/LangGraph/.langgraph_api/.langgraph_checkpoint.1.pckl
+/Users/longyi/project/LangGraph/.langgraph_api/store.vectors.pckl
+/Users/longyi/project/LangGraph/.langgraph_api/.langgraph_retry_counter.pckl
+/Users/longyi/project/LangGraph/.langgraph_api/.langgraph_ops.pckl
+/Users/longyi/project/LangGraph/.langgraph_api/store.pckl
+/Users/longyi/project/LangGraph/.langgraph_api/.langgraph_checkpoint.3.pckl
+/Users/longyi/project/LangGraph/.langgraph_api/.langgraph_checkpoint.2.pckl
+/Users/longyi/project/LangGraph/.screenshots
+/Users/longyi/project/LangGraph/.screenshots/.tmp
+/Users/longyi/project/LangGraph/requirements.txt
+/Users/longyi/project/LangGraph/web
+/Users/longyi/project/LangGraph/web/index.html
+/Users/longyi/project/LangGraph/web/style.css.bak
+/Users/longyi/project/LangGraph/web/index.html.bak
+/Users/longyi/project/LangGraph/web/style.css
+/Users/longyi/project/LangGraph/web/app.js
+/Users/longyi/project/LangGraph/README.md
+/Users/longyi/project/LangGraph/langgraph.json
+/Users/longyi/project/LangGraph/.gitignore
+/Users/longyi/project/LangGraph/.env
+/Users/longyi/project/LangGraph/.venv
+/Users/longyi/project/LangGraph/scripts
+/Users/longyi/project/LangGraph/scripts/smoke_test.py
+/Users/longyi/project/LangGraph/scripts/api_demo.py
+/Users/longyi/project/LangGraph/scripts/serve_web.py
+/Users/longyi/project/LangGraph/.trae-html-share-packages
+/Users/longyi/project/LangGraph/.trae-html-share-packages/web
+/Users/longyi/project/LangGraph/.env.bak.20261109170918
+/Users/longyi/project/LangGraph/.env.example
+/Users/longyi/project/LangGraph/.logs
+/Users/longyi/project/LangGraph/.logs/dev.log
+/Users/longyi/project/LangGraph/src
+/Users/longyi/project/LangGraph/src/__init__.py
+/Users/longyi/project/LangGraph/src/agent.py
+/Users/longyi/project/LangGraph/src/my_agent.py
+/Users/longyi/project/LangGraph/src/workflow.py
+-- images/screenshots (maxdepth 5) --
+-- image count --
+       0
+-- git log --
+(no git)
+-- git status --
+-- README candidates --
+/Users/longyi/project/LangGraph/README.md
+
+############################################################
+## /Users/longyi/project/instabox
+############################################################
+-- file counts --
+       0
+-- by ext (top 12) --
+-- top-level depth2 --
+/Users/longyi/project/instabox
+-- images/screenshots (maxdepth 5) --
+-- image count --
+       0
+-- git log --
+(no git)
+-- git status --
+-- README candidates --
+
+############################################################
+## /Users/longyi/project/redbook-easel
+############################################################
+-- file counts --
+    1452
+-- by ext (top 12) --
+ 421 pyc
+ 337 py
+ 195 js
+ 188 ts
+ 145 md
+ 102 sql
+ 102 json
+  74 png
+  53 tsx
+  28 sample
+  18 db
+  15 DS_Store
+-- top-level depth2 --
+/Users/longyi/project/redbook-easel
+/Users/longyi/project/redbook-easel/chatgpt审查报告_2026-10-28.md
+/Users/longyi/project/redbook-easel/README.fr.md
+/Users/longyi/project/redbook-easel/migrations
+/Users/longyi/project/redbook-easel/migrations/135_master_plan_lifecycle_reconcile.sql
+/Users/longyi/project/redbook-easel/migrations/012_hot_topic_dedup.sql
+/Users/longyi/project/redbook-easel/migrations/152_strategy_effect_feedback_idempotency.sql
+/Users/longyi/project/redbook-easel/migrations/034_hot_topic_import_audit.sql
+/Users/longyi/project/redbook-easel/migrations/010_app_settings.sql
+/Users/longyi/project/redbook-easel/migrations/008_ops_logs_pending_verify.sql
+/Users/longyi/project/redbook-easel/migrations/101_activation_soft_delete.sql
+/Users/longyi/project/redbook-easel/migrations/027_hot_topic_trend.sql
+/Users/longyi/project/redbook-easel/migrations/006_plan_settings.sql
+/Users/longyi/project/redbook-easel/migrations/171_context_waiver_multi_task_consumption.sql
+/Users/longyi/project/redbook-easel/migrations/163_manual_metric_interaction_rate.sql
+/Users/longyi/project/redbook-easel/migrations/143_business_analysis_foundation.sql
+/Users/longyi/project/redbook-easel/migrations/019_account_snapshots.sql
+/Users/longyi/project/redbook-easel/migrations/111_stable_operation_links.sql
+/Users/longyi/project/redbook-easel/migrations/.DS_Store
+/Users/longyi/project/redbook-easel/migrations/170_remove_single_item_production_guards.sql
+/Users/longyi/project/redbook-easel/migrations/151_publication_review_metric_feedback_visual.sql
+/Users/longyi/project/redbook-easel/migrations/142_unified_plan_management.sql
+/Users/longyi/project/redbook-easel/migrations/124_skill_execution_attempts.sql
+/Users/longyi/project/redbook-easel/migrations/102_weekly_action_feedback.sql
+/Users/longyi/project/redbook-easel/migrations/146_immutable_business_snapshots.sql
+/Users/longyi/project/redbook-easel/migrations/004_round_timeout.sql
+/Users/longyi/project/redbook-easel/migrations/117_media_fallback_toggle.sql
+/Users/longyi/project/redbook-easel/migrations/014_topics_orchestration.sql
+/Users/longyi/project/redbook-easel/migrations/145_plan_change_audit.sql
+/Users/longyi/project/redbook-easel/migrations/032_ops_targets.sql
+/Users/longyi/project/redbook-easel/migrations/115_plan_version_lifecycle.sql
+/Users/longyi/project/redbook-easel/migrations/150_content_production_lines_and_context.sql
+/Users/longyi/project/redbook-easel/migrations/107_content_plan_rounds.sql
+/Users/longyi/project/redbook-easel/migrations/112_hot_source_test_history.sql
+/Users/longyi/project/redbook-easel/migrations/026_media_quality_score.sql
+/Users/longyi/project/redbook-easel/migrations/141_hot_topic_collection_fencing.sql
+/Users/longyi/project/redbook-easel/migrations/015_notify_rules.sql
+/Users/longyi/project/redbook-easel/migrations/025_media_generation_review.sql
+/Users/longyi/project/redbook-easel/migrations/016_platform_styles.sql
+/Users/longyi/project/redbook-easel/migrations/999_master_plan_structured_metadata.sql
+-- images/screenshots (maxdepth 5) --
+/Users/longyi/project/redbook-easel/data/_login_qr/xhs.png
+/Users/longyi/project/redbook-easel/data/outputs/card_xhs_b550cc59.png
+/Users/longyi/project/redbook-easel/data/outputs/card_xhs_4915c790.png
+/Users/longyi/project/redbook-easel/data/outputs/card_xhs_4920cbf1.png
+/Users/longyi/project/redbook-easel/data/outputs/card_xhs_a9af6670.png
+/Users/longyi/project/redbook-easel/data/outputs/card_xhs_2dfc7201.png
+/Users/longyi/project/redbook-easel/data/outputs/card_xhs_bd20801a.png
+/Users/longyi/project/redbook-easel/data/outputs/card_xhs_d8302a66.png
+/Users/longyi/project/redbook-easel/data/outputs/card_wechat_channels_3cf3378a.png
+/Users/longyi/project/redbook-easel/data/outputs/card_douyin_736aa8ba.png
+/Users/longyi/project/redbook-easel/data/outputs/card_xhs_0e506c98.png
+/Users/longyi/project/redbook-easel/data/outputs/card_douyin_c1a13991.png
+/Users/longyi/project/redbook-easel/data/outputs/card_xhs_0e381558.png
+/Users/longyi/project/redbook-easel/data/outputs/card_xhs_6c2505e0.png
+/Users/longyi/project/redbook-easel/data/outputs/card_xhs_a0838674.png
+/Users/longyi/project/redbook-easel/data/outputs/card_xhs_b3fa292a.png
+/Users/longyi/project/redbook-easel/data/outputs/card_wechat_channels_f98c39b4.png
+/Users/longyi/project/redbook-easel/data/outputs/card_xhs_a874cd45.png
+/Users/longyi/project/redbook-easel/data/outputs/card_douyin_88ca009d.png
+/Users/longyi/project/redbook-easel/data/outputs/card_douyin_8fb4c8ba.png
+/Users/longyi/project/redbook-easel/data/outputs/card_wechat_channels_7b654d0e.png
+/Users/longyi/project/redbook-easel/data/outputs/card_douyin_09cc3767.png
+/Users/longyi/project/redbook-easel/data/outputs/card_xhs_3f2d2072.png
+/Users/longyi/project/redbook-easel/data/outputs/sensenova_preview_20261102.png
+/Users/longyi/project/redbook-easel/data/outputs/card_d056c52f.png
+-- image count --
+      74
+-- git log --
+2026-11-10 [Production] Fix authoritative master-plan signatures
+2026-11-10 fix(hot-topics): suppress recently failed items from todos
+2026-11-10 fix(hot-topics): retry rate-limited collection requests
+2026-11-10 fix(production): stabilize dry-run finalization and CPL recovery
+2026-11-09 [Test] Add frontend enum display regression guard
+2026-11-09 [Operations] 治理全局待办与热点采集失败生命周期 (#234)
+2026-11-09 [Production] 修复多内容任务约束、豁免复用与 Round 恢复 (#232)
+2026-11-09 [UI] 全站生产状态与质量检查结果中文化 (#233)
+2026-11-09 ux: label legacy production plan tabs
+2026-11-09 [UI/UX] Dashboard responsive data-state acceptance
+2026-11-08 [UI/UX] 隐藏日历内部 ID 兜底展示
+2026-11-08 [UI/UX] 对齐任务队列响应式行布局
+2026-11-08 [UI/UX] 结构化业务数据增加安全诊断展开区 (#221)
+2026-11-08 [UI/UX] 运营任务人工核验输入控件宽度与换行治理 (#216)
+2026-11-08 uiux: rebase compact calendar toolbar onto latest main (#219)
+-- git status --
+?? .trae-html-share-packages/landing-page/
+?? AUDIT_FINDINGS.md
+?? iterwave-auth-rate-limits-history.sqlite3
+?? landing-page/
+?? production-audit-easel.json
+?? production-audit-iterwave.json
+-- README candidates --
+/Users/longyi/project/redbook-easel/chatgpt审查报告_2026-10-28.md
+/Users/longyi/project/redbook-easel/README.fr.md
+/Users/longyi/project/redbook-easel/1.md
+/Users/longyi/project/redbook-easel/开源建议.md
+/Users/longyi/project/redbook-easel/.pytest_cache/README.md
+/Users/longyi/project/redbook-easel/改造方案-租户工作台与素材闭环.md
+/Users/longyi/project/redbook-easel/功能缺口清单.md
+/Users/longyi/project/redbook-easel/docs/global-task-queue-runtime-isolation.md
+/Users/longyi/project/redbook-easel/docs/P1_BUSINESS_CLOSURE_CHECKLIST_20261101.md
+/Users/longyi/project/redbook-easel/docs/calendar-scheduling-api.md
+/Users/longyi/project/redbook-easel/docs/B_SUBPLAN_BUSINESS_FLOW_AUDIT_20261102.md
+/Users/longyi/project/redbook-easel/docs/ITERWAVE_PHASE_2_5_SOURCE_AUDIT_20261101.md
+/Users/longyi/project/redbook-easel/docs/ITERWAVE_P2_REMEDIATION_RECORD_20261101.md
+/Users/longyi/project/redbook-easel/docs/phase-p2-hosted-model-gateway.md
+/Users/longyi/project/redbook-easel/docs/skills-sandbox-security-design.md
+/Users/longyi/project/redbook-easel/docs/ACTIVATION_RETENTION_REDESIGN_20261030.md
+/Users/longyi/project/redbook-easel/docs/T9_C_FULL_CLOSURE_ACCEPTANCE.md
+/Users/longyi/project/redbook-easel/docs/global-dispatch-dashboard.md
+/Users/longyi/project/redbook-easel/docs/ITERWAVE_FULL_REMEDIATION_CHECKLIST.md
+/Users/longyi/project/redbook-easel/docs/unified-plan-management-rollback.md
+
+############################################################
+## /Users/longyi/project/Easel
+############################################################
+-- file counts --
+     439
+-- by ext (top 12) --
+ 329 md
+ 173 py
+  50 jpg
+  41 png
+  39 pyc
+  26 mjs
+  26 lock
+  25 json
+  14 sh
+   8 html
+   5 txt
+   5 mp4
+-- top-level depth2 --
+/Users/longyi/project/Easel
+/Users/longyi/project/Easel/.screenshots
+/Users/longyi/project/Easel/.screenshots/.tmp
+/Users/longyi/project/Easel/头条号全链路审查报告.md
+/Users/longyi/project/Easel/.DS_Store
+/Users/longyi/project/Easel/content
+/Users/longyi/project/Easel/content/.DS_Store
+/Users/longyi/project/Easel/api-config.env
+/Users/longyi/project/Easel/I, zlib.crc32(t + d) & 0xffffffff)
+    sig = b\x89PNG\r\n\x1a\n
+    ihdr = struct.pack(
+/Users/longyi/project/Easel/assets-src
+/Users/longyi/project/Easel/assets-src/easel-icon-transparent-800.png
+/Users/longyi/project/Easel/I, len(d)) + t + d + struct.pack(
+/Users/longyi/project/Easel/avatar
+/Users/longyi/project/Easel/avatar/touxiang_300.png
+/Users/longyi/project/Easel/avatar/touxiang_500.png
+/Users/longyi/project/Easel/avatar/touxiang_circle_preview.png
+/Users/longyi/project/Easel/avatar/preview_60px.png
+/Users/longyi/project/Easel/Easel-main
+/Users/longyi/project/Easel/Easel-main/setup.sh
+/Users/longyi/project/Easel/Easel-main/setup.ps1
+/Users/longyi/project/Easel/Easel-main/conftest.py
+/Users/longyi/project/Easel/Easel-main/pytest.ini
+/Users/longyi/project/Easel/Easel-main/LICENSE
+/Users/longyi/project/Easel/Easel-main/CHANGELOG.md
+/Users/longyi/project/Easel/Easel-main/web
+/Users/longyi/project/Easel/Easel-main/PSScriptAnalyzerSettings.psd1
+/Users/longyi/project/Easel/Easel-main/pyproject.toml
+/Users/longyi/project/Easel/Easel-main/tests
+/Users/longyi/project/Easel/Easel-main/agents
+/Users/longyi/project/Easel/Easel-main/docs
+/Users/longyi/project/Easel/Easel-main/README.md
+/Users/longyi/project/Easel/Easel-main/.gitignore
+/Users/longyi/project/Easel/Easel-main/WECHAT_OA_INTEGRATION.md
+/Users/longyi/project/Easel/Easel-main/kb_data
+/Users/longyi/project/Easel/Easel-main/.env
+/Users/longyi/project/Easel/Easel-main/README_EN.md
+/Users/longyi/project/Easel/Easel-main/CONTRIBUTING.md
+/Users/longyi/project/Easel/Easel-main/.venv
+-- images/screenshots (maxdepth 5) --
+/Users/longyi/project/Easel/assets-src/easel-icon-transparent-800.png
+/Users/longyi/project/Easel/avatar/touxiang_300.png
+/Users/longyi/project/Easel/avatar/touxiang_500.png
+/Users/longyi/project/Easel/avatar/touxiang_circle_preview.png
+/Users/longyi/project/Easel/avatar/preview_60px.png
+/Users/longyi/project/Easel/Easel-main/web/frontend/dist/icon-192.png
+/Users/longyi/project/Easel/Easel-main/web/frontend/dist/icon-512.png
+/Users/longyi/project/Easel/Easel-main/web/frontend/public/icon-192.png
+/Users/longyi/project/Easel/Easel-main/web/frontend/public/icon-512.png
+/Users/longyi/project/Easel/Easel-main/web/static/easel-icon-transparent.png
+/Users/longyi/project/Easel/Easel-main/web/static/showcase/culture-mt-cards-strip.jpg
+/Users/longyi/project/Easel/Easel-main/web/static/showcase/novel-romance.png
+/Users/longyi/project/Easel/Easel-main/web/static/showcase/novel-horror.png
+/Users/longyi/project/Easel/Easel-main/web/static/showcase/life-chengdu-cards-strip.jpg
+/Users/longyi/project/Easel/Easel-main/web/static/showcase/life-mountain-cards-strip.jpg
+/Users/longyi/project/Easel/Easel-main/web/static/showcase/novel-xiuxian.png
+/Users/longyi/project/Easel/Easel-main/web/static/showcase/spatialevo-cards-strip.jpg
+/Users/longyi/project/Easel/Easel-main/web/static/showcase/agentg2-cards-strip.jpg
+/Users/longyi/project/Easel/Easel-main/web/static/showcase/pause-cards-strip.jpg
+/Users/longyi/project/Easel/Easel-main/web/static/showcase/spatialladder-cards-strip.jpg
+/Users/longyi/project/Easel/Easel-main/web/static/showcase/life-color-cards-strip.jpg
+/Users/longyi/project/Easel/Easel-main/web/static/showcase/knowu-cards-strip.jpg
+/Users/longyi/project/Easel/Easel-main/web/static/showcase/novel-seventh.png
+/Users/longyi/project/Easel/Easel-main/web/static/showcase/jokes-cards-strip.jpg
+/Users/longyi/project/Easel/Easel-main/web/static/easel-icon.png
+-- image count --
+     137
+-- git log --
+(no git)
+-- git status --
+-- README candidates --
+/Users/longyi/project/Easel/头条号全链路审查报告.md
+/Users/longyi/project/Easel/Easel-main/CHANGELOG.md
+/Users/longyi/project/Easel/Easel-main/README.md
+/Users/longyi/project/Easel/Easel-main/WECHAT_OA_INTEGRATION.md
+/Users/longyi/project/Easel/Easel-main/README_EN.md
+/Users/longyi/project/Easel/Easel-main/CONTRIBUTING.md
+
+############################################################
+## /Users/longyi/project/持续推送
+############################################################
+-- file counts --
+      10
+-- by ext (top 12) --
+   8 md
+   1 zip
+   1 html
+-- top-level depth2 --
+/Users/longyi/project/持续推送
+/Users/longyi/project/持续推送/焦虑期陪伴产品设计文档V2.md
+/Users/longyi/project/持续推送/old
+/Users/longyi/project/持续推送/old/焦虑期陪伴产品V2.1审查报告.md
+/Users/longyi/project/持续推送/old/八字个性化黄历订阅产品设计文档.md
+/Users/longyi/project/持续推送/old/焦虑期陪伴产品V2.3审查报告.md
+/Users/longyi/project/持续推送/old/焦虑期陪伴产品V2审查报告.md
+/Users/longyi/project/持续推送/old/产品审查结论与改进方案.md
+/Users/longyi/project/持续推送/old/焦虑期陪伴产品孵化期审查报告.md
+/Users/longyi/project/持续推送/焦虑期陪伴产品Demo.html
+/Users/longyi/project/持续推送/焦虑期陪伴产品定稿审查报告.md
+/Users/longyi/project/持续推送/.trae-html-share-packages
+/Users/longyi/project/持续推送/.trae-html-share-packages/焦虑期陪伴产品Demo.html.zip
+-- images/screenshots (maxdepth 5) --
+-- image count --
+       0
+-- git log --
+(no git)
+-- git status --
+-- README candidates --
+/Users/longyi/project/持续推送/焦虑期陪伴产品设计文档V2.md
+/Users/longyi/project/持续推送/old/焦虑期陪伴产品V2.1审查报告.md
+/Users/longyi/project/持续推送/old/八字个性化黄历订阅产品设计文档.md
+/Users/longyi/project/持续推送/old/焦虑期陪伴产品V2.3审查报告.md
+/Users/longyi/project/持续推送/old/焦虑期陪伴产品V2审查报告.md
+/Users/longyi/project/持续推送/old/产品审查结论与改进方案.md
+/Users/longyi/project/持续推送/old/焦虑期陪伴产品孵化期审查报告.md
+/Users/longyi/project/持续推送/焦虑期陪伴产品定稿审查报告.md
+
+############################################################
+## /Users/longyi/project/持续推送1
+############################################################
+-- file counts --
+      15
+-- by ext (top 12) --
+  10 html
+   2 md
+   1 js
+   1 DS_Store
+   1 css
+-- top-level depth2 --
+/Users/longyi/project/持续推送1
+/Users/longyi/project/持续推送1/DEMO
+/Users/longyi/project/持续推送1/DEMO/index.html
+/Users/longyi/project/持续推送1/DEMO/css
+/Users/longyi/project/持续推送1/DEMO/js
+/Users/longyi/project/持续推送1/DEMO/pages
+/Users/longyi/project/持续推送1/.DS_Store
+/Users/longyi/project/持续推送1/情绪陪伴产品设计方案_V2.0.md
+/Users/longyi/project/持续推送1/后台信息架构重构方案.md
+-- images/screenshots (maxdepth 5) --
+-- image count --
+       0
+-- git log --
+(no git)
+-- git status --
+-- README candidates --
+/Users/longyi/project/持续推送1/情绪陪伴产品设计方案_V2.0.md
+/Users/longyi/project/持续推送1/后台信息架构重构方案.md
+
+############################################################
+## /Users/longyi/project/态势感知
+############################################################
+-- file counts --
+      12
+-- by ext (top 12) --
+   5 js
+   2 zip
+   2 html
+   2 css
+   1 db
+-- top-level depth2 --
+/Users/longyi/project/态势感知
+/Users/longyi/project/态势感知/看板
+/Users/longyi/project/态势感知/看板/index.html
+/Users/longyi/project/态势感知/看板/css
+/Users/longyi/project/态势感知/看板/js
+/Users/longyi/project/态势感知/高管看板
+/Users/longyi/project/态势感知/高管看板/index.html
+/Users/longyi/project/态势感知/高管看板/css
+/Users/longyi/project/态势感知/高管看板/js
+/Users/longyi/project/态势感知/.trae-html-share-packages
+/Users/longyi/project/态势感知/.trae-html-share-packages/看板
+/Users/longyi/project/态势感知/.trae-html-share-packages/高管看板
+/Users/longyi/project/态势感知/data
+/Users/longyi/project/态势感知/data/sanqing.db
+-- images/screenshots (maxdepth 5) --
+-- image count --
+       0
+-- git log --
+(no git)
+-- git status --
+-- README candidates --
+
+############################################################
+## /Users/longyi/project/KAI/KAI
+############################################################
+-- file counts --
+    2486
+-- by ext (top 12) --
+2886 js
+ 813 ts
+ 586 json
+ 581 map
+ 501 md
+ 115 mjs
+  96 mts
+  45 gz
+  38 yml
+  28 cjs
+  22 eslintrc
+  21 cts
+-- top-level depth2 --
+/Users/longyi/project/KAI/KAI
+/Users/longyi/project/KAI/KAI/sinm-kai-1.11.14.tgz
+/Users/longyi/project/KAI/KAI/.git
+/Users/longyi/project/KAI/KAI/package
+/Users/longyi/project/KAI/KAI/package/dist-electron
+/Users/longyi/project/KAI/KAI/package/LICENSE
+/Users/longyi/project/KAI/KAI/package/bin
+/Users/longyi/project/KAI/KAI/package/node_modules
+/Users/longyi/project/KAI/KAI/package/kai-stop.sh
+/Users/longyi/project/KAI/KAI/package/README.md
+/Users/longyi/project/KAI/KAI/package/package-lock.json
+/Users/longyi/project/KAI/KAI/package/package.json
+/Users/longyi/project/KAI/KAI/package/RELEASE_NOTES.md
+/Users/longyi/project/KAI/KAI/package/kai-start.sh
+/Users/longyi/project/KAI/KAI/package/dist-cli
+-- images/screenshots (maxdepth 5) --
+-- image count --
+       0
+-- git log --
+(no git)
+-- git status --
+?? package/
+?? sinm-kai-1.11.14.tgz
+-- README candidates --
+/Users/longyi/project/KAI/KAI/package/README.md
+/Users/longyi/project/KAI/KAI/package/RELEASE_NOTES.md
+
+############################################################
+## /Users/longyi/project/KAI/situation-awareness
+############################################################
+-- file counts --
+      21
+-- by ext (top 12) --
+  15 md
+   6 py
+   5 pyc
+-- top-level depth2 --
+/Users/longyi/project/KAI/situation-awareness
+/Users/longyi/project/KAI/situation-awareness/ARCHITECTURE.md
+/Users/longyi/project/KAI/situation-awareness/domains
+/Users/longyi/project/KAI/situation-awareness/domains/competitor
+/Users/longyi/project/KAI/situation-awareness/domains/self
+/Users/longyi/project/KAI/situation-awareness/domains/market
+/Users/longyi/project/KAI/situation-awareness/CHANGELOG.md
+/Users/longyi/project/KAI/situation-awareness/PROJECT.md
+/Users/longyi/project/KAI/situation-awareness/workflows
+/Users/longyi/project/KAI/situation-awareness/agents
+/Users/longyi/project/KAI/situation-awareness/models
+/Users/longyi/project/KAI/situation-awareness/docs
+/Users/longyi/project/KAI/situation-awareness/docs/concepts.md
+/Users/longyi/project/KAI/situation-awareness/docs/decisions
+/Users/longyi/project/KAI/situation-awareness/README.md
+/Users/longyi/project/KAI/situation-awareness/REFERENCES.md
+/Users/longyi/project/KAI/situation-awareness/ROADMAP.md
+/Users/longyi/project/KAI/situation-awareness/CONTRIBUTING.md
+/Users/longyi/project/KAI/situation-awareness/skills
+/Users/longyi/project/KAI/situation-awareness/skills/information-unit-extraction
+/Users/longyi/project/KAI/situation-awareness/data
+/Users/longyi/project/KAI/situation-awareness/outputs
+-- images/screenshots (maxdepth 5) --
+-- image count --
+       0
+-- git log --
+(no git)
+-- git status --
+-- README candidates --
+/Users/longyi/project/KAI/situation-awareness/ARCHITECTURE.md
+/Users/longyi/project/KAI/situation-awareness/CHANGELOG.md
+/Users/longyi/project/KAI/situation-awareness/PROJECT.md
+/Users/longyi/project/KAI/situation-awareness/docs/concepts.md
+/Users/longyi/project/KAI/situation-awareness/README.md
+/Users/longyi/project/KAI/situation-awareness/REFERENCES.md
+/Users/longyi/project/KAI/situation-awareness/ROADMAP.md
+/Users/longyi/project/KAI/situation-awareness/CONTRIBUTING.md
+
+############################################################
+## /Users/longyi/project/人物画像
+############################################################
+-- file counts --
+     723
+-- by ext (top 12) --
+ 712 md
+ 241 yaml
+ 164 py
+  61 pyc
+  22 log
+  21 json
+  20 png
+  16 db
+  14 sample
+  13 sql
+  10 gitkeep
+   8 sqlite3
+-- top-level depth2 --
+/Users/longyi/project/人物画像
+/Users/longyi/project/人物画像/real-data.baseline.sha256
+/Users/longyi/project/人物画像/.screenshots
+/Users/longyi/project/人物画像/.screenshots/.tmp
+/Users/longyi/project/人物画像/tools
+/Users/longyi/project/人物画像/tools/__pycache__
+/Users/longyi/project/人物画像/tools/doc_lint.py
+/Users/longyi/project/人物画像/.DS_Store
+/Users/longyi/project/人物画像/real-data
+/Users/longyi/project/人物画像/real-data/.write.lock
+/Users/longyi/project/人物画像/real-data/inbox
+/Users/longyi/project/人物画像/real-data/kb
+/Users/longyi/project/人物画像/real-data/db
+/Users/longyi/project/人物画像/real-data/persons
+/Users/longyi/project/人物画像/real-data/events
+/Users/longyi/project/人物画像/real-data/backups
+/Users/longyi/project/人物画像/test-data
+/Users/longyi/project/人物画像/test-data/.write.lock
+/Users/longyi/project/人物画像/test-data/kb
+/Users/longyi/project/人物画像/test-data/db
+/Users/longyi/project/人物画像/test-data/persons
+/Users/longyi/project/人物画像/test-data/backups
+/Users/longyi/project/人物画像/CHANGELOG.md
+/Users/longyi/project/人物画像/2026-11-14
+/Users/longyi/project/人物画像/2026-11-14/web-corpus
+/Users/longyi/project/人物画像/2026-11-13
+/Users/longyi/project/人物画像/2026-11-13/demo
+/Users/longyi/project/人物画像/2026-11-13/frontend-viewer
+/Users/longyi/project/人物画像/2026-11-13/real-data-体检报告.md
+/Users/longyi/project/人物画像/2026-11-13/wbs-reuse-audit
+/Users/longyi/project/人物画像/2026-11-13/acceptance
+/Users/longyi/project/人物画像/2026-11-13/kb-content
+/Users/longyi/project/人物画像/2026-11-12
+/Users/longyi/project/人物画像/2026-11-12/doc-registry
+/Users/longyi/project/人物画像/2026-11-12/kb-sources
+/Users/longyi/project/人物画像/2026-11-12/.DS_Store
+/Users/longyi/project/人物画像/2026-11-12/relationship-schema
+/Users/longyi/project/人物画像/2026-11-12/diagrams
+/Users/longyi/project/人物画像/2026-11-12/推进计划-大白话版.md
+/Users/longyi/project/人物画像/2026-11-12/项目规则-大白话版.md
+-- images/screenshots (maxdepth 5) --
+/Users/longyi/project/人物画像/2026-11-12/diagrams/work/preview-biz-plain-v2.png
+/Users/longyi/project/人物画像/2026-11-12/diagrams/work/preview-02-业务架构.png
+/Users/longyi/project/人物画像/2026-11-12/diagrams/work/preview-html-v2.png
+/Users/longyi/project/人物画像/2026-11-12/diagrams/work/zoom-tech-top.png
+/Users/longyi/project/人物画像/2026-11-12/diagrams/work/preview-01-技术架构.png
+/Users/longyi/project/人物画像/2026-11-12/diagrams/work/preview-02-大白话.png
+/Users/longyi/project/人物画像/2026-11-12/diagrams/work/zoom-a-lane.png
+/Users/longyi/project/人物画像/2026-11-12/diagrams/work/preview-01-大白话.png
+/Users/longyi/project/人物画像/2026-11-12/diagrams/work/zoom-tech-app2.png
+/Users/longyi/project/人物画像/2026-11-12/diagrams/work/zoom-tech-ports2.png
+/Users/longyi/project/人物画像/2026-11-12/diagrams/work/zoom-tech-app.png
+/Users/longyi/project/人物画像/2026-11-12/diagrams/work/zoom-tech-ports.png
+/Users/longyi/project/人物画像/2026-11-12/diagrams/work/preview-tech-v2.png
+/Users/longyi/project/人物画像/2026-11-12/diagrams/work/preview-html-plain.png
+/Users/longyi/project/人物画像/2026-11-12/diagrams/work/preview-tech-plain-v2.png
+/Users/longyi/project/人物画像/2026-11-12/diagrams/work/preview-html.png
+/Users/longyi/project/人物画像/2026-11-12/diagrams/work/zoom-plain-app.png
+/Users/longyi/project/人物画像/2026-11-12/diagrams/work/preview-biz-v2.png
+/Users/longyi/project/人物画像/2026-11-12/diagrams/work/zoom-tech-bottom.png
+/Users/longyi/project/人物画像/2026-11-12/diagrams/work/zoom-tech-right.png
+-- image count --
+      20
+-- git log --
+(no git)
+-- git status --
+-- README candidates --
+/Users/longyi/project/人物画像/CHANGELOG.md
+/Users/longyi/project/人物画像/2026-11-13/real-data-体检报告.md
+/Users/longyi/project/人物画像/2026-11-12/推进计划-大白话版.md
+/Users/longyi/project/人物画像/2026-11-12/项目规则-大白话版.md
+/Users/longyi/project/人物画像/2026-11-12/README.md
+/Users/longyi/project/人物画像/work/待决策清单.md
+/Users/longyi/project/人物画像/DATA_DIRS.md
+/Users/longyi/project/人物画像/AGENTS.md
+/Users/longyi/project/人物画像/portrait-agent/README.md
+/Users/longyi/project/人物画像/portrait-agent/NOTICE.md
+
+############################################################
+## /Users/longyi/project/门店运营
+############################################################
+-- file counts --
+     485
+-- by ext (top 12) --
+ 361 png
+  60 py
+  36 md
+  31 tsx
+  14 sample
+  12 ts
+   9 gitignore
+   8 TAG
+   8 json
+   8 html
+   7 js
+   6 jpg
+-- top-level depth2 --
+/Users/longyi/project/门店运营
+/Users/longyi/project/门店运营/artifacts
+/Users/longyi/project/门店运营/artifacts/hot-source-admin
+/Users/longyi/project/门店运营/.screenshots
+/Users/longyi/project/门店运营/.screenshots/.tmp
+/Users/longyi/project/门店运营/hotspot-pool.jpg
+/Users/longyi/project/门店运营/.DS_Store
+/Users/longyi/project/门店运营/hotspot-collection-complete.jpg
+/Users/longyi/project/门店运营/Smart-Marketing
+/Users/longyi/project/门店运营/Smart-Marketing/demo
+/Users/longyi/project/门店运营/Smart-Marketing/pnpm-lock.yaml
+/Users/longyi/project/门店运营/Smart-Marketing/infra
+/Users/longyi/project/门店运营/Smart-Marketing/index.html
+/Users/longyi/project/门店运营/Smart-Marketing/.DS_Store
+/Users/longyi/project/门店运营/Smart-Marketing/Makefile
+/Users/longyi/project/门店运营/Smart-Marketing/.ruff_cache
+/Users/longyi/project/门店运营/Smart-Marketing/node_modules
+/Users/longyi/project/门店运营/Smart-Marketing/docs
+/Users/longyi/project/门店运营/Smart-Marketing/README.md
+/Users/longyi/project/门店运营/Smart-Marketing/.dockerignore
+/Users/longyi/project/门店运营/Smart-Marketing/.gitignore
+/Users/longyi/project/门店运营/Smart-Marketing/package.json
+/Users/longyi/project/门店运营/Smart-Marketing/.env
+/Users/longyi/project/门店运营/Smart-Marketing/scripts
+/Users/longyi/project/门店运营/Smart-Marketing/packages
+/Users/longyi/project/门店运营/Smart-Marketing/.github
+/Users/longyi/project/门店运营/Smart-Marketing/.env.example
+/Users/longyi/project/门店运营/Smart-Marketing/.git
+/Users/longyi/project/门店运营/Smart-Marketing/apps
+/Users/longyi/project/门店运营/Smart-Marketing/README.DEVELOPMENT.md
+/Users/longyi/project/门店运营/Smart-Marketing/pnpm-workspace.yaml
+/Users/longyi/project/门店运营/验收截图-内容生产
+/Users/longyi/project/门店运营/验收截图-内容生产/图片-V2与步骤未推进.png
+/Users/longyi/project/门店运营/验收截图-内容生产/图片-审核通过.png
+/Users/longyi/project/门店运营/验收截图-内容生产/素材-扫描通过与使用权确认.png
+/Users/longyi/project/门店运营/验收截图-内容生产/任务-内容与后续环节.png
+/Users/longyi/project/门店运营/验收截图-内容生产/图片-关联V1.png
+/Users/longyi/project/门店运营/2026-11-14
+/Users/longyi/project/门店运营/2026-11-14/media-assets
+/Users/longyi/project/门店运营/2026-11-14/effects-tabs
+-- images/screenshots (maxdepth 5) --
+/Users/longyi/project/门店运营/artifacts/hot-source-admin/08-create-dialog-390.png
+/Users/longyi/project/门店运营/artifacts/hot-source-admin/07-sources-390.png
+/Users/longyi/project/门店运营/artifacts/hot-source-admin/04-created-enabled-1440.png
+/Users/longyi/project/门店运营/artifacts/hot-source-admin/02-create-dialog-1440.png
+/Users/longyi/project/门店运营/artifacts/hot-source-admin/05-edited-enabled-1440.png
+/Users/longyi/project/门店运营/artifacts/hot-source-admin/06-collect-triggered-1440.png
+/Users/longyi/project/门店运营/artifacts/hot-source-admin/01-sources-1440.png
+/Users/longyi/project/门店运营/artifacts/hot-source-admin/03-validation-host-1440.png
+/Users/longyi/project/门店运营/hotspot-pool.jpg
+/Users/longyi/project/门店运营/hotspot-collection-complete.jpg
+/Users/longyi/project/门店运营/验收截图-内容生产/图片-V2与步骤未推进.png
+/Users/longyi/project/门店运营/验收截图-内容生产/图片-审核通过.png
+/Users/longyi/project/门店运营/验收截图-内容生产/素材-扫描通过与使用权确认.png
+/Users/longyi/project/门店运营/验收截图-内容生产/任务-内容与后续环节.png
+/Users/longyi/project/门店运营/验收截图-内容生产/图片-关联V1.png
+/Users/longyi/project/门店运营/2026-11-14/media-assets/1440-drawer.png
+/Users/longyi/project/门店运营/2026-11-14/media-assets/1440-batch-select.png
+/Users/longyi/project/门店运营/2026-11-14/media-assets/1440-page1.png
+/Users/longyi/project/门店运营/2026-11-14/media-assets/1440-page2.png
+/Users/longyi/project/门店运营/2026-11-14/media-assets/1440-filter-ai-search.png
+/Users/longyi/project/门店运营/2026-11-14/media-assets/1440-filter-ai.png
+/Users/longyi/project/门店运营/2026-11-14/media-assets/1440-refresh-keep-filters.png
+/Users/longyi/project/门店运营/2026-11-14/effects-tabs/effects-content-1440.png
+/Users/longyi/project/门店运营/2026-11-14/effects-tabs/vp-tabs-content-390.png
+/Users/longyi/project/门店运营/2026-11-14/effects-tabs/vp-tabs-business-1440.png
+-- image count --
+     367
+-- git log --
+(no git)
+-- git status --
+-- README candidates --
+/Users/longyi/project/门店运营/Smart-Marketing/README.md
+/Users/longyi/project/门店运营/Smart-Marketing/README.DEVELOPMENT.md
+
+############################################################
+## /Users/longyi/project/开发范式
+############################################################
+-- file counts --
+      41
+-- by ext (top 12) --
+1375 js
+ 134 md
+ 110 ts
+  97 json
+  21 py
+  13 eslintrc
+  10 nycrc
+   7 mdc
+   5 cjs
+   4 txt
+   3 mjs
+   3 cts
+-- top-level depth2 --
+/Users/longyi/project/开发范式
+/Users/longyi/project/开发范式/.trae
+/Users/longyi/project/开发范式/.trae/.speckit.yaml
+/Users/longyi/project/开发范式/.trae/speckit-workflow.md
+/Users/longyi/project/开发范式/.trae/rules
+/Users/longyi/project/开发范式/.trae/prompts
+/Users/longyi/project/开发范式/.trae/templates
+/Users/longyi/project/开发范式/4.3.1 用户管理.md
+/Users/longyi/project/开发范式/cursor_speckit_算法管理模块（前端）.md
+/Users/longyi/project/开发范式/4.3.3 菜单管理.md
+/Users/longyi/project/开发范式/wms-master-data
+/Users/longyi/project/开发范式/wms-master-data/CONSTITUTION.md
+/Users/longyi/project/开发范式/wms-master-data/frontend
+/Users/longyi/project/开发范式/wms-master-data/backend
+/Users/longyi/project/开发范式/wms-master-data/.speckit.yaml
+/Users/longyi/project/开发范式/4.3.6 物料管理.md
+/Users/longyi/project/开发范式/cursor_speckit_算法管理模块.md
+/Users/longyi/project/开发范式/speckit安装.md
+/Users/longyi/project/开发范式/4.3.9 仓库管理.md
+/Users/longyi/project/开发范式/4.3.2 角色管理.md
+-- images/screenshots (maxdepth 5) --
+-- image count --
+       0
+-- git log --
+(no git)
+-- git status --
+-- README candidates --
+/Users/longyi/project/开发范式/.trae/speckit-workflow.md
+/Users/longyi/project/开发范式/4.3.1 用户管理.md
+/Users/longyi/project/开发范式/cursor_speckit_算法管理模块（前端）.md
+/Users/longyi/project/开发范式/4.3.3 菜单管理.md
+/Users/longyi/project/开发范式/wms-master-data/CONSTITUTION.md
+/Users/longyi/project/开发范式/4.3.6 物料管理.md
+/Users/longyi/project/开发范式/cursor_speckit_算法管理模块.md
+/Users/longyi/project/开发范式/speckit安装.md
+/Users/longyi/project/开发范式/4.3.9 仓库管理.md
+/Users/longyi/project/开发范式/4.3.2 角色管理.md
+
+############################################################
+## /Users/longyi/project/h5小游戏/绝命办公室
+############################################################
+-- file counts --
+      22
+-- by ext (top 12) --
+  12 md
+   7 css
+   1 js
+   1 html
+   1 DS_Store
+-- top-level depth2 --
+/Users/longyi/project/h5小游戏/绝命办公室
+/Users/longyi/project/h5小游戏/绝命办公室/demo
+/Users/longyi/project/h5小游戏/绝命办公室/demo/index.html
+/Users/longyi/project/h5小游戏/绝命办公室/demo/css
+/Users/longyi/project/h5小游戏/绝命办公室/demo/js
+/Users/longyi/project/h5小游戏/绝命办公室/.DS_Store
+/Users/longyi/project/h5小游戏/绝命办公室/胜利条件与评分系统.md
+/Users/longyi/project/h5小游戏/绝命办公室/UI深度审查报告.md
+/Users/longyi/project/h5小游戏/绝命办公室/员工次级数值与信任度机制.md
+/Users/longyi/project/h5小游戏/绝命办公室/随机事件概率表.md
+/Users/longyi/project/h5小游戏/绝命办公室/主播话术包.md
+/Users/longyi/project/h5小游戏/绝命办公室/礼物付费链路设计.md
+/Users/longyi/project/h5小游戏/绝命办公室/布局线框图与动画队列设计.md
+/Users/longyi/project/h5小游戏/绝命办公室/新手引导设计.md
+/Users/longyi/project/h5小游戏/绝命办公室/需求文档.md
+/Users/longyi/project/h5小游戏/绝命办公室/合规设计.md
+/Users/longyi/project/h5小游戏/绝命办公室/对抗模式设计总览.md
+/Users/longyi/project/h5小游戏/绝命办公室/数值平衡表.md
+-- images/screenshots (maxdepth 5) --
+-- image count --
+       0
+-- git log --
+(no git)
+-- git status --
+-- README candidates --
+/Users/longyi/project/h5小游戏/绝命办公室/胜利条件与评分系统.md
+/Users/longyi/project/h5小游戏/绝命办公室/UI深度审查报告.md
+/Users/longyi/project/h5小游戏/绝命办公室/员工次级数值与信任度机制.md
+/Users/longyi/project/h5小游戏/绝命办公室/随机事件概率表.md
+/Users/longyi/project/h5小游戏/绝命办公室/主播话术包.md
+/Users/longyi/project/h5小游戏/绝命办公室/礼物付费链路设计.md
+/Users/longyi/project/h5小游戏/绝命办公室/布局线框图与动画队列设计.md
+/Users/longyi/project/h5小游戏/绝命办公室/新手引导设计.md
+/Users/longyi/project/h5小游戏/绝命办公室/需求文档.md
+/Users/longyi/project/h5小游戏/绝命办公室/合规设计.md
+/Users/longyi/project/h5小游戏/绝命办公室/对抗模式设计总览.md
+/Users/longyi/project/h5小游戏/绝命办公室/数值平衡表.md
+
+############################################################
+## /Users/longyi/Documents/trae_projects/chaifen
+############################################################
+-- file counts --
+      10
+-- by ext (top 12) --
+   8 html
+   1 js
+   1 css
+-- top-level depth2 --
+/Users/longyi/Documents/trae_projects/chaifen
+/Users/longyi/Documents/trae_projects/chaifen/已完成
+/Users/longyi/Documents/trae_projects/chaifen/已完成/05-各阶段核心功能一览.html
+/Users/longyi/Documents/trae_projects/chaifen/已完成/06-异常处理与闭环机制.html
+/Users/longyi/Documents/trae_projects/chaifen/已完成/01-总体业务流程图.html
+/Users/longyi/Documents/trae_projects/chaifen/已完成/04-需求状态流转图.html
+/Users/longyi/Documents/trae_projects/chaifen/已完成/02-泳道流程图.html
+/Users/longyi/Documents/trae_projects/chaifen/已完成/03-四大阶段详细业务流程.html
+/Users/longyi/Documents/trae_projects/chaifen/index.html
+/Users/longyi/Documents/trae_projects/chaifen/任务协同平台业务流程图(1).html
+/Users/longyi/Documents/trae_projects/chaifen/script.js
+/Users/longyi/Documents/trae_projects/chaifen/style.css
+-- images/screenshots (maxdepth 5) --
+-- image count --
+       0
+-- git log --
+(no git)
+-- git status --
+-- README candidates --
+
+############################################################
+## /Users/longyi/project/WJ/功能清单
+############################################################
+-- file counts --
+    1110
+-- by ext (top 12) --
+1220 html
+  13 js
+  11 md
+   2 DS_Store
+   2 css
+   1 xlsx
+   1 trae/skills
+   1 trae/rules
+   1 trae/memory
+   1 trae/config
+-- top-level depth2 --
+/Users/longyi/project/WJ/功能清单
+/Users/longyi/project/WJ/功能清单/AI模型工厂_风险知识库.md
+/Users/longyi/project/WJ/功能清单/.trae
+/Users/longyi/project/WJ/功能清单/.trae/memory
+/Users/longyi/project/WJ/功能清单/.trae/config
+/Users/longyi/project/WJ/功能清单/.trae/rules
+/Users/longyi/project/WJ/功能清单/.trae/templates
+/Users/longyi/project/WJ/功能清单/.trae/skills
+/Users/longyi/project/WJ/功能清单/.trae/assets
+/Users/longyi/project/WJ/功能清单/.DS_Store
+/Users/longyi/project/WJ/功能清单/需求发布中心.md
+/Users/longyi/project/WJ/功能清单/config
+/Users/longyi/project/WJ/功能清单/config/sidebar.js
+/Users/longyi/project/WJ/功能清单/config/flow-map.js
+/Users/longyi/project/WJ/功能清单/config/md-extract.js
+/Users/longyi/project/WJ/功能清单/config/pages.js
+/Users/longyi/project/WJ/功能清单/AI模型工厂_数据汇聚治理.md
+/Users/longyi/project/WJ/功能清单/prototype
+/Users/longyi/project/WJ/功能清单/prototype/demo
+/Users/longyi/project/WJ/功能清单/prototype/.DS_Store
+/Users/longyi/project/WJ/功能清单/风险态势分析平台.md
+/Users/longyi/project/WJ/功能清单/README.md
+/Users/longyi/project/WJ/功能清单/五通对接模块.md
+/Users/longyi/project/WJ/功能清单/项目总结.md
+/Users/longyi/project/WJ/功能清单/AI_风险特征库.md
+/Users/longyi/project/WJ/功能清单/generators
+/Users/longyi/project/WJ/功能清单/generators/html-helpers.js
+/Users/longyi/project/WJ/功能清单/generators/page.js
+/Users/longyi/project/WJ/功能清单/generators/cockpit.js
+/Users/longyi/project/WJ/功能清单/generators/chart-scripts.js
+/Users/longyi/project/WJ/功能清单/generators/dashboard-charts.js
+/Users/longyi/project/WJ/功能清单/任务协同平台.md
+/Users/longyi/project/WJ/功能清单/AI模型工厂_风险特征库.md
+/Users/longyi/project/WJ/功能清单/功能清单(1).xlsx
+-- images/screenshots (maxdepth 5) --
+-- image count --
+       0
+-- git log --
+(no git)
+-- git status --
+-- README candidates --
+/Users/longyi/project/WJ/功能清单/AI模型工厂_风险知识库.md
+/Users/longyi/project/WJ/功能清单/需求发布中心.md
+/Users/longyi/project/WJ/功能清单/AI模型工厂_数据汇聚治理.md
+/Users/longyi/project/WJ/功能清单/风险态势分析平台.md
+/Users/longyi/project/WJ/功能清单/README.md
+/Users/longyi/project/WJ/功能清单/五通对接模块.md
+/Users/longyi/project/WJ/功能清单/项目总结.md
+/Users/longyi/project/WJ/功能清单/AI_风险特征库.md
+/Users/longyi/project/WJ/功能清单/任务协同平台.md
+/Users/longyi/project/WJ/功能清单/AI模型工厂_风险特征库.md
+

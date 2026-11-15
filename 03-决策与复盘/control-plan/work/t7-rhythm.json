@@ -1,0 +1,6 @@
+[
+  {"name":"时点","type":"text"},
+  {"name":"动作","type":"text"},
+  {"name":"产出","type":"text"},
+  {"name":"判据","type":"text"}
+]

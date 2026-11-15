@@ -1,0 +1,8 @@
+[
+  {"name":"条号","type":"text"},
+  {"name":"推荐版标题","type":"text"},
+  {"name":"搜索版标题","type":"text"},
+  {"name":"搜索版发布时间","type":"text"},
+  {"name":"关键词","type":"text"},
+  {"name":"备注","type":"text"}
+]

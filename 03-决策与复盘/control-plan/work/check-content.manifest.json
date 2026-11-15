@@ -1,0 +1,60 @@
+{
+  "manifest_version": "v1",
+  "format": "ndjson",
+  "base_token": "JChjbMdNzaOf2msRkgoc8qK4neb",
+  "table_id": "tblzUjX6KRp0thcz",
+  "rev": 4,
+  "timezone": "Asia/Shanghai",
+  "query_context": {
+    "field_scope": "selected_fields",
+    "record_scope": "all_records"
+  },
+  "requested_limit": 50,
+  "records_count": 7,
+  "page_count": 1,
+  "has_more": false,
+  "record_file": "/Users/longyi/project/账号对标/03-决策与复盘/control-plan/work/check-content.ndjson",
+  "record_file_size_bytes": 837,
+  "manifest_file": "/Users/longyi/project/账号对标/03-决策与复盘/control-plan/work/check-content.manifest.json",
+  "columns": {
+    "record_id": {
+      "physical_type": "string",
+      "stats": {
+        "max_length": 16
+      },
+      "example": "reczz28ZVNRnwrrC"
+    },
+    "内容类型": {
+      "field_id": "fld79UGdTb",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 5
+      },
+      "example": "快反"
+    },
+    "占比": {
+      "field_id": "fld59RiEsu",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 16
+      },
+      "example": "100%"
+    },
+    "条数（30天）": {
+      "field_id": "fldnnChDD7",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 0,
+        "min": 4,
+        "max": 34,
+        "avg": 18.285714285714285
+      },
+      "example": 4
+    }
+  }
+}

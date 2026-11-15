@@ -1,0 +1,19 @@
+[
+  {"name":"条号","type":"text"},
+  {"name":"计划日期","type":"datetime","style":{"format":"yyyy/MM/dd"}},
+  {"name":"素材来源项目","type":"text"},
+  {"name":"要讲的那件事","type":"text"},
+  {"name":"翻译主题（这句大白话是什么）","type":"text"},
+  {"name":"结构类型","type":"select","multiple":false,"options":[{"name":"自嘲"},{"name":"结果前置"},{"name":"冲突开场"},{"name":"旁人视角"},{"name":"判断型"}]},
+  {"name":"时长","type":"text"},
+  {"name":"拍摄难度","type":"select","multiple":false,"options":[{"name":"低"},{"name":"中"},{"name":"高"}]},
+  {"name":"需要作者提供什么","type":"text"},
+  {"name":"状态","type":"select","multiple":false,"options":[{"name":"未开拍"},{"name":"待补口播"},{"name":"待录屏"},{"name":"已拍摄"},{"name":"已发布"},{"name":"已复盘"},{"name":"搁置"}]},
+  {"name":"实际发布日","type":"datetime","style":{"format":"yyyy/MM/dd"}},
+  {"name":"完播率","type":"number","style":{"type":"plain","precision":1}},
+  {"name":"平均播放时长","type":"number","style":{"type":"plain","precision":1}},
+  {"name":"新增粉丝","type":"number","style":{"type":"plain","precision":0}},
+  {"name":"评论数","type":"number","style":{"type":"plain","precision":0}},
+  {"name":"私信数","type":"number","style":{"type":"plain","precision":0}},
+  {"name":"复盘备注","type":"text"}
+]

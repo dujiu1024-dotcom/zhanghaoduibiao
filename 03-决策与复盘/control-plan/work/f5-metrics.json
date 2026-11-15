@@ -1,0 +1,8 @@
+[
+  {"name":"指标","type":"text"},
+  {"name":"口径","type":"text"},
+  {"name":"每周目标","type":"text"},
+  {"name":"异常阈值","type":"text"},
+  {"name":"异常时怎么改","type":"text"},
+  {"name":"数据来源","type":"text"}
+]

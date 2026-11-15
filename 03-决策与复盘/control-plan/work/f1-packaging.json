@@ -1,0 +1,8 @@
+[
+  {"name":"项目","type":"text"},
+  {"name":"现状","type":"text"},
+  {"name":"目标状态","type":"text"},
+  {"name":"具体怎么做","type":"text"},
+  {"name":"谁来做","type":"text"},
+  {"name":"截止日","type":"datetime","style":{"format":"yyyy/MM/dd"}}
+]

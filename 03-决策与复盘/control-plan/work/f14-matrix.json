@@ -1,0 +1,8 @@
+[
+  {"name":"账号类型","type":"text"},
+  {"name":"数量","type":"text"},
+  {"name":"发什么","type":"text"},
+  {"name":"频次","type":"text"},
+  {"name":"作用","type":"text"},
+  {"name":"红线/边界","type":"text"}
+]

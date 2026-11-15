@@ -1,0 +1,7 @@
+[
+  {"name":"检查节点","type":"text"},
+  {"name":"判据原文","type":"text"},
+  {"name":"实际值","type":"text"},
+  {"name":"判定结果","type":"select","multiple":false,"options":[{"name":"通过"},{"name":"预警"},{"name":"失败"},{"name":"未到检查点"}]},
+  {"name":"要做的动作","type":"text"}
+]

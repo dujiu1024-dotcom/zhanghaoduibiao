@@ -1,0 +1,61 @@
+{
+  "manifest_version": "v1",
+  "format": "ndjson",
+  "base_token": "DutFbyBakachRjsSofLcagHGnRh",
+  "table_id": "tbl8tNMga5XoWhK1",
+  "rev": 1,
+  "timezone": "Asia/Shanghai",
+  "query_context": {
+    "field_scope": "selected_fields",
+    "record_scope": "all_records"
+  },
+  "requested_limit": 20,
+  "records_count": 8,
+  "page_count": 1,
+  "has_more": false,
+  "record_file": "/Users/longyi/project/账号对标/00-战略与目标/plan-30d/work/check-feasibility.ndjson",
+  "record_file_size_bytes": 1321,
+  "manifest_file": "/Users/longyi/project/账号对标/00-战略与目标/plan-30d/work/check-feasibility.manifest.json",
+  "columns": {
+    "record_id": {
+      "physical_type": "string",
+      "stats": {
+        "max_length": 16
+      },
+      "example": "reczz28ZTVCTs9Xt"
+    },
+    "结论": {
+      "field_id": "fld8mPJcR8",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 29
+      },
+      "example": "30 天约 60–90 小时，日均 2–3 小时【推算】"
+    },
+    "维度": {
+      "field_id": "flddMGMgFu",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 13
+      },
+      "example": "素材供给"
+    },
+    "风险等级": {
+      "field_id": "fldV5QCnZX",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 0,
+        "max_length": 1,
+        "avg_length": 1
+      },
+      "example": [
+        "中"
+      ]
+    }
+  }
+}

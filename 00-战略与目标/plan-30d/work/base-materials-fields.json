@@ -1,0 +1,9 @@
+[
+  {"name":"项目","type":"text"},
+  {"name":"事件","type":"text"},
+  {"name":"可拍性分档","type":"select","multiple":false,"options":[{"name":"A"},{"name":"B"},{"name":"C"},{"name":"D"}]},
+  {"name":"画面是什么","type":"text"},
+  {"name":"反常点是什么","type":"text"},
+  {"name":"能不能直接拍","type":"select","multiple":false,"options":[{"name":"能"},{"name":"需补录"},{"name":"需重跑"},{"name":"不能"}]},
+  {"name":"还缺什么","type":"text"}
+]

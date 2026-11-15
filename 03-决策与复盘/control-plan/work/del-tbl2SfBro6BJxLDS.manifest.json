@@ -1,0 +1,89 @@
+{
+  "manifest_version": "v1",
+  "format": "ndjson",
+  "base_token": "JChjbMdNzaOf2msRkgoc8qK4neb",
+  "table_id": "tbl2SfBro6BJxLDS",
+  "rev": 1,
+  "timezone": "Asia/Shanghai",
+  "query_context": {
+    "field_scope": "all_fields",
+    "record_scope": "all_records"
+  },
+  "requested_limit": 100,
+  "records_count": 8,
+  "page_count": 1,
+  "has_more": false,
+  "record_file": "/Users/longyi/project/账号对标/03-决策与复盘/control-plan/work/del-tbl2SfBro6BJxLDS.ndjson",
+  "record_file_size_bytes": 4007,
+  "manifest_file": "/Users/longyi/project/账号对标/03-决策与复盘/control-plan/work/del-tbl2SfBro6BJxLDS.manifest.json",
+  "columns": {
+    "record_id": {
+      "physical_type": "string",
+      "stats": {
+        "max_length": 16
+      },
+      "example": "reczz28ZVKOx3YXm"
+    },
+    "具体怎么做": {
+      "field_id": "fldoQCQnhu",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 94
+      },
+      "example": "一次拍 3 版：白墙、书桌、办公室门口；选眼神最稳的一张。不用 logo、卡通、生成脸；头像和置顶视频同一套衣服。"
+    },
+    "截止日": {
+      "field_id": "fldsZ3dtmQ",
+      "field_type": "datetime",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "min": "2026-11-14T20:00:00.000+08:00",
+        "max": "2026-11-20T20:00:00.000+08:00"
+      },
+      "example": "2026-11-15T20:00:00.000+08:00"
+    },
+    "现状": {
+      "field_id": "fldAoSKrws",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 25
+      },
+      "example": "无"
+    },
+    "目标状态": {
+      "field_id": "fldrQkrhPM",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 37
+      },
+      "example": "不看名字也能认出是同一个人"
+    },
+    "谁来做": {
+      "field_id": "fld86vzvZg",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 11
+      },
+      "example": "操盘手"
+    },
+    "项目": {
+      "field_id": "fldSYs0bQq",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 9
+      },
+      "example": "头像"
+    }
+  }
+}

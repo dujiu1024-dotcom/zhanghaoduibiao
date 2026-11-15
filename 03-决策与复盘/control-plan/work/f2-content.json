@@ -1,0 +1,9 @@
+[
+  {"name":"内容类型","type":"text"},
+  {"name":"占比","type":"text"},
+  {"name":"条数（30天）","type":"number","style":{"type":"plain","precision":0}},
+  {"name":"每条结构","type":"text"},
+  {"name":"素材从哪来","type":"text"},
+  {"name":"范例","type":"text"},
+  {"name":"为什么这个配比","type":"text"}
+]
