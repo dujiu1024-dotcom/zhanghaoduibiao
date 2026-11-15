@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Stage 8 Run Manifest",
+  "type": "object",
+  "required": ["run_id", "stage", "run_type", "started_at", "status", "repository_commit", "environment", "artifacts"],
+  "properties": {
+    "run_id": {"type": "string", "pattern": "^S8-[0-9]{8}-(CASE-0[1-5]|SYSTEM|RAG|MIGRATION)-[0-9]{3}$"},
+    "stage": {"const": 8},
+    "run_type": {"enum": ["case", "system", "rag", "migration"]},
+    "case_id": {"enum": ["CASE-01", "CASE-02", "CASE-03", "CASE-04", "CASE-05"]},
+    "started_at": {"type": "string", "format": "date-time"},
+    "finished_at": {"type": ["string", "null"], "format": "date-time"},
+    "status": {"enum": ["not_started", "blocked_local_environment", "running", "passed", "failed", "not_applicable"]},
+    "repository_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "environment": {
+      "type": "object",
+      "required": ["trae_version", "model", "workspace_trust"],
+      "properties": {
+        "trae_version": {"type": ["string", "null"]},
+        "model": {"type": ["string", "null"]},
+        "model_parameters": {"type": "object"},
+        "workspace_trust": {"type": ["string", "null"]},
+        "rules_version": {"type": ["string", "null"]},
+        "subagent_version": {"type": ["string", "null"]},
+        "skills_version": {"type": ["string", "null"]},
+        "mcp_configuration_version": {"type": ["string", "null"]},
+        "knowledge_snapshot": {"type": ["string", "null"]},
+        "rag_code_sha": {"type": ["string", "null"]},
+        "rag_parameters": {"type": "object"}
+      },
+      "additionalProperties": true
+    },
+    "input_artifacts": {"type": "array", "items": {"$ref": "#/$defs/artifact"}},
+    "artifacts": {"type": "array", "items": {"$ref": "#/$defs/artifact"}},
+    "scores": {
+      "type": "object",
+      "properties": {
+        "expert_scores": {"type": "object"},
+        "controller_score": {"type": ["number", "null"], "minimum": 0, "maximum": 100},
+        "veto_count": {"type": ["integer", "null"], "minimum": 0},
+        "decision": {"enum": ["pass", "fail", "blocked", "pending", null]}
+      },
+      "additionalProperties": true
+    },
+    "defect_issue_urls": {"type": "array", "items": {"type": "string", "format": "uri"}},
+    "notes": {"type": "string"}
+  },
+  "$defs": {
+    "artifact": {
+      "type": "object",
+      "required": ["path", "sha256", "artifact_type"],
+      "properties": {
+        "path": {"type": "string"},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "artifact_type": {"enum": ["input", "conversation_export", "tool_log", "blackboard", "agent_output", "scorecard", "rag_result", "migration_record", "screenshot", "report", "other"]}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
