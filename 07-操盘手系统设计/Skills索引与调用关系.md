@@ -65,13 +65,14 @@ flowchart TD
 - Skill 负责说明任务如何完成；Subagent 负责专业角色与独立分析；MCP Server 提供外部工具能力，三者不可混为一谈。
 - 项目技能仅在当前项目使用；项目目录必须在 TRAE 中设为可信，才能加载项目技能。
 - 技能命名遵循小写字母、数字和连字符，名称唯一；description 明确功能与触发场景，避免泛化词造成误触发。
+- 官方依据：<https://docs.trae.cn/ide_skills>；技能编写最佳实践：<https://docs.trae.cn/ide_best-practice-for-how-to-write-a-good-skill>。
 
 ### 静态验收记录
 
 | 检查项 | 本次结果 |
 |---|---|
 | Skill 数量 | 10 个 |
-| 目录名与 frontmatter name 一致 | 待 PR 静态脚本逐项复核 |
-| name / description 字段 | 待 PR 静态脚本逐项复核 |
-| 必需章节与输出契约 | 按 Issue #7 标准逐项复核 |
+| 目录名与 frontmatter name 一致 | 10/10 通过 |
+| name / description 字段 | 10/10 均存在且唯一 |
+| 必需章节与输出契约 | 10/10 均包含全部必需章节 |
 | TRAE 本机识别与自动触发 | 未测试，留待项目末尾统一真机验收 |
