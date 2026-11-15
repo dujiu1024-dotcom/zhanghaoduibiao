@@ -1,5 +1,8 @@
 ﻿# 2026-11-15 20:50 复核发现旧表合计与明细不平，已由本表替代，旧数作废；本表以 kbase.db 为唯一事实源，可引/可转述取自 metadata 授权字段
 # 未归类的书按「背景知识」留库，可检索、可作理解用，但不计入 77 格覆盖度——77 细类按作业动作划分，不对应动作的专著不硬归、不开新细类
+# 【对外唯一口径·单一事实源】总本数（去重）=370；可引原句=108；可转述=262；未归类=152；对上细类=218。别处引用一律指向本行，不再抄数字。
+# 去重口径：键＝docs.title 归一（截断「 / 」后的译名、去括号注、去标点空白、转小写），同一本书多载体合一组；不含 P0 替代材料（非原书）；未归类＝不对应 77 细类任何作业动作的背景知识。
+# 392 是书籍层文档篇数（375 个真实书载体 + 17 个 P0 载体），是篇数不是本数；388 是归位次数（236 个归位 + 152 未归类），跨细类重复计，也不是本数。
 细类编号,细类名称,本数,其中可引原句,其中可转述,书名清单（前 6 本）
 01-01,认知偏差与判断启发,3,0,3,Core-2-Research-Method-6-Replication-Project-Publication-Bias-in-Empirical-Socio；Option-14-Sociogenomics-Is-the-Effect-of-Parental-Education-on-Offspring-Biased-；Option-3-Online-Social-Networks-Week-8-Network-cognition-and-visualization-Human
 01-02,说服与态度改变,3,0,3,Option-14-Sociogenomics-Genetic-influence-on-age-at-first-birth-of-female-twins-；Option-3-Online-Social-Networks-Week-3-Sociocentric-and-partial-data-collection-；Option-3-Online-Social-Networks-Week-7-Dynamic-and-Generative-models-Social-sele
@@ -80,6 +83,6 @@
 99-02,心理阻抗与说服反噬,0,0,0,
 未归类,背景知识·不计入覆盖度,152,28,124,
 
-合计,按细类累加（含 15 本落两个细类，重复计；含未归类）,388,109,279,
-合计,去重后总数（按书名归一去重，不含 P0 替代材料）,370,108,262,
+合计,按细类累加（15 本落 2 个及以上细类，重复计 18 次；含未归类）,388,109,279,
+合计,去重后总数（＝上方「对外唯一口径」那一行；不含 P0 替代材料）,370,108,262,
 附,P0 替代材料（非原书，不计入本数）,17,0,17,

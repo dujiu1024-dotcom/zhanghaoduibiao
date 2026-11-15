@@ -260,6 +260,13 @@ def main():
 
     names = {v["编号"]: v["名称"] for v in subs.values()}
 
+    multi_books = sum(1 for r in rows if r["细类"].count("；") > 0)
+    extra_places = sum(r["细类"].count("；") for r in rows)
+    carriers = sum(int(r["载体数"]) for r in rows)
+    n_cite = sum(1 for r in rows if r["引用口径"] == "可引原句")
+    n_trans = sum(1 for r in rows if r["引用口径"] == "可转述")
+    places = sum(cnt.values())
+
     os.makedirs(OUTDIR, exist_ok=True)
     p1 = f"{OUTDIR}/书籍细类归位-逐本-{DAY}.csv"
     with open(p1, "w", encoding="utf-8-sig", newline="") as fh:
@@ -275,6 +282,14 @@ def main():
                     "本表以 kbase.db 为唯一事实源，可引/可转述取自 metadata 授权字段"])
         w.writerow(["# 未归类的书按「背景知识」留库，可检索、可作理解用，但不计入 77 格覆盖度"
                     "——77 细类按作业动作划分，不对应动作的专著不硬归、不开新细类"])
+        w.writerow([f"# 【对外唯一口径·单一事实源】总本数（去重）={len(rows)}；可引原句={n_cite}；"
+                    f"可转述={n_trans}；未归类={len(unmatched)}；对上细类={len(rows) - len(unmatched)}。"
+                    "别处引用一律指向本行，不再抄数字。"])
+        w.writerow(["# 去重口径：键＝docs.title 归一（截断「 / 」后的译名、去括号注、去标点空白、转小写），"
+                    "同一本书多载体合一组；不含 P0 替代材料（非原书）；"
+                    "未归类＝不对应 77 细类任何作业动作的背景知识。"])
+        w.writerow([f"# 392 是书籍层文档篇数（{carriers} 个真实书载体 + {len(p0)} 个 P0 载体），是篇数不是本数；"
+                    f"388 是归位次数（{places} 个归位 + {len(unmatched)} 未归类），跨细类重复计，也不是本数。"])
         w.writerow(["细类编号", "细类名称", "本数", "其中可引原句", "其中可转述", "书名清单（前 6 本）"])
         for v in sorted(subs.values(), key=lambda x: x["编号"]):
             c = v["编号"]
@@ -283,11 +298,11 @@ def main():
                     sum(1 for r in unmatched if r["引用口径"] == "可引原句"),
                     sum(1 for r in unmatched if r["引用口径"] == "可转述"), ""])
         w.writerow([])
-        w.writerow(["合计", f"按细类累加（含 {sum(1 for r in rows if r['细类'].count('；') > 0)} 本落两个细类，重复计；含未归类）",
+        w.writerow(["合计", f"按细类累加（{multi_books} 本落 2 个及以上细类，重复计 {extra_places} 次；含未归类）",
                     sum(cnt.values()) + len(unmatched),
                     sum(cite.values()) + sum(1 for r in unmatched if r["引用口径"] == "可引原句"),
                     sum(trans.values()) + sum(1 for r in unmatched if r["引用口径"] == "可转述"), ""])
-        w.writerow(["合计", "去重后总数（按书名归一去重，不含 P0 替代材料）", len(rows),
+        w.writerow(["合计", "去重后总数（＝上方「对外唯一口径」那一行；不含 P0 替代材料）", len(rows),
                     sum(1 for r in rows if r["引用口径"] == "可引原句"),
                     sum(1 for r in rows if r["引用口径"] == "可转述"), ""])
         w.writerow(["附", "P0 替代材料（非原书，不计入本数）", len(p0),
