@@ -2,7 +2,7 @@
 
 **执行日期：** 2026-11-16 17:20–17:40（本机时间）
 **执行环境：** Trae CN 3.4.20，Python 3.14.6，Git HEAD `086d4ac942540f02aeac8868a5b914247101b231`
-**仓库：** `dujiu1024-dotcom/zhanghaoduibiao`（本机路径：`/Users/longyi/project/账号对标`）
+**仓库：** `dujiu1024-dotcom/zhanghaoduibiao`（本机路径：`<本机仓库根目录>`）
 **执行依据：** `批次C-仓库静态审计与真机取证清单.md` 第 4 节（C1-A/B/C 命令组）。PR #32 引用的细项命令文件 `02-C1-Trae本机只读采集命令.md` 本机仓库未合入，本报告按已合入清单的命令执行。
 **约束遵守：** 全程只读，未执行 ingest/rebuild/retag/迁移/删除/覆盖/参数变更。所有 SQLite 访问使用 `mode=ro` 只读 URI + `PRAGMA query_only=ON` 双重锁写。未接触任何客户隐私内容。
 
