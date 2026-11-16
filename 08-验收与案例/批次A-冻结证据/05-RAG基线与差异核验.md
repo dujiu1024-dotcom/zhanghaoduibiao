@@ -1,6 +1,6 @@
 # 05 · RAG 基线与差异核验
 
-- 生成时间：2026-11-16 10:20（CST）
+- 生成时间：2026-11-16 10:20（CST）；修订：2026-11-16 10:40（CST，A-04 落档 U5/U11，未重新采集）
 - 采集方式：只读。未执行 `ingest`、`rebuild`、`eval`、`retag`、数据库迁移或索引重建；对 `kbase.db` 仅使用 `sqlite3 "file:...?mode=ro"` 与只读 `sqlite_vec` 连接执行 `select/count`。
 - 关联快照：`02-环境配置快照.json` 的 `rag` 区块；`03-Run-Manifest.json` 的 `environment.rag_*`。
 
@@ -18,7 +18,7 @@
 | 参数 | rag.py 默认值 | README 值 | 评测使用值 | 最终冻结值 | 证据 |
 |---|---:|---:|---:|---|---|
 | `SIM_FLOOR` | 0.66 | 0.66（`rag/README.md` 参数表） | 0.66（`eval/report.md`） | **0.66（待用户确认）** | `rag.py` 第 57 行；README；eval 报告 |
-| `ANSWER_MIN_COVERAGE` | **0.50** | **0.40**（参数表） | 0.4（`eval/report.md`） | **待确认（代码 0.50 / 文档 0.40 冲突）** | `rag.py` 第 70 行；README；eval 报告 |
+| `ANSWER_MIN_COVERAGE` | **0.50** | **0.40**（参数表，历史口径） | 0.4（`eval/report.md`，历史口径） | **按运行分支冻结（U5，见 2.5）：`SHORT_RELAX=0` → 0.50；`SHORT_RELAX=1` → 动态 0.22–0.40；`RAG_ANSWER_MIN_COVERAGE` 可覆盖** | `rag.py` 第 70、94–115 行；README；eval 报告 |
 | `COVERAGE_FLOOR` | 0.32 | 0.32 | 0.32 | 0.32（待用户确认） | `rag.py` 第 64 行；README；eval 报告 |
 | `OOV_FLOOR` | 0.50 | 0.50 | 0.5 | 0.50（待用户确认） | `rag.py` 第 113 行；README；eval 报告 |
 | `CROSS_PENALTY` | 0.9 | 未列 | 未列 | 0.9（代码唯一来源） | `rag.py` 第 60 行 |
@@ -29,10 +29,10 @@
 | `EMBED_MODEL` | bge-m3 | bge-m3 | bge-m3 | bge-m3 | `rag.py` 第 39 行；Ollama |
 | `EMBED_DIM` | 1024 | 1024 | 1024 | 1024 | `rag.py` 第 40 行；Ollama 返回 1024 维 |
 | `EMBED_BATCH` | 32 | 未列 | 未列 | 32 | `rag.py` 第 41 行 |
-| Top-K 展示条数 | 由调用方 `k` 决定（API 默认 5） | 默认 5/10 | 5/10 | **无唯一值：分入口 5 / 10 / 50（见 2.2）** | `rag.py` 命令参数；2.2 调用链表 |
+| Top-K 展示条数 | 由调用方 `k` 决定（API 默认 5） | 默认 5/10 | 5/10 | **按入口冻结（5 / 10 / 50，见 2.2、2.5）；不适用全局唯一值** | `rag.py` 命令参数；2.2 调用链表 |
 | 重排模型 | 无实现 | 未提 | 未提 | **N/A（仓库无重排）** | 代码无 rerank 模块 |
 
-**冻结结论**：当前只可冻结「代码默认值 + 库哈希」这一事实基线；`ANSWER_MIN_COVERAGE` 因代码 0.50 与 README 0.40 冲突，**不得自行统一**，标为待确认。`knowledge-v2/README.md` 称「代码默认 `SIM_FLOOR=0.60`」与 HEAD 实测 0.66 不符，标为过期文档。第 2.1–2.3 节为 A-03 追加的静态调用链核验：第 2 节表格中的数值均为**源码默认值**，运行时覆盖值与可确定有效值分列于各表。
+**冻结结论**：以「代码默认值 + 库哈希」为事实基线。`ANSWER_MIN_COVERAGE` 已按运行分支冻结（U5：`SHORT_RELAX=0` 时 0.50；`SHORT_RELAX=1` 时走 `dynamic_cover_floor()` 动态 0.22–0.40；`RAG_ANSWER_MIN_COVERAGE` 可覆盖；README/eval 的 0.40 为历史文档口径），**不再裁决为 0.50 与 0.40 二选一**。Top-K 已按入口冻结（U11，见 2.5），不要求全局唯一值。`knowledge-v2/README.md` 称「代码默认 `SIM_FLOOR=0.60`」与 HEAD 实测 0.66 不符，标为过期文档。第 2.1–2.5 节为 A-03/A-04 静态调用链与裁决落档：第 2 节表格中的数值均为**源码默认值**，运行时覆盖值与可确定有效值分列于各表。
 
 ### 2.1 `ANSWER_MIN_COVERAGE` 静态调用链核验（A-03，只读）
 
@@ -73,7 +73,7 @@
 | `catalog/work/batch6_failed_list.py` | `k=5` | 5 | `batch6_failed_list.py` L51 |
 | `catalog/work/batch6_rank_diag.py` | `k=10` | 10 | `batch6_rank_diag.py` L48 |
 
-**结论**：**不存在唯一 Top-K，不得强行定义**。已冻结的是分入口口径：生产检索与审计 5、验收 Recall 10、深诊断候选上界 50（`check_recall.py` L285–286 说明 sqlite-vec KNN LIMIT 4096 使 k 最大约 51）。若需唯一值，须由用户裁决并同步修改各入口。
+**结论**：**不存在全局唯一 Top-K，也不应强行定义**。已冻结的是分入口口径：生产检索与审计默认 5、验收 Recall 10、深诊断候选上界 50（`check_recall.py` L285–286 说明 sqlite-vec KNN LIMIT 4096 使 k 最大约 51）。U11 已裁决：Top-K 为入口级配置，按入口冻结，不要求全局唯一值；不修改任何调用入口。
 
 ### 2.3 其他参数：源码默认 / 运行时覆盖 / 实际有效值（A-03，只读）
 
@@ -96,6 +96,37 @@
 ### 2.4 核验边界（A-03）
 
 只读静态核验：未执行 `search`、`eval`、`ingest`、`rebuild`、`retag`、数据库迁移或索引重建；未修改 `rag.py`、`rag/README.md`、`eval/report.md` 或任何配置；未设置任何 `RAG_*` 环境变量。
+
+### 2.5 A-04 用户裁决落档（U5 / U11）
+
+**U5 `ANSWER_MIN_COVERAGE` 按运行分支冻结**（不把 0.50 与 0.40 裁决为二选一）：
+
+| 条件 | 阈值行为 | 冻结说明 |
+|---|---|---|
+| `SHORT_RELAX=0`（源码默认，当前 shell 可观测） | `ANSWER_MIN_COVERAGE = 0.50` | 当前源码默认行为 |
+| `SHORT_RELAX=1` | 动态阈值 0.22 / 0.30 / 0.36 / 0.40 | 以 `dynamic_cover_floor()` 实际逻辑为准（`rag.py` L94–115） |
+| `RAG_ANSWER_MIN_COVERAGE` 环境变量 | 覆盖默认值 | 记录运行时环境覆盖；未观测到的外部环境不得猜测 |
+| `rag/README.md` L132 / `eval/report.md` L11 的 0.40 | 历史文档口径 | 不冒充当前源码默认值 |
+
+- 源码默认值：**0.50**。当前 shell 可观测值：**0.50**（无 `RAG_*` 变量）。外部运行环境未知值：**unknown**（不得猜测）。
+- 后续实际执行（如批次 B/C 跑 eval）必须把当时环境变量、`SHORT_RELAX` 状态与最终有效阈值写入 Run Manifest。
+- 未修改 `rag.py`、`rag/README.md`、`eval/report.md` 或任何参数。
+
+**U11 Top-K 按入口冻结**（入口级配置，不是全局单值）：
+
+| 入口 | Top-K |
+|---|---:|
+| CLI `search` 默认 | 5 |
+| CLI `eval` 默认 | 5 |
+| Python API `search()` / `fuse()` / `legacy_search()` 默认 | 5 |
+| `check_recall.py` 常规 | 10 |
+| `check_recall.py` 深诊断 | 50 |
+| `retrieval_diag.py` | 5 / 50 |
+| `batch6_rank_diag.py` | 10 |
+| `audit_a.py` / `check_gate.py` / `batch6_failed_list.py` | 5 |
+
+- 10 与 50 属验收/诊断脚本口径，**不得冒充生产检索默认值**；生产检索与审计默认 5。
+- 未修改任何调用入口，不统一参数，不定义全局唯一 Top-K。
 
 ## 3. 评测与题集
 

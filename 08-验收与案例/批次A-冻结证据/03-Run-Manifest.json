@@ -5,13 +5,15 @@
   "run_scope": "批次 A：环境与配置冻结证据归档（只读采集；不含批次 B-E 运行测试）",
   "started_at": "2026-11-16T10:00:00+08:00",
   "finished_at": "2026-11-16T10:20:00+08:00",
+  "revised_at": "2026-11-16T10:40:00+08:00",
+  "revision_note": "A-04 用户裁决落档：仅修正状态与口径，未重新采集环境；model_display_status、blockers、ANSWER_MIN_COVERAGE 冻结说明、Top-K 冻结说明已更新",
   "status": "completed_with_blockers",
   "repository_commit": "88a31efa7deac7a53d8d646471e0e2adc7e4b753",
   "linked_environment_snapshot": "S8-20261116-A02-FREEZE-001",
   "environment": {
     "trae_version": "3.4.20 (Build 3.4.20)",
     "model": "DeepSeek-V4.1-Flash",
-    "model_display_status": "session_declared_ui_unverified",
+    "model_display_status": "user_confirmed_ui",
     "model_parameters": {},
     "model_parameters_unavailable": [
       "temperature",
@@ -33,6 +35,7 @@
       "POOL_MIN": 50,
       "COVERAGE_FLOOR": 0.32,
       "ANSWER_MIN_COVERAGE": 0.5,
+      "ANSWER_MIN_COVERAGE_freeze_rule": "U5 按运行分支冻结：SHORT_RELAX=0 → 0.50（源码默认，当前 shell 可观测）；SHORT_RELAX=1 → 动态 0.22/0.30/0.36/0.40；RAG_ANSWER_MIN_COVERAGE 环境变量可覆盖；rag/README.md 的 0.40 为历史文档口径",
       "STRICT_ANSWER": false,
       "SHORT_RELAX": false,
       "ENTITY_GATE": false,
@@ -40,7 +43,8 @@
       "EMBED_MODEL": "bge-m3",
       "EMBED_DIM": 1024,
       "EMBED_BATCH": 32
-    }
+    },
+    "top_k_freeze_rule": "U11 按入口冻结，不适用全局唯一值：CLI/API 默认 5；check_recall 常规 10、深诊断 50；retrieval_diag 5/50；batch6_rank_diag 10；audit_a/check_gate/batch6_failed_list 5。10/50 属验收/诊断脚本，不得冒充生产检索默认值。"
   },
   "input_artifacts": [
     {
@@ -114,13 +118,15 @@
     "db_segments": 536707
   },
   "blockers": [
-    "模型推理参数不可读",
-    "模型选中项无机器证明",
-    "知识正文与当前库无完整备份",
-    "库结构与 HEAD 代码不一致",
-    "B/C/D/E 层未建",
-    "metadata/切段无版本号",
-    "48 个未跟踪项待裁决"
+    "A3.2：模型推理参数 unknown_not_exposed（温度/top_p/最大输出/思考档位/上下文均不可读）",
+    "A6.3：参考要点与反证注入材料的具体位置与保管人尚未登记（U8：用户保管，批次 D 盲测准备前登记）"
   ],
-  "notes": "字段沿用仓库模板；scores 不适用留空。本 Manifest 不代表批次 A 通过，状态为 completed_with_blockers。"
+  "followup_risks": [
+    "知识正文与当前 kbase.db 无完整可恢复备份——批次 C 迁移/重建/写库前高风险前置条件（U4）",
+    "kbase.db 结构与 HEAD rag.py 不一致，rebuild 不可完全复现",
+    "B/C/D/E 知识层未建立——只记现状，不构成本批次失败（U7）",
+    "metadata schema 与切段策略无版本号——已记 NO_VERSION_DECLARED",
+    "48 个未跟踪文件已分类，U3 裁决不删除/移动/重命名/清理"
+  ],
+  "notes": "A-04 修订后 blockers 仅 2 项；其余事项已按用户裁决（U3/U4/U7/U10）转为后续风险或现状。scores 不适用留空。本 Manifest 不代表批次 A 通过，状态为 completed_with_blockers。"
 }
