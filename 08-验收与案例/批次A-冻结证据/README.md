@@ -35,7 +35,7 @@
 |---|---|
 | 主验收环境 | Trae CN 3.4.20（Build 3.4.20），macOS 27.0.1 arm64，运行中 |
 | 仓库 | `dujiu1024-dotcom/zhanghaoduibiao`，`main` @ `88a31efa7deac7a53d8d646471e0e2adc7e4b753` |
-| 工作区 | 0 修改、0 暂存、**44 个顶层路径 / 48 个实际文件**（43 个散文件 + `2026-11-16/` 目录内 5 个文件） |
+| 工作区 | 0 修改、0 暂存、**44 个顶层路径 / 48 个实际文件**（42 个散文件 + `03-决策与复盘/work/` 1 个 + `2026-11-16/` 5 个） |
 | 模型 | 会话声明 `DeepSeek-V4.1-Flash`；V4 与 V4.1 为不同条目；参数 `unknown_not_exposed`；UI 待目视确认 |
 | Rules / Subagents / Skills | 3 / 6 / 10 个文件，PRESENT + RECOGNIZED；**未做 RUNTIME_VERIFIED** |
 | MCP | 项目级无配置（N/A）；全局 MCP 不纳入本项目 |
