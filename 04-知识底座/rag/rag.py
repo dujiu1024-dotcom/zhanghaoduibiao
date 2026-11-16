@@ -32,7 +32,8 @@ BASE = HERE.parent                    # 04-知识底座
 PROJECT = BASE.parent                 # 账号对标
 KNOW = BASE / "knowledge"
 SOURCES = KNOW / "sources"
-DB_PATH = Path(os.environ.get("KBASE_DB", str(HERE / "kbase.db"))).expanduser().resolve()
+_DB_PATH = Path(os.environ.get("KBASE_DB", str(HERE / "kbase.db"))).expanduser()
+DB_PATH = _DB_PATH if _DB_PATH.is_absolute() else (Path.cwd() / _DB_PATH)
 GRAPH_JSON = BASE / "图谱" / "graph.json"
 
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://127.0.0.1:11434")
@@ -193,7 +194,9 @@ def connect(path: Path = DB_PATH, create: bool = False, allow_create: bool = Fal
     默认不创建数据库。只有显式 create=True 且 allow_create=True 才允许创建缺失文件；
     readonly=True 使用 SQLite mode=ro，且不执行可能改变数据库文件状态的 PRAGMA。
     """
-    path = Path(path).expanduser().resolve()
+    path = Path(path).expanduser()
+    if not path.is_absolute():
+        path = Path.cwd() / path
     if readonly and create:
         raise ValueError("只读连接不能同时请求建库/建表")
     if not path.exists() and not (create and allow_create and not readonly):
@@ -737,6 +740,8 @@ def cmd_retag(args):
 def cmd_rebuild(args):
     if not args.confirm_rebuild:
         sys.exit("拒绝执行 rebuild：该命令会删除当前 KBASE_DB。核对目标路径并显式添加 --confirm-rebuild。")
+    if DB_PATH.is_symlink():
+        sys.exit(f"拒绝执行 rebuild：目标路径是符号链接：{DB_PATH}。请显式指定真实数据库文件路径后再评估。")
     if not DB_PATH.exists():
         sys.exit(f"拒绝执行 rebuild：目标数据库不存在：{DB_PATH}。不会自动创建新库；如确需初始化，请使用 init --allow-create。")
     check_embedder()
