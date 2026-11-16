@@ -1,16 +1,14 @@
 {
   "freeze_id": "S8-20261116-A02-FREEZE-001",
-  "status": "captured_with_deferred_conditions",
+  "status": "captured_with_blockers",
   "captured_at": "2026-11-16T10:20:00+08:00",
-  "revised_at": "2026-11-16T14:00:00+08:00",
-  "revision_note": "A-06 用户裁决：A6.3 拆分为 A6.3a 与 A6.3b；A6.3a（外部位置已指定为用户电脑桌面 Desktop、保管人为用户本人）通过；A6.3b（专用目录创建及盲测材料实际存放）延期至批次 D 启动前确认；不阻挡批次 B/C",
   "generated_by": "阶段8批次A 环境冻结证据包",
   "repository": {
     "full_name": "dujiu1024-dotcom/zhanghaoduibiao",
     "branch": "main",
     "commit_sha": "88a31efa7deac7a53d8d646471e0e2adc7e4b753",
     "working_tree_clean": false,
-    "uncommitted_changes_summary": "0 个已跟踪文件修改、0 个暂存变更、44 个顶层未跟踪路径（展开 48 个实际文件：32 个 checks 快照、1 个 SOP 备份、10 个书籍巡检抓取中间件、5 个 A-01/A-02 输出文件）",
+    "uncommitted_changes_summary": "0 个已跟踪文件修改、0 个暂存变更、48 个未跟踪文件（32 个 checks 快照、1 个 SOP 备份、10 个书籍巡检抓取中间件、5 个 A-01/A-02 输出文件）",
     "tracked_file_count": 623,
     "commit_count": 33
   },
@@ -42,9 +40,7 @@
     "name": "DeepSeek-V4.1-Flash",
     "version": null,
     "configuration_scope": "会话级",
-    "display_status": "user_confirmed_ui",
-    "selection_confirmed_at": "2026-11-16",
-    "confirmation_evidence": "用户在 Trae CN 3.4.20 UI 目视确认当前模型为 DeepSeek-V4.1-Flash；属用户观察，非客户端状态库机器证明",
+    "display_status": "session_declared_ui_unverified",
     "effective_parameters": {},
     "unavailable_parameters": [
       "temperature",
@@ -54,20 +50,7 @@
       "context_window_effective"
     ],
     "distinct_model_warning": "客户端模型清单同时存在 deepseek-v4.1-flash 与 deepseek-v4-flash 两个独立条目，不得混同",
-    "evidence": "会话上下文声明 + Trae CN globalStorage/state.vscdb 的 model_list_map；session_selected_model 无 DeepSeek 记录（事实保留，用户确认不等同机器证明）",
-    "parameter_acceptance": {
-      "status": "user_accepted_unknown_not_exposed",
-      "accepted_at": "2026-11-16",
-      "accepted_by": "用户",
-      "parameters": [
-        "temperature",
-        "top_p",
-        "max_output_tokens",
-        "thinking_budget",
-        "context_window_effective"
-      ],
-      "note": "用户接受未知状态作为本批次最终冻结结果；实际参数值仍不可读，不使用默认值代填"
-    }
+    "evidence": "会话上下文声明 + Trae CN globalStorage/state.vscdb 的 model_list_map；session_selected_model 无 DeepSeek 记录"
   },
   "agent_configuration": {
     "rules": {
@@ -176,8 +159,6 @@
     "metadata_records": 776,
     "metadata_schema_version": null,
     "chunking_strategy_version": null,
-    "version_declaration": "NO_VERSION_DECLARED",
-    "chunking_strategy": "rag.py split_markdown() + chunk_block(limit=1200)；字段结构以 metadata.csv 14 列表头为准",
     "index_version": "kbase.db SHA256 40744a5fefedad80a1a4b78f4672345d7df3493fd7d4cad9b6b3a613cd6d7923",
     "access_control_config_sha256": null,
     "backup_status": "当前库无同版本可恢复备份；知识正文无完整备份且不在 Git"
@@ -195,7 +176,6 @@
       "POOL_MIN": 50,
       "COVERAGE_FLOOR": 0.32,
       "ANSWER_MIN_COVERAGE": 0.5,
-      "ANSWER_MIN_COVERAGE_freeze_rule": "U5 按运行分支冻结：SHORT_RELAX=0 → 0.50（源码默认，当前 shell 可观测）；SHORT_RELAX=1 → 动态 0.22/0.30/0.36/0.40；RAG_ANSWER_MIN_COVERAGE 环境变量可覆盖；rag/README.md 的 0.40 为历史文档口径",
       "STRICT_ANSWER": false,
       "SHORT_RELAX": false,
       "ENTITY_GATE": false,
@@ -204,7 +184,6 @@
       "EMBED_DIM": 1024,
       "EMBED_BATCH": 32
     },
-    "top_k_freeze_rule": "U11 按入口冻结，不适用全局唯一值：CLI/API 默认 5；check_recall 常规 10、深诊断 50；retrieval_diag 5/50；batch6_rank_diag 10；audit_a/check_gate/batch6_failed_list 5。10/50 属验收/诊断脚本，不得冒充生产检索默认值。",
     "unavailable_parameters": [
       "top_k_runtime",
       "rerank_model",
@@ -233,8 +212,8 @@
     "scorecard_version": "08-验收与案例/评分量表.md @ 10ff9dd3e89b3655b202c022a5ae67c71dcb8f0e4e7616c42e47a20b2e88496b",
     "blind_test_template_version": "08-验收与案例/盲测记录模板.md @ 668d8c54c8ac5d2559d0fc8a0fc3726961842705442d1010db7090f83169d535",
     "report_template_version": "08-验收与案例/压力测试报告模板.md @ a479b96ea5fc9ed00655509efe89560bcb47c2bbd5a13ef2aa4be97e4c544148",
-    "reference_materials_outside_test_workspace": "用户电脑桌面（Desktop）；专用目录及盲测材料实际存放状态延期至批次 D 启动前确认（A6.3b）",
-    "reference_materials_custodian": "用户本人"
+    "reference_materials_outside_test_workspace": null,
+    "reference_materials_custodian": null
   },
   "evidence": {
     "local_evidence_directory": "08-验收与案例/批次A-冻结证据/",
@@ -246,16 +225,14 @@
     "hash_manifest": "06-知识库快照清单.csv（954 行逐文件 SHA256）",
     "sensitive_values_redacted": true
   },
-  "blockers": [],
-  "followup_risks": [
-    "知识正文与当前 kbase.db 无完整可恢复备份——批次 C 迁移/重建/写库前高风险前置条件（U4）",
+  "blockers": [
+    "模型推理参数 unknown_not_exposed",
+    "无法从客户端状态库证明当前选中模型",
+    "知识正文与当前 kbase.db 无完整可恢复备份",
     "kbase.db 结构与 HEAD rag.py 不一致，rebuild 不可完全复现",
-    "B/C/D/E 知识层未建立——只记现状，不构成本批次失败（U7）",
-    "metadata schema 与切段策略无版本号——已记 NO_VERSION_DECLARED",
-    "48 个未跟踪文件已分类，U3 裁决不删除/移动/重命名/清理"
+    "B/C/D/E 知识层未建立",
+    "metadata schema 与切段策略无版本号",
+    "48 个未跟踪项去留待用户确认"
   ],
-  "notes": "A-05 用户裁决后 blockers 仅 1 项（A6.3）；A3.2 五项推理参数仍为 unknown_not_exposed，用户已接受该未知状态作为本批次最终冻结结果，不代表实际参数值已知或已验证。其余事项按用户裁决（U3/U4/U7/U10）作为后续风险或现状记录。所有字段为实测值或显式 unknown/null + 原因；未使用默认值代填；未包含密钥与个人路径。",
-  "deferred_conditions": [
-    "A6.3b：批次 D 启动前确认桌面专用目录已创建且盲测参考要点与反证注入材料已实际存入；材料不得进入被测工作区、项目仓库或知识库。"
-  ]
+  "notes": "所有字段为实测值或显式 unknown/null + 原因；未使用默认值代填；未包含密钥与个人路径。"
 }
