@@ -1,9 +1,8 @@
 """Regression tests for RAG database path and write-safety guards.
 
 Run from the repository root:
-    python -m unittest 04-知识底座.rag.test_db_safety
+    python 04-知识底座/rag/test_db_safety.py
 """
-import importlib
 import sqlite3
 import sys
 import tempfile
