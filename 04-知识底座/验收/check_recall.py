@@ -16,6 +16,7 @@ import argparse
 import csv
 import hashlib
 import json
+import os
 import re
 import sqlite3
 import subprocess
@@ -30,7 +31,7 @@ QB_DIR = HERE / "题库"
 RAG_DIR = BASE / "rag"
 RAG_PY = RAG_DIR / "rag.py"
 RAG_VENV = RAG_DIR / ".venv" / "bin" / "python"
-DB = RAG_DIR / "kbase.db"
+DB = Path(os.environ.get("KBASE_DB", str(RAG_DIR / "kbase.db"))).expanduser().resolve()
 
 COLUMNS = ["题号", "问题原文", "gold路径", "gold段号", "判定标准",
            "期望能否引原文", "期望", "无料归因", "补料建议"]
