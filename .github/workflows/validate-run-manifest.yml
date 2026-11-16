@@ -1,0 +1,33 @@
+name: Validate Run Manifest Schema
+
+on:
+  pull_request:
+    paths:
+      - "08-验收与案例/run-manifest.schema.json"
+      - "scripts/validate-run-manifest.mjs"
+      - ".github/workflows/validate-run-manifest.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "08-验收与案例/run-manifest.schema.json"
+      - "scripts/validate-run-manifest.mjs"
+      - ".github/workflows/validate-run-manifest.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install JSON Schema validator
+        run: npm install --no-save ajv@8 ajv-formats@3
+      - name: Compile and test Draft 2020-12 schema
+        run: node scripts/validate-run-manifest.mjs
