@@ -185,18 +185,32 @@ work/cases/stage8-c1-readonly-followup-20261116/
 
 只提交脱敏后的输入输出和证据索引；不得提交本机绝对路径、令牌、客户隐私、数据库文件、metadata.csv 原件或盲测参考材料。
 
-完成后仅暂存本次证据目录，不要使用 `git add .`：
+完成后按批次拆成两个独立分支和两个 Draft PR，不要混合批次：
 
+**PR A：批次 B 证据**
 ```bash
 git status --short
+git switch -c evidence/stage8-batch-b-rerun-20261116
 git add work/cases/stage8-batch-b-rerun-20261116/
 git diff --cached --stat
-git commit -m "docs(stage8): add batch B rerun and C1 readonly evidence"
-git push -u origin <新分支名>
+git commit -m "docs(stage8): add batch B rerun evidence"
+git push -u origin evidence/stage8-batch-b-rerun-20261116
 ```
+创建 Draft PR，关联 Issues #27、#30、#9。
 
-随后创建一个只包含本轮证据的 Draft PR，关联 Issues #27、#28、#30、#9。不要把任何 C1 源码审计报告或代码改动混入 B-08 原始运行证据文件夹。
+**PR B：批次 C1 只读取证**
+```bash
+git switch main
+git status --short
+git switch -c evidence/stage8-c1-readonly-followup-20261116
+git add work/cases/stage8-c1-readonly-followup-20261116/
+git diff --cached --stat
+git commit -m "docs(stage8): add C1 readonly follow-up evidence"
+git push -u origin evidence/stage8-c1-readonly-followup-20261116
+```
+创建独立 Draft PR，关联 Issues #28、#30、#9。
 
+两次切换前均必须确认工作区干净。若第一支分支提交后仍有未提交文件，先停止并报告；不得把 B 证据带入 C1 分支。不要使用 `git add .`，不要把 C1 文件、源码审计报告或代码改动混入 B-08 原始运行证据 PR。
 ## 5. 本轮明确不启动的工作
 
 ### C2 备份与隔离恢复
