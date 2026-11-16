@@ -5,9 +5,9 @@
   "run_scope": "批次 A：环境与配置冻结证据归档（只读采集；不含批次 B-E 运行测试）",
   "started_at": "2026-11-16T10:00:00+08:00",
   "finished_at": "2026-11-16T10:20:00+08:00",
-  "revised_at": "2026-11-16T11:44:00+08:00",
-  "revision_note": "A-05 用户裁决补充：A3.2 接受 unknown_not_exposed 作为最终冻结状态并解除该项阻塞；A6.3 要求存放于被测工作区之外并由用户本人保管；用户已指定外部保管位置为其电脑桌面（Desktop），保管人为用户本人；桌面专用目录是否创建、参考材料是否已实际存入尚未确认；未重新采集环境",
-  "status": "completed_with_blockers",
+  "revised_at": "2026-11-16T14:00:00+08:00",
+  "revision_note": "A-06 用户裁决：A6.3 拆分为 A6.3a 与 A6.3b；A6.3a（外部位置已指定为用户电脑桌面 Desktop、保管人为用户本人）通过；A6.3b（专用目录创建及盲测材料实际存放）延期至批次 D 启动前确认；不阻挡批次 B/C",
+  "status": "passed_with_deferred_conditions",
   "repository_commit": "88a31efa7deac7a53d8d646471e0e2adc7e4b753",
   "linked_environment_snapshot": "S8-20261116-A02-FREEZE-001",
   "environment": {
@@ -58,9 +58,9 @@
       ],
       "note": "用户接受未知状态作为本批次最终冻结结果；实际参数值仍不可读，不使用默认值代填"
     },
-    "reference_materials_location_type": "external_to_test_workspace_user_desktop_selected_actual_directory_pending",
-    "reference_materials_path": "用户已指定电脑桌面（Desktop）作为被测工作区之外的外部保管位置；桌面专用目录是否创建、参考材料是否已实际存入尚未确认（按 U8，批次 D 盲测准备前确认）",
-    "reference_materials_custodian": "用户本人（已指定保管人；目录及材料实际落地状态待确认）"
+    "reference_materials_location_type": "external_to_test_workspace_user_desktop_selected",
+    "reference_materials_path": "用户电脑桌面（Desktop）；专用目录及盲测材料实际存放状态延期至批次 D 启动前确认（A6.3b）",
+    "reference_materials_custodian": "用户本人"
   },
   "input_artifacts": [
     {
@@ -141,9 +141,7 @@
     "db_docs": 807,
     "db_segments": 536707
   },
-  "blockers": [
-    "A6.3：参考要点与反证注入材料须存放于被测工作区之外并由用户本人保管；用户已指定外部保管位置为其电脑桌面（Desktop），保管人为用户本人；桌面专用目录是否创建、参考材料是否已实际存入尚未确认（U8，批次 D 盲测准备前登记）"
-  ],
+  "blockers": [],
   "followup_risks": [
     "知识正文与当前 kbase.db 无完整可恢复备份——批次 C 迁移/重建/写库前高风险前置条件（U4）",
     "kbase.db 结构与 HEAD rag.py 不一致，rebuild 不可完全复现",
@@ -151,5 +149,8 @@
     "metadata schema 与切段策略无版本号——已记 NO_VERSION_DECLARED",
     "48 个未跟踪文件已分类，U3 裁决不删除/移动/重命名/清理"
   ],
-  "notes": "A-05 用户裁决后 blockers 仅 1 项（A6.3）。A3.2 五项推理参数仍为 unknown_not_exposed，用户已接受该未知状态作为本批次最终冻结结果；不代表参数实际值已知或已验证。scores 不适用留空。本 Manifest 不代表批次 A 通过，状态为 completed_with_blockers。"
+  "notes": "A-06 用户裁决后，批次 A 验收状态为 passed_with_deferred_conditions：A6.3a 已通过；A6.3b 为批次 D 的启动前置条件，不阻挡批次 B/C。A3.2 五项推理参数仍为 unknown_not_exposed，用户接受该未知状态作为冻结例外，不代表实际参数值已知或已验证。A-01/A-02 原始输入的本机来源可追溯性限制继续按 input_artifacts 明示。",
+  "deferred_conditions": [
+    "A6.3b：批次 D 启动前，由用户确认桌面专用目录已创建且盲测参考要点与反证注入材料已实际存入；材料始终不得进入被测工作区、项目仓库或知识库。"
+  ]
 }
