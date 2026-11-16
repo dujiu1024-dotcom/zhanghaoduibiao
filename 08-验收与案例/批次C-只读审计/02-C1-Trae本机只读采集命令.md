@@ -134,9 +134,9 @@ find "04-知识底座" -maxdepth 4 \( -name "kbase.db" -o -name "*.db-wal" -o -n
 python3 - <<'PY'
 import os, sqlite3, json
 candidates = [
- "04-知识底座/rag/kbase.db",
  "04-知识底座/kbase.db",
  "04-知识底座/knowledge/kbase.db",
+ "04-知识底座/rag/kbase.db",
 ]
 out = []
 for path in candidates:
