@@ -13,7 +13,7 @@ from collections import Counter, defaultdict
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))   # 04-知识底座
 PROJECT = os.path.dirname(BASE)
-DB = os.path.join(BASE, "rag", "kbase.db")
+DB = os.path.abspath(os.path.expanduser(os.environ.get("KBASE_DB", os.path.join(BASE, "rag", "kbase.db"))))
 META = os.path.join(BASE, "knowledge", "sources", "metadata.csv")
 CAT = os.path.join(BASE, "catalog", "catalog.csv")
 
