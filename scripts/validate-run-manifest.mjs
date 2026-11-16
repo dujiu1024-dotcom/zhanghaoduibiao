@@ -44,6 +44,7 @@ const validNotStarted = {
   artifacts: []
 };
 
+const { blockers: _ignored, ...blockedWithoutBlockers } = validBlocked;
 const cases = [
   ["valid passed manifest", validPassed, true],
   ["valid completed_with_blockers manifest with legacy path artifact", validBlocked, true],
@@ -57,10 +58,7 @@ const cases = [
     ...validPassed,
     blockers: ["unresolved"]
   }, false],
-  ["completed_with_blockers without blockers", {
-    ...validBlocked,
-    blockers: undefined
-  }, false],
+  ["completed_with_blockers without blockers", blockedWithoutBlockers, false],
   ["completed_with_blockers with empty blockers", {
     ...validBlocked,
     blockers: []
