@@ -1,0 +1,89 @@
+{
+  "run_id": "S8-20261116-A02-ENV-FREEZE-001",
+  "stage": 8,
+  "run_type": "system",
+  "run_scope": "批次 A：环境与配置冻结（只读采集，不含 Rules/Subagent/Skills 功能测试、不含 RAG 评测、不含知识迁移）",
+  "started_at": "2026-11-16T09:41:00+08:00",
+  "finished_at": "2026-11-16T10:00:00+08:00",
+  "status": "completed_with_blockers",
+  "repository_commit": "88a31efa7deac7a53d8d646471e0e2adc7e4b753",
+  "environment": {
+    "trae_version": "3.4.20 (Build 3.4.20)",
+    "model": "DeepSeek-V4.1-Flash",
+    "model_parameters": {},
+    "model_parameters_unavailable": [
+      "temperature",
+      "top_p",
+      "max_output_tokens",
+      "thinking_budget",
+      "context_window_effective"
+    ],
+    "workspace_trust": "trusted",
+    "rules_version": "无版本号；3 文件清单哈希 0b311fa80fa79604f4bfa3324e6c82ee9e24008ac8db1916f80a161af97c6544",
+    "subagent_version": "无版本号；6 文件清单哈希 0b311fa80fa79604f4bfa3324e6c82ee9e24008ac8db1916f80a161af97c6544",
+    "skills_version": "无版本号；10 文件清单哈希 0b311fa80fa79604f4bfa3324e6c82ee9e24008ac8db1916f80a161af97c6544",
+    "mcp_configuration_version": "仓库无项目级 MCP 配置；全局 MCP 未检查，记为 not_checked",
+    "knowledge_snapshot": "A02-KB-20261116；954 文件 / 799,938,738 字节；清单 SHA256 0bd939951acf25474f91c063969e0343cd2914cf7d8b16384abd60a304862de2",
+    "rag_code_sha": "48a3890875143cb209114c3c0cbe5fae3b7b7bfb2c3615fe4dcb330140c8c051",
+    "rag_parameters": {
+      "SIM_FLOOR": 0.66,
+      "CROSS_PENALTY": 0.9,
+      "POOL_MIN": 50,
+      "COVERAGE_FLOOR": 0.32,
+      "ANSWER_MIN_COVERAGE": 0.50,
+      "STRICT_ANSWER": false,
+      "SHORT_RELAX": false,
+      "ENTITY_GATE": false,
+      "OOV_FLOOR": 0.50,
+      "EMBED_MODEL": "bge-m3",
+      "EMBED_DIM": 1024,
+      "EMBED_BATCH": 32,
+      "source": "HEAD rag.py 代码默认值；当前 shell 无 RAG_* 覆盖"
+    }
+  },
+  "input_artifacts": [
+    {"path": "2026-11-16/a-01-inventory/outputs/盘点报告.md", "role": "A-01 只读盘点报告，本任务唯一前置依据"},
+    {"path": "08-验收与案例/批次A-环境配置快照模板.json", "sha256": "c309ec887da4298e57843bd68ba61c4d6205867740cb02a669c05092b9407c76"},
+    {"path": "08-验收与案例/批次A-run-manifest模板.json", "sha256": "d3479c0c9f3bcf92e0ec94af13395a26d41b28bc1689bba9f8a8070ac6d281b1"},
+    {"path": "08-验收与案例/批次A-环境与配置冻结清单.md", "role": "批次 A 冻结项与通过条件"},
+    {"path": "08-验收与案例/验收标准追踪矩阵.md", "role": "Issue #9 验收要求对照"}
+  ],
+  "artifacts": [
+    {"path": "2026-11-16/a-02-env-freeze/outputs/A-02-环境冻结报告.md", "role": "主报告（十节）"},
+    {"path": "2026-11-16/a-02-env-freeze/outputs/environment-snapshot.json", "role": "环境配置快照"},
+    {"path": "2026-11-16/a-02-env-freeze/outputs/run-manifest.json", "role": "本文件，Run Manifest"},
+    {"path": "2026-11-16/a-02-env-freeze/outputs/knowledge-snapshot-manifest.json", "role": "954 个知识文件逐文件 SHA256 清单"}
+  ],
+  "scores": {
+    "expert_scores": {},
+    "controller_score": null,
+    "veto_count": null,
+    "decision": "pending",
+    "note": "本 run 为环境冻结，不涉及专家评分与案例判定，评分字段保持空值，不适用。"
+  },
+  "defect_issue_urls": [],
+  "counts": {
+    "git_untracked_items": 44,
+    "knowledge_files": 954,
+    "knowledge_files_excluding_hidden": 952,
+    "metadata_records": 776,
+    "questions_positive": 20,
+    "questions_negative": 12,
+    "acceptance_question_bank": 240,
+    "acceptance_negative_set": 60,
+    "db_docs": 807,
+    "db_segments": 536707,
+    "db_vectors": 536707
+  },
+  "blockers": [
+    "模型推理参数 unknown_not_exposed",
+    "会话当前选中模型无法由客户端状态库直接证明",
+    "知识正文无完整备份且不在 Git",
+    "当前 kbase.db 无同版本可恢复备份",
+    "kbase.db 质量档/CHECK 约束与 HEAD rag.py 不一致，重建不可完全复现",
+    "B/C/D/E 知识层未建立",
+    "metadata schema 与切段策略无版本号",
+    "44 个未跟踪项是否纳入快照待用户决定"
+  ],
+  "notes": "TEMPLATE FIELD NOTES: run_type 沿用模板枚举 system；模板中 scores 为批次 D/E 使用，本 run 不适用故留空。status 使用 completed_with_blockers 而非 passed：环境快照已取得，但存在 8 项阻塞/待确认。repository_commit 为冻结时实际 main HEAD，非模板占位值。未提交任何 Git 变更，未包含密钥或敏感证据。"
+}

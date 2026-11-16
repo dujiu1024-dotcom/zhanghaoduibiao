@@ -80,3 +80,9 @@ tmp-snapshots/
 # 备份副本
 *.bak
 *.bak-*
+
+# Agent / IDE 运行时本地缓存
+.workbuddy/
+
+# 知识源检查点时间戳快照（自动生成，latest.json 是唯一追踪的汇总）
+01-知识源/checks/20*-*.json

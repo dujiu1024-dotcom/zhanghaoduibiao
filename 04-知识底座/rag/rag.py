@@ -40,7 +40,7 @@ EMBED_MODEL = os.environ.get("EMBED_MODEL", "bge-m3")
 EMBED_DIM = 1024
 EMBED_BATCH = 32
 
-QUALITY_ORDER = {"可引用": 3, "仅参考": 2, "仅参考·可转述": 1, "历史文本|已废止": 0}
+QUALITY_ORDER = {"可引用": 3, "仅参考": 2, "仅参考·可转述": 1, "历史文本|已废止": 0, "不可引用": -1}
 
 # 来源不明的扫描件/摘编件：只作索引，不摘原句、不构成答案，排序排在可引用之后
 INDEX_ONLY = set()
@@ -128,7 +128,7 @@ CREATE TABLE IF NOT EXISTS docs(
   source_path TEXT UNIQUE NOT NULL,
   text_path TEXT,
   title TEXT NOT NULL,
-  quality TEXT NOT NULL CHECK(quality IN ('可引用','仅参考','仅参考·可转述','历史文本|已废止')),
+  quality TEXT NOT NULL CHECK(quality IN ('可引用','仅参考','仅参考·可转述','历史文本|已废止','不可引用')),
   kind TEXT NOT NULL,
   sha1 TEXT NOT NULL,
   char_count INTEGER NOT NULL,
@@ -447,7 +447,14 @@ def md_sources():
         by_path[row.get("来源URL", "")] = row
     out = []
     for md in sorted(KNOW.rglob("*.md")):
-        if "sources" in md.relative_to(KNOW).parts[:1]:
+        parts = md.relative_to(KNOW).parts
+        # 只排除被打回的自写笔记（sources/fulltext/knowledge/）。
+        # 其余 sources/ 下的 .md 是与 .txt 零重叠的独立 OCR 全文，必须入库：
+        # 旧规则整目录跳过，导致重建时丢掉 190 篇 / 326,459 段（占全库 60.8%）。
+        if parts[:3] == ("sources", "fulltext", "knowledge"):
+            continue
+        # sources/ 根目录直属的 .md 是采购清单/出处审计/README 等管理文档，不是知识正文
+        if len(parts) == 2 and parts[0] == "sources":
             continue
         text = md.read_text(encoding="utf-8", errors="ignore")
         key = rel(md)
@@ -469,22 +476,28 @@ def md_sources():
 def fulltext_sources():
     meta = load_metadata()
     out = []
-    # metadata.csv 的「文本形态」历史写法不统一（Markdown/Markdown(原生)、PDF原生/原生PDF/PDF、
-    # OCR/扫描OCR、原生HTML/浏览器渲染HTML），全部纳入白名单；按本地文件存在性兜底。
-    TEXT_FORMS = {
-        "原生HTML", "浏览器渲染HTML", "PDF原生", "原生PDF", "PDF",
-        "Markdown(原生)", "Markdown", "原生文本", "扫描OCR", "OCR",
-    }
+    # metadata.csv 的「文本形态」是人手自由文本，实测 9 种写法（PDF 原生文字层 / HTML 章节页 /
+    # 纯文本（PG 原生）/ 原生HTML转文本 …），精确白名单会静默漏收：旧规则漏掉 193 篇 / 32.8% 段落。
+    # 改为归一化后按关键词判定，文件存在性仍由下面的 p.exists() 兜底。
+    TEXT_FORM_KEYS = ("pdf", "html", "markdown", "ocr", "纯文本", "原生文本")
+
+    def _text_form_ok(form: str) -> bool:
+        s = re.sub(r"[\s（）()·・,，、/]+", "", (form or "")).lower()
+        return bool(s) and any(k in s for k in TEXT_FORM_KEYS)
+
     # 被打回的自写笔记（口径第五格）：是替换对象不是依据，永不入库
     BANNED_DIR = "fulltext/knowledge/"
     for row in meta.values():
-        if row.get("文本形态") not in TEXT_FORMS:
+        if not _text_form_ok(row.get("文本形态")):
             continue
         local = row.get("本地路径") or ""
         if BANNED_DIR in local:
             continue
         p = SOURCES / row["本地路径"]
         if not p.exists():
+            continue
+        # 只收已提取的文本；.pdf/.epub 等二进制原件不能当文本读，否则入库的是乱码
+        if p.suffix.lower() not in (".txt", ".md"):
             continue
         text = p.read_text(encoding="utf-8", errors="ignore")
         name = p.stem
@@ -599,7 +612,7 @@ def delete_doc(conn, doc_id):
 
 
 
-ALLOWED_QUALITY = ("可引用", "仅参考", "仅参考·可转述", "历史文本|已废止")
+ALLOWED_QUALITY = ("可引用", "仅参考", "仅参考·可转述", "历史文本|已废止", "不可引用")
 
 
 def normalize_quality(q):
@@ -607,6 +620,9 @@ def normalize_quality(q):
     q = (q or "").strip()
     if q in ALLOWED_QUALITY:
         return q
+    # 「不可引用」含子串「可引用」，必须先判否定档，否则会被误升为「可引用」
+    if q.startswith("不可"):
+        return "不可引用"
     for base in ("仅参考·可转述", "仅参考", "可引用"):
         if base in q:
             return base
@@ -1164,7 +1180,9 @@ def search(conn, query, k=5, quality="", mode="hybrid", sim_floor=None, source="
     tags, qtopics = ([], [])
     if mode in ("tag", "literal+tag", "hybrid"):
         tags, qtopics = tag_search(conn, query, pool, quality)
-    vecs = vector_search(conn, query, pool, quality, sim_floor) if mode == "hybrid" else []
+    # mode="vector" 是单路诊断模式：只走向量、不掺字面与标签，用于对照/校准。
+    # 此前的条件只写了 "hybrid"，导致 CLI 声明过的 --mode vector 三路全关、恒返回空。
+    vecs = vector_search(conn, query, pool, quality, sim_floor) if mode in ("hybrid", "vector") else []
     vec_conf = [v for v in vecs if not v.get("cross")]
     best_cov = max((l["coverage"] for l in lit), default=None)
     oov = oov_idf_ratio(conn, query)
@@ -1762,7 +1780,9 @@ def main():
     p.add_argument("query")
     p.add_argument("-k", type=int, default=5)
     p.add_argument("--quality", default="", help="质量档过滤：可引用 / 仅参考 / 仅参考·可转述，可逗号多选")
-    p.add_argument("--mode", default="hybrid", choices=["literal", "tag", "literal+tag", "hybrid", "vector"])
+    p.add_argument("--mode", default="hybrid", choices=["literal", "tag", "literal+tag", "hybrid", "vector"],
+                   help="检索通路。hybrid=字面+标签+向量（默认）；vector 为单路诊断模式，只走向量、不掺字面与标签，"
+                        "用于对照与阈值校准，不作生产成答口径")
     p.add_argument("--sim-floor", type=float, default=None,
                    help=f"向量相似度下限（默认 {SIM_FLOOR}，也可用环境变量 RAG_SIM_FLOOR）")
     p.add_argument("--json", action="store_true")

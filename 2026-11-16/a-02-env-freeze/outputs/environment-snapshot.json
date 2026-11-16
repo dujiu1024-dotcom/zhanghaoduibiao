@@ -1,0 +1,185 @@
+{
+  "freeze_id": "S8-20261116-A02-FREEZE-001",
+  "status": "captured_with_blockers",
+  "captured_at": "2026-11-16T09:55:00+08:00",
+  "captured_by": "A-02 环境冻结任务（只读采集，未修改任何受控文件）",
+  "repository": {
+    "full_name": "dujiu1024-dotcom/zhanghaoduibiao",
+    "branch": "main",
+    "commit_sha": "88a31efa7deac7a53d8d646471e0e2adc7e4b753",
+    "working_tree_clean": false,
+    "uncommitted_changes_summary": "0 个已跟踪文件被修改，0 个暂存变更，44 个未跟踪项（32 个 01-执行包/checks/20261116-*.json、03-决策与复盘/work/、10 个 04-知识底座/catalog/work/books-watch-pull-1116{a-e}.{ndjson,manifest.json}、2026-11-16/ A-01 与 A-02 输出目录）",
+    "commit_count": 33,
+    "tracked_file_count": 623,
+    "note": "HEAD 与 A-01 盘点时一致（88a31ef）。仓库内所有已跟踪文件无 diff；未跟踪项数量由 43 增至 44，唯一新增来源是 A-01/A-02 的输出目录 2026-11-16/。"
+  },
+  "host_environment": {
+    "operating_system": "macOS",
+    "os_version": "27.0.1 (Build 26A434), Darwin 27.0.0, arm64",
+    "trae_version": "3.4.20",
+    "trae_build": "3.4.20",
+    "runtime_mode": "Trae CN 桌面客户端（/Applications/Trae CN.app）内的 Agent 会话；客户端运行模式字段未暴露，按 unknown_not_exposed 处理",
+    "workspace_path_redacted": "/Users/longyi/project/账号对标",
+    "workspace_trust": "trusted",
+    "other_trae_installations": [
+      {"path": "/Applications/Trae.app", "version": "3.6.4", "running": false},
+      {"path": "/Applications/Trae CN 分身.app", "version": "3.4.18", "running": false}
+    ],
+    "runtime_evidence": "ps 显示 /Applications/Trae CN.app/Contents/MacOS/Electron 正在运行；Info.plist CFBundleShortVersionString/CFBundleVersion 均为 3.4.20；未升级、未卸载、未切换任何版本",
+    "note": "模板字段名 workspace_path_redacted 保留；按用户任务要求记录绝对路径，未做脱敏。"
+  },
+  "model": {
+    "provider": "Trae 客户端模型清单（用户自定义 OpenAI 兼容通道）",
+    "name": "DeepSeek-V4.1-Flash",
+    "version": null,
+    "configuration_scope": "会话级（session）",
+    "effective_parameters": {},
+    "unavailable_parameters": [
+      "temperature",
+      "top_p",
+      "max_output_tokens",
+      "thinking_budget / reasoning_effort",
+      "context_window_effective"
+    ],
+    "evidence": {
+      "session_declaration": "本会话系统上下文声明模型为 DeepSeek-V4.1-Flash",
+      "client_model_registry": "Trae CN globalStorage/state.vscdb 的 AI.agent.model.model_list_map 中同时存在两个独立条目：deepseek-v4.1-flash（显示名 DeepSeek-V4.1-Flash）与 deepseek-v4-flash / DeepSeek-V4-Flash（显示名 DeepSeek-V4-Flash）；两者不是同一模型",
+      "session_selection_record": "同一状态库的 session_selected_model 记录中未检索到 DeepSeek 系列的选择记录（仅有 Doubao/GLM 记录），因此无法由客户端状态库直接证明本会话的当前选中项"
+    },
+    "note": "模型名称采用会话声明值 DeepSeek-V4.1-Flash；不得与 DeepSeek-V4-Flash 混用。是否在 UI 中显示为 DeepSeek-V4.1-Flash 需用户人工确认；全部推理参数标记 unknown_not_exposed，未用产品默认值代填。"
+  },
+  "agent_configuration": {
+    "rules": {
+      "files": [
+        ".trae/rules/00-commercial-constitution.md",
+        ".trae/rules/10-case-blackboard.md",
+        ".trae/rules/scenarios/personal-ip.md"
+      ],
+      "configuration_version": null,
+      "file_manifest_sha256": "0b311fa80fa79604f4bfa3324e6c82ee9e24008ac8db1916f80a161af97c6544",
+      "note": "三个规则文件均无版本号字段，configuration_version 记 null。file_manifest_sha256 为 .trae/ 全部 19 个文件按路径排序后的「SHA256 清单」再取 SHA256，覆盖 Rules 3 + Subagents 6 + Skills 10。"
+    },
+    "subagents": {
+      "files": [
+        ".trae/agents/competition-expert.md",
+        ".trae/agents/decision-challenger.md",
+        ".trae/agents/marketing-expert.md",
+        ".trae/agents/operations-expert.md",
+        ".trae/agents/research-expert.md",
+        ".trae/agents/strategy-expert.md"
+      ],
+      "configuration_version": null,
+      "file_manifest_sha256": "0b311fa80fa79604f4bfa3324e6c82ee9e24008ac8db1916f80a161af97c6544",
+      "note": "六类专家配置文件存在且已跟踪；实际加载与调用行为不在批次 A 验证，属批次 B。"
+    },
+    "skills": {
+      "files": [
+        ".trae/skills/business-diagnosis/SKILL.md",
+        ".trae/skills/business-intake/SKILL.md",
+        ".trae/skills/business-model-analysis/SKILL.md",
+        ".trae/skills/commercial-decision-review/SKILL.md",
+        ".trae/skills/customer-marketing-strategy/SKILL.md",
+        ".trae/skills/execution-metrics-plan/SKILL.md",
+        ".trae/skills/financial-unit-economics/SKILL.md",
+        ".trae/skills/industry-competition-analysis/SKILL.md",
+        ".trae/skills/performance-attribution-review/SKILL.md",
+        ".trae/skills/strategic-planning/SKILL.md"
+      ],
+      "configuration_version": null,
+      "file_manifest_sha256": "0b311fa80fa79604f4bfa3324e6c82ee9e24008ac8db1916f80a161af97c6544",
+      "note": "十项 Skills 均只有 SKILL.md，无版本号字段。"
+    },
+    "mcp": {
+      "services": [],
+      "configuration_version": null,
+      "configuration_file_sha256": null,
+      "credentials_excluded": true,
+      "note": "仓库内未发现项目级 MCP 配置文件（无 .trae/mcp.json、无 mcp 相关 json）。不适用字段保持 null；未检查用户全局 MCP 配置，故不能断言全局无 MCP。"
+    }
+  },
+  "knowledge_base": {
+    "instance_id_redacted": "local-sqlite:04-知识底座/rag/kbase.db",
+    "snapshot_id": "A02-KB-20261116",
+    "snapshot_time": "2026-11-16T09:45:00+08:00",
+    "export_method": "只读文件系统清单 + SHA256；未导出、未复制、未打开写事务；WAL 为 0 字节，主库文件即完整快照载体",
+    "layer_inventory": [
+      {"layer": "A", "path": "04-知识底座/通用商业认知/", "status": "已建立", "files": 5},
+      {"layer": "B", "path": "未建立", "status": "不存在", "files": 0},
+      {"layer": "C", "path": "未建立", "status": "不存在", "files": 0},
+      {"layer": "D", "path": "未建立", "status": "不存在", "files": 0},
+      {"layer": "E", "path": "未建立", "status": "不存在", "files": 0}
+    ],
+    "metadata_schema_version": null,
+    "chunking_strategy_version": null,
+    "index_version": "kbase.db SHA256 40744a5fefedad80a1a4b78f4672345d7df3493fd7d4cad9b6b3a613cd6d7923",
+    "file_manifest_sha256": "0bd939951acf25474f91c063969e0343cd2914cf7d8b16384abd60a304862de2",
+    "access_control_config_sha256": null,
+    "note": "metadata.csv 为 14 列固定表头，但无 schema 版本字段；rag.py 切段逻辑内嵌于代码，无策略版本号；D/E 层尚未建立，因此访问控制配置无对象可哈希。file_manifest_sha256 指本目录 knowledge-snapshot-manifest.json（954 个文件、799,938,738 字节）的 SHA256。"
+  },
+  "rag": {
+    "repository_or_location": "dujiu1024-dotcom/zhanghaoduibiao :: 04-知识底座/rag/rag.py",
+    "code_commit_sha": "88a31efa7deac7a53d8d646471e0e2adc7e4b753",
+    "embedding_model": "bge-m3:latest",
+    "embedding_model_version": "ollama digest 7907646426070047a77226ac3e684fbbe8410524f7b4a74d02837e43f2146bab，1024 维，F16，566.70M 参数，context 8192",
+    "index_build_version": "kbase.db 最后写入 2026-11-15 22:02:35；docs.updated_at 与 ingested_at 最大值均为 2026-11-15 22:02:35",
+    "effective_parameters": {
+      "SIM_FLOOR": 0.66,
+      "CROSS_PENALTY": 0.9,
+      "POOL_MIN": 50,
+      "COVERAGE_FLOOR": 0.32,
+      "ANSWER_MIN_COVERAGE": 0.50,
+      "STRICT_ANSWER": false,
+      "SHORT_RELAX": false,
+      "ENTITY_GATE": false,
+      "OOV_FLOOR": 0.50,
+      "EMBED_MODEL": "bge-m3",
+      "EMBED_DIM": 1024,
+      "EMBED_BATCH": 32
+    },
+    "unavailable_parameters": [
+      "Top-K 默认展示条数（代码按调用方 k 截断，未在配置中冻结）",
+      "重排模型/版本（本仓库无重排实现）",
+      "运行时环境变量覆盖（当前 shell 无 RAG_* 变量，但不能证明所有启动入口均无覆盖）",
+      "rag.py 文件 SHA256"
+    ],
+    "code_file_sha256": "48a3890875143cb209114c3c0cbe5fae3b7b7bfb2c3615fe4dcb330140c8c051",
+    "note": "以上参数取自 HEAD 版本 rag.py 的代码默认值。当前会话环境未设置任何 RAG_* 环境变量，故默认值与生效值一致的证据较强，但仍不能排除其他启动入口注入环境变量。"
+  },
+  "test_assets": {
+    "case_files": [
+      {"path": "08-验收与案例/案例输入/CASE-01-传统企业战略转型.md", "sha256": "cd2c9501f3eb027474bab23804b6f99b456da84d8629c628d47f89365c6aff06"},
+      {"path": "08-验收与案例/案例输入/CASE-02-新进入者市场竞争策略.md", "sha256": "edff5934c0416d3cde3a77eafa452797aac56dae1b27f28051d2c08fd60e0d4c"},
+      {"path": "08-验收与案例/案例输入/CASE-03-新产品上市与营销增长.md", "sha256": "592f388853de05bb6f29844dd225c69ee5536a5643676edf154c6d52d02b3568"},
+      {"path": "08-验收与案例/案例输入/CASE-04-收入增长但持续亏损.md", "sha256": "16ada513fb468ffe2165fab0adaca9973b19bb74b7def56497c448881f54e85a"},
+      {"path": "08-验收与案例/案例输入/CASE-05-个人IP商业闭环.md", "sha256": "af6e7dc0c314e259fe64221459db62af6cb5ec223006a6a93715c552326c74c2"}
+    ],
+    "scorecard_version": "08-验收与案例/评分量表.md @ sha256 10ff9dd3e89b3655b202c022a5ae67c71dcb8f0e4e7616c42e47a20b2e88496b（无版本号字段）",
+    "blind_test_template_version": "08-验收与案例/盲测记录模板.md @ sha256 668d8c54c8ac5d2559d0fc8a0fc3726961842705442d1010db7090f83169d535（无版本号字段）",
+    "report_template_version": "08-验收与案例/压力测试报告模板.md @ sha256 a479b96ea5fc9ed00655509efe89560bcb47c2bbd5a13ef2aa4be97e4c544148（无版本号字段）",
+    "reference_materials_outside_test_workspace": null,
+    "reference_materials_custodian": null,
+    "note": "五类案例输入、评分量表与模板均已冻结哈希。参考答案与反证注入材料的存放位置与保管人未在仓库中找到明确登记，保持 null，属批次 D 前置待确认项。"
+  },
+  "evidence": {
+    "local_evidence_directory": "2026-11-16/a-02-env-freeze/outputs/",
+    "configuration_snapshots": [
+      "environment-snapshot.json",
+      "run-manifest.json",
+      "knowledge-snapshot-manifest.json"
+    ],
+    "hash_manifest": "knowledge-snapshot-manifest.json（954 文件逐文件 SHA256）",
+    "sensitive_values_redacted": true,
+    "note": "未采集任何 Token、API Key、Cookie、密码或个人信息；仅读取 Trae 客户端的模型名称登记值，未导出凭据。"
+  },
+  "blockers": [
+    "模型推理参数（温度、最大输出、思考档位、上下文长度）在客户端未暴露，全部标 unknown_not_exposed",
+    "无法从客户端状态库证明本会话当前选中模型即为 DeepSeek-V4.1-Flash；会话声明存在，但 session_selected_model 未记录 DeepSeek 项",
+    "知识正文（04-知识底座/knowledge/，765MB）无完整可恢复备份，且被 .gitignore 排除，不在 Git 中",
+    "当前 kbase.db（3.8GB）无同版本可恢复备份；现有备份均早于当前库（145MB/259MB/885MB/1.8GB）",
+    "kbase.db 的 docs 表 CHECK 约束与 HEAD rag.py 的 SCHEMA 不一致，且存在 23 条 quality='不可引用'，当前代码无法复现，重建后数据会变化",
+    "A-E 知识分层仅有 A 层目录（5 个文件），B/C/D/E 层未建立",
+    "metadata.csv 与 rag.py 切段策略均无版本号字段",
+    "工作区存在 44 个未跟踪项，尚未由用户决定是否纳入本轮测试快照"
+  ],
+  "notes": "本快照为真实值或明确 unknown/不适用，未用默认值代填。批次 A 状态建议 captured_with_blockers，不标 passed。模板字段全部保留；不适用字段已在对应 note 中说明原因。"
+}
