@@ -9,6 +9,7 @@ on:
   push:
     branches:
       - main
+      - docs/stage8-governance-alignment
     paths:
       - "08-验收与案例/run-manifest.schema.json"
       - "scripts/validate-run-manifest.mjs"
