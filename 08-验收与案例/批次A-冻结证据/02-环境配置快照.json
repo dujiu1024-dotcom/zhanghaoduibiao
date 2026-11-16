@@ -3,7 +3,7 @@
   "status": "captured_with_blockers",
   "captured_at": "2026-11-16T10:20:00+08:00",
   "revised_at": "2026-11-16T11:44:00+08:00",
-  "revision_note": "A-05 用户裁决补充：A3.2 接受 unknown_not_exposed 作为最终冻结状态并解除该项阻塞；A6.3 确认本地存放、用户本人保管，具体目录待登记；未重新采集环境",
+  "revision_note": "A-05 用户裁决补充：A3.2 接受 unknown_not_exposed 作为最终冻结状态并解除该项阻塞；A6.3 要求存放于被测工作区之外并由用户本人保管；外部目录尚未创建或登记，材料实际存放状态未确认；未重新采集环境",
   "generated_by": "阶段8批次A 环境冻结证据包",
   "repository": {
     "full_name": "dujiu1024-dotcom/zhanghaoduibiao",
@@ -233,7 +233,7 @@
     "scorecard_version": "08-验收与案例/评分量表.md @ 10ff9dd3e89b3655b202c022a5ae67c71dcb8f0e4e7616c42e47a20b2e88496b",
     "blind_test_template_version": "08-验收与案例/盲测记录模板.md @ 668d8c54c8ac5d2559d0fc8a0fc3726961842705442d1010db7090f83169d535",
     "report_template_version": "08-验收与案例/压力测试报告模板.md @ a479b96ea5fc9ed00655509efe89560bcb47c2bbd5a13ef2aa4be97e4c544148",
-    "reference_materials_outside_test_workspace": "本地（具体目录待登记）",
+    "reference_materials_outside_test_workspace": "要求存放于被测工作区之外；外部目录尚未创建或登记，材料实际存放状态未确认",
     "reference_materials_custodian": "用户本人"
   },
   "evidence": {
@@ -247,7 +247,7 @@
     "sensitive_values_redacted": true
   },
   "blockers": [
-    "A6.3：参考要点与反证注入材料已确认本地存放、用户本人保管；具体目录/可定位路径尚未登记（U8，批次 D 盲测准备前登记）"
+    "A6.3：参考要点与反证注入材料须存放于被测工作区之外并由用户本人保管；外部目录尚未创建或登记，材料实际存放状态未确认（U8，批次 D 盲测准备前登记）"
   ],
   "followup_risks": [
     "知识正文与当前 kbase.db 无完整可恢复备份——批次 C 迁移/重建/写库前高风险前置条件（U4）",
