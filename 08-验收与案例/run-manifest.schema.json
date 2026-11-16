@@ -60,7 +60,8 @@
         "passed",
         "failed",
         "not_applicable",
-        "completed_with_blockers"
+        "completed_with_blockers",
+        "passed_with_deferred_conditions"
       ]
     },
     "repository_commit": {
@@ -199,6 +200,13 @@
         "type": "string",
         "minLength": 1
       }
+    },
+    "deferred_conditions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
     }
   },
   "$defs": {
@@ -308,6 +316,37 @@
         ],
         "properties": {
           "blockers": {
+            "type": "array",
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "passed_with_deferred_conditions"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "required": [
+          "deferred_conditions"
+        ],
+        "properties": {
+          "artifacts": {
+            "type": "array",
+            "minItems": 1
+          },
+          "blockers": {
+            "type": "array",
+            "maxItems": 0
+          },
+          "deferred_conditions": {
             "type": "array",
             "minItems": 1
           }
