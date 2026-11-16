@@ -2,8 +2,8 @@
   "freeze_id": "S8-20261116-A02-FREEZE-001",
   "status": "captured_with_blockers",
   "captured_at": "2026-11-16T10:20:00+08:00",
-  "revised_at": "2026-11-16T10:40:00+08:00",
-  "revision_note": "A-04 用户裁决落档：仅修正状态与口径，未重新采集环境；captured_at 保留原始采集时间",
+  "revised_at": "2026-11-16T11:44:00+08:00",
+  "revision_note": "A-05 用户裁决补充：A3.2 接受 unknown_not_exposed 作为最终冻结状态并解除该项阻塞；A6.3 确认本地存放、用户本人保管，具体目录待登记；未重新采集环境",
   "generated_by": "阶段8批次A 环境冻结证据包",
   "repository": {
     "full_name": "dujiu1024-dotcom/zhanghaoduibiao",
@@ -54,7 +54,20 @@
       "context_window_effective"
     ],
     "distinct_model_warning": "客户端模型清单同时存在 deepseek-v4.1-flash 与 deepseek-v4-flash 两个独立条目，不得混同",
-    "evidence": "会话上下文声明 + Trae CN globalStorage/state.vscdb 的 model_list_map；session_selected_model 无 DeepSeek 记录（事实保留，用户确认不等同机器证明）"
+    "evidence": "会话上下文声明 + Trae CN globalStorage/state.vscdb 的 model_list_map；session_selected_model 无 DeepSeek 记录（事实保留，用户确认不等同机器证明）",
+    "parameter_acceptance": {
+      "status": "user_accepted_unknown_not_exposed",
+      "accepted_at": "2026-11-16",
+      "accepted_by": "用户",
+      "parameters": [
+        "temperature",
+        "top_p",
+        "max_output_tokens",
+        "thinking_budget",
+        "context_window_effective"
+      ],
+      "note": "用户接受未知状态作为本批次最终冻结结果；实际参数值仍不可读，不使用默认值代填"
+    }
   },
   "agent_configuration": {
     "rules": {
@@ -220,8 +233,8 @@
     "scorecard_version": "08-验收与案例/评分量表.md @ 10ff9dd3e89b3655b202c022a5ae67c71dcb8f0e4e7616c42e47a20b2e88496b",
     "blind_test_template_version": "08-验收与案例/盲测记录模板.md @ 668d8c54c8ac5d2559d0fc8a0fc3726961842705442d1010db7090f83169d535",
     "report_template_version": "08-验收与案例/压力测试报告模板.md @ a479b96ea5fc9ed00655509efe89560bcb47c2bbd5a13ef2aa4be97e4c544148",
-    "reference_materials_outside_test_workspace": null,
-    "reference_materials_custodian": null
+    "reference_materials_outside_test_workspace": "本地（具体目录待登记）",
+    "reference_materials_custodian": "用户本人"
   },
   "evidence": {
     "local_evidence_directory": "08-验收与案例/批次A-冻结证据/",
@@ -234,8 +247,7 @@
     "sensitive_values_redacted": true
   },
   "blockers": [
-    "A3.2：模型推理参数 unknown_not_exposed（温度/top_p/最大输出/思考档位/上下文均不可读）",
-    "A6.3：参考要点与反证注入材料的具体位置与保管人尚未登记（U8：用户保管，批次 D 盲测准备前登记）"
+    "A6.3：参考要点与反证注入材料已确认本地存放、用户本人保管；具体目录/可定位路径尚未登记（U8，批次 D 盲测准备前登记）"
   ],
   "followup_risks": [
     "知识正文与当前 kbase.db 无完整可恢复备份——批次 C 迁移/重建/写库前高风险前置条件（U4）",
