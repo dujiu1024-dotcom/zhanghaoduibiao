@@ -63,6 +63,19 @@ class DatabaseSafetyTests(unittest.TestCase):
             check.assert_not_called()
         self.assertEqual(self.db.read_bytes(), b"do-not-delete")
 
+    def test_rebuild_refuses_symlink_target(self):
+        target = Path(self.tmp.name) / "real.db"
+        target.write_bytes(b"keep-target")
+        link = Path(self.tmp.name) / "linked.db"
+        link.symlink_to(target)
+        args = types.SimpleNamespace(confirm_rebuild=True)
+        with patch.object(rag, "DB_PATH", link), patch.object(rag, "check_embedder") as check:
+            with self.assertRaises(SystemExit):
+                rag.cmd_rebuild(args)
+            check.assert_not_called()
+        self.assertTrue(link.is_symlink())
+        self.assertEqual(target.read_bytes(), b"keep-target")
+
 
 if __name__ == "__main__":
     unittest.main()
