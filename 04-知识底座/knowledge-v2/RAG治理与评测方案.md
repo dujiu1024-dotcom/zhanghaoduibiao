@@ -2,7 +2,7 @@
 
 ## 1. 当前风险基线
 
-仓库现有 RAG 代码采用 SQLite、中文字面倒排、人工标签和本地向量通道。当前 `04-知识底座/rag/rag.py` 的 `SIM_FLOOR` 代码默认值为 0.60；同仓库 `04-知识底座/rag/README.md` 的旧查询示例仍显示“成答下限 0.66”。这两处名称/语义并不完全相同，不能直接当作同一参数比较；该 README 示例至少属于需要复测更新的历史输出，实际运行时还需同时记录 `SIM_FLOOR`、`ANSWER_MIN_COVERAGE`、`SHORT_RELAX`、`ENTITY_GATE` 等配置。
+仓库现有 RAG 代码采用 SQLite、中文字面倒排、人工标签和本地向量通道。按当前 `04-知识底座/rag/rag.py` 源码默认值：`SIM_FLOOR=0.66`、`ANSWER_MIN_COVERAGE=0.50`、`OOV_FLOOR=0.50`、`COVERAGE_FLOOR=0.32`；`SHORT_RELAX`、`ENTITY_GATE`、`RAG_STRICT` 默认关闭。`SIM_FLOOR` 是向量相似度下限，`ANSWER_MIN_COVERAGE` 是字面单独成答的覆盖率下限，`COVERAGE_FLOOR` 是字面候选进入融合的下限，三者不可混称。`RAG_SIM_FLOOR`、`RAG_ANSWER_MIN_COVERAGE` 等环境变量可覆盖源码默认值；因此这些数字不代表用户本机实际生效值，真机评测必须记录运行环境的最终配置。
 
 本方案沿用的历史记录还提及有答案 20 条/无答案 12 条、命中 15/20、负集硬答 5/12，以及更早的 240 题 Recall@5 56.2%、60 条负集硬答 44 条。但本轮未定位到这些数字对应的原始题集版本、gold 标注和完整评测报告，因此全部标记为**未核验历史记录**，不得作为当前基线或通过成绩。必须先找回原始数据与报告，核对题目是否重复、口径是否一致，再决定是否保留作历史对照。
 
