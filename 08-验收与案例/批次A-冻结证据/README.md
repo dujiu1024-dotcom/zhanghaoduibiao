@@ -5,7 +5,7 @@
 - 状态：**passed_with_deferred_conditions**（A6.3a 已通过；A6.3b 延期至批次 D 启动前确认）
 - 唯一标识：freeze_id `S8-20261116-A02-FREEZE-001`；run_id `S8-20261116-A02-ENV-FREEZE-001`
 - 正式验收环境：**Trae CN 3.4.20**（Trae 3.6.4 国际版、Trae CN 分身 3.4.18 仅作其他安装环境记录，不纳入主验收环境）
-- 最近更新：2026-11-16 A-05 用户裁决落档（A3.2 接受 unknown_not_exposed 冻结例外并转 PASS；A6.3 拆分：A6.3a（桌面位置与本人保管）PASS；A6.3b（专用目录及材料实际存放）DEFERRED 至批次 D 启动前；未重新采集环境）
+- 最近更新：2026-11-16 A-06 用户裁决落档（A3.2 接受 unknown_not_exposed 冻结例外并转 PASS；A6.3 拆分：A6.3a（桌面位置与本人保管）PASS；A6.3b（专用目录及材料实际存放）DEFERRED 至批次 D 启动前；未重新采集环境）
 
 ## 1. 本包范围
 
