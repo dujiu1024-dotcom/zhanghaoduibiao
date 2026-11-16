@@ -1,0 +1,126 @@
+{
+  "run_id": "S8-20261116-A02-ENV-FREEZE-001",
+  "stage": 8,
+  "run_type": "system",
+  "run_scope": "批次 A：环境与配置冻结证据归档（只读采集；不含批次 B-E 运行测试）",
+  "started_at": "2026-11-16T10:00:00+08:00",
+  "finished_at": "2026-11-16T10:20:00+08:00",
+  "status": "completed_with_blockers",
+  "repository_commit": "88a31efa7deac7a53d8d646471e0e2adc7e4b753",
+  "linked_environment_snapshot": "S8-20261116-A02-FREEZE-001",
+  "environment": {
+    "trae_version": "3.4.20 (Build 3.4.20)",
+    "model": "DeepSeek-V4.1-Flash",
+    "model_display_status": "session_declared_ui_unverified",
+    "model_parameters": {},
+    "model_parameters_unavailable": [
+      "temperature",
+      "top_p",
+      "max_output_tokens",
+      "thinking_budget",
+      "context_window_effective"
+    ],
+    "workspace_trust": "trusted",
+    "rules_version": "无版本号；清单哈希 0b311fa80fa79604f4bfa3324e6c82ee9e24008ac8db1916f80a161af97c6544",
+    "subagent_version": "无版本号；同上清单哈希",
+    "skills_version": "无版本号；同上清单哈希",
+    "mcp_configuration_version": "项目级无 MCP 配置",
+    "knowledge_snapshot": "A02-KB-20261116（954 文件 / 799,938,738 字节 / 清单哈希 0bd939951acf25474f91c063969e0343cd2914cf7d8b16384abd60a304862de2）",
+    "rag_code_sha": "48a3890875143cb209114c3c0cbe5fae3b7b7bfb2c3615fe4dcb330140c8c051",
+    "rag_parameters": {
+      "SIM_FLOOR": 0.66,
+      "CROSS_PENALTY": 0.9,
+      "POOL_MIN": 50,
+      "COVERAGE_FLOOR": 0.32,
+      "ANSWER_MIN_COVERAGE": 0.5,
+      "STRICT_ANSWER": false,
+      "SHORT_RELAX": false,
+      "ENTITY_GATE": false,
+      "OOV_FLOOR": 0.5,
+      "EMBED_MODEL": "bge-m3",
+      "EMBED_DIM": 1024,
+      "EMBED_BATCH": 32
+    }
+  },
+  "input_artifacts": [
+    {
+      "path": "2026-11-16/a-01-inventory/outputs/盘点报告.md",
+      "role": "A-01 只读盘点"
+    },
+    {
+      "path": "2026-11-16/a-02-env-freeze/outputs/A-02-环境冻结报告.md",
+      "role": "A-02 环境冻结"
+    },
+    {
+      "path": "08-验收与案例/批次A-环境配置快照模板.json",
+      "role": "模板"
+    },
+    {
+      "path": "08-验收与案例/批次A-run-manifest模板.json",
+      "role": "模板"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "08-验收与案例/批次A-冻结证据/README.md"
+    },
+    {
+      "path": "08-验收与案例/批次A-冻结证据/01-A02环境冻结报告.md"
+    },
+    {
+      "path": "08-验收与案例/批次A-冻结证据/02-环境配置快照.json"
+    },
+    {
+      "path": "08-验收与案例/批次A-冻结证据/03-Run-Manifest.json"
+    },
+    {
+      "path": "08-验收与案例/批次A-冻结证据/04-Git工作区冻结清单.csv"
+    },
+    {
+      "path": "08-验收与案例/批次A-冻结证据/05-RAG基线与差异核验.md"
+    },
+    {
+      "path": "08-验收与案例/批次A-冻结证据/06-知识库快照清单.csv"
+    },
+    {
+      "path": "08-验收与案例/批次A-冻结证据/07-案例资产清单.csv"
+    },
+    {
+      "path": "08-验收与案例/批次A-冻结证据/08-待用户确认事项.md"
+    },
+    {
+      "path": "08-验收与案例/批次A-冻结证据/09-批次A验收自审表.md"
+    },
+    {
+      "path": "08-验收与案例/批次A-冻结证据/evidence/文件哈希与证据索引.md"
+    }
+  ],
+  "scores": {
+    "expert_scores": {},
+    "controller_score": null,
+    "veto_count": null,
+    "decision": "pending",
+    "note": "环境冻结阶段无评分对象，不适用"
+  },
+  "defect_issue_urls": [],
+  "counts": {
+    "untracked_files": 48,
+    "knowledge_files": 954,
+    "knowledge_content_files": 952,
+    "metadata_records": 776,
+    "question_bank": 240,
+    "negative_set": 60,
+    "db_docs": 807,
+    "db_segments": 536707
+  },
+  "blockers": [
+    "模型推理参数不可读",
+    "模型选中项无机器证明",
+    "知识正文与当前库无完整备份",
+    "库结构与 HEAD 代码不一致",
+    "B/C/D/E 层未建",
+    "metadata/切段无版本号",
+    "48 个未跟踪项待裁决"
+  ],
+  "notes": "字段沿用仓库模板；scores 不适用留空。本 Manifest 不代表批次 A 通过，状态为 completed_with_blockers。"
+}

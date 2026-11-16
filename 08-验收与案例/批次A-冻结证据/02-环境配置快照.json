@@ -1,0 +1,238 @@
+{
+  "freeze_id": "S8-20261116-A02-FREEZE-001",
+  "status": "captured_with_blockers",
+  "captured_at": "2026-11-16T10:20:00+08:00",
+  "generated_by": "阶段8批次A 环境冻结证据包",
+  "repository": {
+    "full_name": "dujiu1024-dotcom/zhanghaoduibiao",
+    "branch": "main",
+    "commit_sha": "88a31efa7deac7a53d8d646471e0e2adc7e4b753",
+    "working_tree_clean": false,
+    "uncommitted_changes_summary": "0 个已跟踪文件修改、0 个暂存变更、48 个未跟踪文件（32 个 checks 快照、1 个 SOP 备份、10 个书籍巡检抓取中间件、5 个 A-01/A-02 输出文件）",
+    "tracked_file_count": 623,
+    "commit_count": 33
+  },
+  "host_environment": {
+    "operating_system": "macOS",
+    "os_version": "27.0.1 (Build 26A434) arm64",
+    "trae_version": "3.4.20",
+    "trae_build": "3.4.20",
+    "runtime_mode": "Trae CN 桌面客户端内的 Agent 会话；运行模式字段未暴露",
+    "workspace_path_redacted": "账号对标（工作区根目录，绝对路径已脱敏）",
+    "workspace_trust": "trusted",
+    "other_installations": [
+      {
+        "product": "Trae",
+        "version": "3.6.4",
+        "role": "国际版，不纳入主验收环境",
+        "running": false
+      },
+      {
+        "product": "Trae CN 分身",
+        "version": "3.4.18",
+        "role": "历史分身，不纳入主验收环境",
+        "running": false
+      }
+    ]
+  },
+  "model": {
+    "provider": "Trae 客户端模型清单",
+    "name": "DeepSeek-V4.1-Flash",
+    "version": null,
+    "configuration_scope": "会话级",
+    "display_status": "session_declared_ui_unverified",
+    "effective_parameters": {},
+    "unavailable_parameters": [
+      "temperature",
+      "top_p",
+      "max_output_tokens",
+      "thinking_budget",
+      "context_window_effective"
+    ],
+    "distinct_model_warning": "客户端模型清单同时存在 deepseek-v4.1-flash 与 deepseek-v4-flash 两个独立条目，不得混同",
+    "evidence": "会话上下文声明 + Trae CN globalStorage/state.vscdb 的 model_list_map；session_selected_model 无 DeepSeek 记录"
+  },
+  "agent_configuration": {
+    "rules": {
+      "files": [
+        ".trae/rules/00-commercial-constitution.md",
+        ".trae/rules/10-case-blackboard.md",
+        ".trae/rules/scenarios/personal-ip.md"
+      ],
+      "configuration_version": null,
+      "file_manifest_sha256": "0b311fa80fa79604f4bfa3324e6c82ee9e24008ac8db1916f80a161af97c6544",
+      "present": true,
+      "recognized": true,
+      "runtime_verified": false,
+      "state": "RECOGNIZED"
+    },
+    "subagents": {
+      "files": [
+        ".trae/agents/competition-expert.md",
+        ".trae/agents/decision-challenger.md",
+        ".trae/agents/marketing-expert.md",
+        ".trae/agents/operations-expert.md",
+        ".trae/agents/research-expert.md",
+        ".trae/agents/strategy-expert.md"
+      ],
+      "configuration_version": null,
+      "file_manifest_sha256": "0b311fa80fa79604f4bfa3324e6c82ee9e24008ac8db1916f80a161af97c6544",
+      "present": true,
+      "recognized": true,
+      "runtime_verified": false,
+      "state": "RECOGNIZED"
+    },
+    "skills": {
+      "files": [
+        ".trae/skills/business-diagnosis/SKILL.md",
+        ".trae/skills/business-intake/SKILL.md",
+        ".trae/skills/business-model-analysis/SKILL.md",
+        ".trae/skills/commercial-decision-review/SKILL.md",
+        ".trae/skills/customer-marketing-strategy/SKILL.md",
+        ".trae/skills/execution-metrics-plan/SKILL.md",
+        ".trae/skills/financial-unit-economics/SKILL.md",
+        ".trae/skills/industry-competition-analysis/SKILL.md",
+        ".trae/skills/performance-attribution-review/SKILL.md",
+        ".trae/skills/strategic-planning/SKILL.md"
+      ],
+      "configuration_version": null,
+      "file_manifest_sha256": "0b311fa80fa79604f4bfa3324e6c82ee9e24008ac8db1916f80a161af97c6544",
+      "present": true,
+      "recognized": true,
+      "runtime_verified": false,
+      "state": "RECOGNIZED"
+    },
+    "mcp": {
+      "services": [],
+      "configuration_version": null,
+      "configuration_file_sha256": null,
+      "present": false,
+      "recognized": null,
+      "runtime_verified": false,
+      "state": "UNKNOWN",
+      "note": "仓库无项目级 MCP 配置；全局 MCP（如 code_mode）不属于本项目验收范围"
+    }
+  },
+  "knowledge_base": {
+    "instance_id_redacted": "local-sqlite:04-知识底座/rag/kbase.db",
+    "snapshot_id": "A02-KB-20261116",
+    "snapshot_time": "2026-11-16T10:00:00+08:00",
+    "export_method": "只读文件系统清单 + SHA256，未复制、未导出正文",
+    "file_count": 954,
+    "content_file_count": 952,
+    "total_bytes": 799938738,
+    "file_manifest_sha256": "0bd939951acf25474f91c063969e0343cd2914cf7d8b16384abd60a304862de2",
+    "layer_inventory": [
+      {
+        "layer": "A",
+        "path": "04-知识底座/通用商业认知/",
+        "files": 5,
+        "status": "已建立"
+      },
+      {
+        "layer": "B",
+        "path": "未建立",
+        "files": 0,
+        "status": "不存在"
+      },
+      {
+        "layer": "C",
+        "path": "未建立",
+        "files": 0,
+        "status": "不存在"
+      },
+      {
+        "layer": "D",
+        "path": "未建立",
+        "files": 0,
+        "status": "不存在"
+      },
+      {
+        "layer": "E",
+        "path": "未建立",
+        "files": 0,
+        "status": "不存在"
+      }
+    ],
+    "metadata_path": "04-知识底座/knowledge/sources/metadata.csv",
+    "metadata_sha256": "f5f2f586c6f6bc003a83e7d0df65beaaca3b6ac5422c65b5a3538bc4538d95fb",
+    "metadata_records": 776,
+    "metadata_schema_version": null,
+    "chunking_strategy_version": null,
+    "index_version": "kbase.db SHA256 40744a5fefedad80a1a4b78f4672345d7df3493fd7d4cad9b6b3a613cd6d7923",
+    "access_control_config_sha256": null,
+    "backup_status": "当前库无同版本可恢复备份；知识正文无完整备份且不在 Git"
+  },
+  "rag": {
+    "repository_or_location": "04-知识底座/rag/rag.py",
+    "code_commit_sha": "88a31efa7deac7a53d8d646471e0e2adc7e4b753",
+    "code_file_sha256": "48a3890875143cb209114c3c0cbe5fae3b7b7bfb2c3615fe4dcb330140c8c051",
+    "embedding_model": "bge-m3:latest",
+    "embedding_model_version": "ollama digest 7907646426070047a77226ac3e684fbbe8410524f7b4a74d02837e43f2146bab，1024 维",
+    "index_build_version": "2026-11-15 22:02:35",
+    "effective_parameters": {
+      "SIM_FLOOR": 0.66,
+      "CROSS_PENALTY": 0.9,
+      "POOL_MIN": 50,
+      "COVERAGE_FLOOR": 0.32,
+      "ANSWER_MIN_COVERAGE": 0.5,
+      "STRICT_ANSWER": false,
+      "SHORT_RELAX": false,
+      "ENTITY_GATE": false,
+      "OOV_FLOOR": 0.5,
+      "EMBED_MODEL": "bge-m3",
+      "EMBED_DIM": 1024,
+      "EMBED_BATCH": 32
+    },
+    "unavailable_parameters": [
+      "top_k_runtime",
+      "rerank_model",
+      "env_override_all_entrypoints"
+    ]
+  },
+  "test_assets": {
+    "case_files": [
+      "CASE-01-传统企业战略转型.md",
+      "CASE-02-新进入者市场竞争策略.md",
+      "CASE-03-新产品上市与营销增长.md",
+      "CASE-04-收入增长但持续亏损.md",
+      "CASE-05-个人IP商业闭环.md"
+    ],
+    "question_bank": {
+      "path": "04-知识底座/验收/题库/",
+      "count": 240,
+      "groups": 12,
+      "manifest_sha256": "161f9f55237975c74431d64d634d9e26792b519ea8f37be9a88996f2c95e4f7b"
+    },
+    "negative_set": {
+      "path": "04-知识底座/验收/负集.csv",
+      "count": 60,
+      "sha256": "7ac104a6fe078c6afa6410f0268cba31c0af3bb551ea97287eabe8f4fc9906f0"
+    },
+    "scorecard_version": "08-验收与案例/评分量表.md @ 10ff9dd3e89b3655b202c022a5ae67c71dcb8f0e4e7616c42e47a20b2e88496b",
+    "blind_test_template_version": "08-验收与案例/盲测记录模板.md @ 668d8c54c8ac5d2559d0fc8a0fc3726961842705442d1010db7090f83169d535",
+    "report_template_version": "08-验收与案例/压力测试报告模板.md @ a479b96ea5fc9ed00655509efe89560bcb47c2bbd5a13ef2aa4be97e4c544148",
+    "reference_materials_outside_test_workspace": null,
+    "reference_materials_custodian": null
+  },
+  "evidence": {
+    "local_evidence_directory": "08-验收与案例/批次A-冻结证据/",
+    "configuration_snapshots": [
+      "02-环境配置快照.json",
+      "03-Run-Manifest.json",
+      "06-知识库快照清单.csv"
+    ],
+    "hash_manifest": "06-知识库快照清单.csv（954 行逐文件 SHA256）",
+    "sensitive_values_redacted": true
+  },
+  "blockers": [
+    "模型推理参数 unknown_not_exposed",
+    "无法从客户端状态库证明当前选中模型",
+    "知识正文与当前 kbase.db 无完整可恢复备份",
+    "kbase.db 结构与 HEAD rag.py 不一致，rebuild 不可完全复现",
+    "B/C/D/E 知识层未建立",
+    "metadata schema 与切段策略无版本号",
+    "48 个未跟踪项去留待用户确认"
+  ],
+  "notes": "所有字段为实测值或显式 unknown/null + 原因；未使用默认值代填；未包含密钥与个人路径。"
+}
