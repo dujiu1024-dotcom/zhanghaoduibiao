@@ -9,11 +9,12 @@ import csv
 import os
 import sqlite3
 import sys
+from pathlib import Path
 from collections import Counter, defaultdict
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))   # 04-知识底座
 PROJECT = os.path.dirname(BASE)
-DB = os.path.abspath(os.path.expanduser(os.environ.get("KBASE_DB", os.path.join(BASE, "rag", "kbase.db"))))
+DB = Path(os.environ.get("KBASE_DB", os.path.join(BASE, "rag", "kbase.db"))).expanduser().resolve()
 META = os.path.join(BASE, "knowledge", "sources", "metadata.csv")
 CAT = os.path.join(BASE, "catalog", "catalog.csv")
 
@@ -23,7 +24,7 @@ VALID_Q = {"可引用", "仅参考", "仅参考·可转述", "历史文本|已�
 
 def main():
     problems = 0
-    conn = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
+    conn = sqlite3.connect(DB.as_uri() + "?mode=ro", uri=True)
     docs = [dict(zip(("id", "path", "title", "quality", "sha1"), r)) for r in
             conn.execute("select id,source_path,title,quality,sha1 from docs")]
     segs = dict(conn.execute("select doc_id,count(*) from segments group by doc_id"))
