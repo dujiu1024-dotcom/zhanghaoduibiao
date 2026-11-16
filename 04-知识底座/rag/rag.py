@@ -32,7 +32,7 @@ BASE = HERE.parent                    # 04-知识底座
 PROJECT = BASE.parent                 # 账号对标
 KNOW = BASE / "knowledge"
 SOURCES = KNOW / "sources"
-DB_PATH = HERE / "kbase.db"
+DB_PATH = Path(os.environ.get("KBASE_DB", str(HERE / "kbase.db"))).expanduser().resolve()
 GRAPH_JSON = BASE / "图谱" / "graph.json"
 
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://127.0.0.1:11434")
@@ -186,16 +186,27 @@ CREATE INDEX IF NOT EXISTS idx_edge_dst ON graph_edges(target);
 
 # ---------------------------------------------------------------- 基础工具
 
-def connect(path: Path = DB_PATH, create: bool = True) -> sqlite3.Connection:
-    if not create and not path.exists():
-        sys.exit(f"数据库不存在：{path}，先跑 `python rag.py rebuild`")
-    conn = sqlite3.connect(path)
+def connect(path: Path = DB_PATH, create: bool = False, allow_create: bool = False,
+            readonly: bool = False) -> sqlite3.Connection:
+    """打开知识库连接。
+
+    默认不创建数据库。只有显式 create=True 且 allow_create=True 才允许创建缺失文件；
+    readonly=True 使用 SQLite mode=ro，且不执行可能改变数据库文件状态的 PRAGMA。
+    """
+    path = Path(path).expanduser().resolve()
+    if readonly and create:
+        raise ValueError("只读连接不能同时请求建库/建表")
+    if not path.exists() and not (create and allow_create and not readonly):
+        sys.exit(f"数据库不存在：{path}。拒绝自动建库；请先核对 KBASE_DB 并显式执行 init --allow-create。")
+    if readonly:
+        conn = sqlite3.connect(path.as_uri() + "?mode=ro", uri=True)
+    else:
+        conn = sqlite3.connect(path)
     conn.row_factory = sqlite3.Row
     conn.enable_load_extension(True)
     sqlite_vec.load(conn)
     conn.enable_load_extension(False)
     conn.execute("PRAGMA foreign_keys=ON")
-    conn.execute("PRAGMA journal_mode=WAL")
     if create:
         conn.executescript(SCHEMA)
         cols = [r[1] for r in conn.execute("PRAGMA table_info(docs)")]
@@ -667,7 +678,7 @@ def ingest_docs(conn, docs, skip_unchanged=True):
 
 
 def cmd_init(args):
-    conn = connect()
+    conn = connect(create=True, allow_create=args.allow_create)
     n = import_graph(conn)
     conn.close()
     print(f"[ok] schema ready: {DB_PATH}  （图谱节点 {n}）")
@@ -697,7 +708,7 @@ def kick_change_checks(reason: str):
 
 def cmd_ingest(args):
     check_embedder()
-    conn = connect()
+    conn = connect(create=False)
     docs = load_paths(args.paths) if args.paths else all_sources()
     t0 = time.time()
     st = ingest_docs(conn, docs, skip_unchanged=not args.force)
@@ -724,14 +735,17 @@ def cmd_retag(args):
 
 
 def cmd_rebuild(args):
+    if not args.confirm_rebuild:
+        sys.exit("拒绝执行 rebuild：该命令会删除当前 KBASE_DB。核对目标路径并显式添加 --confirm-rebuild。")
+    if not DB_PATH.exists():
+        sys.exit(f"拒绝执行 rebuild：目标数据库不存在：{DB_PATH}。不会自动创建新库；如确需初始化，请使用 init --allow-create。")
     check_embedder()
-    if DB_PATH.exists():
-        DB_PATH.unlink()
+    DB_PATH.unlink()
     for suffix in ("-wal", "-shm"):
         p = Path(str(DB_PATH) + suffix)
         if p.exists():
             p.unlink()
-    conn = connect()
+    conn = connect(create=True, allow_create=True)
     docs = all_sources()
     st = ingest_docs(conn, docs)
     n = import_graph(conn)
@@ -1400,7 +1414,7 @@ def entity_gate(conn, query, hits, meta):
 
 
 def cmd_search(args):
-    conn = connect(create=False)
+    conn = connect(create=False, readonly=True)
     load_license_note()
     q2, note = expand_query(args.query)
     if note:
@@ -1497,7 +1511,7 @@ def import_graph(conn):
 
 
 def cmd_graph(args):
-    conn = connect(create=False)
+    conn = connect(create=False, readonly=not args.import_)
     if args.import_:
         n = import_graph(conn)
         print(f"[graph] nodes={n} edges={conn.execute('SELECT COUNT(*) FROM graph_edges').fetchone()[0]}")
@@ -1529,7 +1543,7 @@ def cmd_graph(args):
 # ---------------------------------------------------------------- 统计
 
 def cmd_stats(args):
-    conn = connect(create=False)
+    conn = connect(create=False, readonly=True)
     q = conn.execute
     print(f"DB: {DB_PATH}  ({DB_PATH.stat().st_size / 1e6:.1f} MB)")
     print(f"docs={q('SELECT COUNT(*) FROM docs').fetchone()[0]}  "
@@ -1575,7 +1589,7 @@ def cmd_eval(args):
 
     pos = load("eval/questions.jsonl")
     neg = load("eval/questions_negative.jsonl")
-    conn = connect(create=False)
+    conn = connect(create=False, readonly=True)
     modes = [("纯字面", "literal"), ("字面+标签", "literal+tag"), ("字面+标签+向量", "hybrid")]
 
     def run(q, mode, floor=None):
@@ -1747,7 +1761,8 @@ def main():
     ap = argparse.ArgumentParser(description="本地检索底座（SQLite + sqlite-vec + 二元字组 + 概念标签）")
     sub = ap.add_subparsers(dest="cmd", required=True)
 
-    p = sub.add_parser("init", help="建库建表")
+    p = sub.add_parser("init", help="建库建表；缺失数据库时必须显式允许创建")
+    p.add_argument("--allow-create", action="store_true", help="明确允许在 KBASE_DB 指向的路径创建新数据库")
     p.set_defaults(func=cmd_init)
 
     p = sub.add_parser("ingest", help="增量入库：切段、打标签、算向量")
@@ -1755,7 +1770,8 @@ def main():
     p.add_argument("--force", action="store_true", help="忽略 sha1，强制重建这些文档")
     p.set_defaults(func=cmd_ingest)
 
-    p = sub.add_parser("rebuild", help="删库重建（含全量向量）")
+    p = sub.add_parser("rebuild", help="删除当前 KBASE_DB 并全量重建（破坏性操作）")
+    p.add_argument("--confirm-rebuild", action="store_true", help="确认删除 KBASE_DB 及其 WAL/SHM 后重建")
     p.set_defaults(func=cmd_rebuild)
 
     p = sub.add_parser("search", help="检索")

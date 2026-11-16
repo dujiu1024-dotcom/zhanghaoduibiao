@@ -16,6 +16,7 @@ import argparse
 import csv
 import hashlib
 import json
+import os
 import re
 import sqlite3
 import subprocess
@@ -30,7 +31,7 @@ QB_DIR = HERE / "题库"
 RAG_DIR = BASE / "rag"
 RAG_PY = RAG_DIR / "rag.py"
 RAG_VENV = RAG_DIR / ".venv" / "bin" / "python"
-DB = RAG_DIR / "kbase.db"
+DB = Path(os.environ.get("KBASE_DB", str(RAG_DIR / "kbase.db"))).expanduser().resolve()
 
 COLUMNS = ["题号", "问题原文", "gold路径", "gold段号", "判定标准",
            "期望能否引原文", "期望", "无料归因", "补料建议"]
@@ -115,7 +116,7 @@ def load_questions(selected: list[str]):
 
 def load_gold_index(golds):
     """返回 canon_path -> (doc_ids, locators, qualities)。只读打开数据库。"""
-    con = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
+    con = sqlite3.connect(DB.as_uri() + "?mode=ro", uri=True)
     con.row_factory = sqlite3.Row
     docs = con.execute("SELECT id, source_path, quality FROM docs").fetchall()
     by_path = {}
