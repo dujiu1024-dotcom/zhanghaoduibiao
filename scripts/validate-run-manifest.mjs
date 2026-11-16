@@ -36,6 +36,14 @@ const validBlocked = {
   blockers: ["A6.3 directory not registered"]
 };
 
+const validDeferred = {
+  ...validBlocked,
+  run_id: "S8-20261116-SYSTEM-004",
+  status: "passed_with_deferred_conditions",
+  blockers: [],
+  deferred_conditions: ["A6.3b must be completed before Batch D"]
+};
+
 const validNotStarted = {
   ...validPassed,
   run_id: "S8-20261116-SYSTEM-003",
@@ -49,6 +57,7 @@ const cases = [
   ["valid passed manifest", validPassed, true],
   ["valid completed_with_blockers manifest with legacy path artifact", validBlocked, true],
   ["valid not_started template", validNotStarted, true],
+  ["valid passed_with_deferred_conditions manifest", validDeferred, true],
   ["passed with no artifacts", { ...validPassed, artifacts: [] }, false],
   ["passed with artifact missing sha256", {
     ...validPassed,
@@ -59,6 +68,7 @@ const cases = [
     blockers: ["unresolved"]
   }, false],
   ["completed_with_blockers without blockers", blockedWithoutBlockers, false],
+  ["passed_with_deferred_conditions without deferred conditions", { ...validDeferred, deferred_conditions: [] }, false],
   ["completed_with_blockers with empty blockers", {
     ...validBlocked,
     blockers: []
