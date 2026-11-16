@@ -40,3 +40,128 @@
 询盘,inquiry,inbound lead;enquiry,—
 开场,opening,first contact;icebreaker,—
 异议,objection,concern;pushback,—
+认知偏差,cognitive bias,确认偏误;幸存者偏差;启发式,01-01 判断偏差问法
+幸存者偏差,survivorship bias,样本偏差;只看活下来的;只看到成功案例,01-01 判断偏差问法
+从众,social proof,社会认同;群体压力;跟风,01-03 从众与社会认同
+说服力,persuasion,态度改变;修辞;论证,01-02 说服与态度改变
+情绪唤起,emotional arousal,唤醒;情绪感染;共鸣,01-06 情绪与唤醒
+身份认同,identity,自我呈现;人设;群体归属,01-07 身份认同与自我呈现
+互惠,reciprocity,人情;社会交换;先给后取,01-05 互惠与社会交换
+传播模型,communication model,媒介环境;扩散;传播路径,02-01 传播模型与媒介环境
+议程设置,agenda setting,框架;舆论;议题,02-02 议程设置与框架
+讲故事,storytelling,叙事;故事结构;起承转合,02-03 叙事结构与故事
+选题,topic selection,需求信号;评论区选题;爆款选题,02-06 选题与需求信号
+口播,spoken delivery,口播稿;语言表达;语速,02-08 口播与语言表达
+分镜,storyboard,镜头;视听语言;画面,02-09 视听语言与镜头
+剪辑节奏,editing rhythm,卡点;转场;节奏,02-10 剪辑节奏与声音
+字幕,subtitle,信息密度;逐字稿;字条,02-11 字幕与信息密度
+脚本结构,script structure,结构模板;脚本模板;开头中段结尾,02-12 脚本结构
+抽样框,sampling frame,样本代表性;总体;抽样方法,03-03 抽样与样本偏差；用户点名缺口词
+代表整个平台,representativeness,抽样框;样本代表性;总体推断,01-016 缺口
+自变量跨度,range of independent variable,相关性;样本量;自变量,03-01 统计与因果推断；用户点名缺口词
+相关性不等于因果,correlation and causation,相关;因果;混淆变量,03-01 统计与因果推断
+发得勤,posting frequency,自变量跨度;相关性;样本量,01-017 缺口
+没观察到,absence of evidence,零样本;样本里没有;阴性结果,03-03 抽样与样本偏差；
+样本量,sample size,样本不足;统计功效;几十条,03-03 抽样与样本偏差
+AB测试,A/B test,实验组;对照组;变量控制,03-02 实验设计与A/B
+两种开头,two variants,变量控制;分组;同一变量,12-003 缺口
+统计显著,statistical significance,置信区间;显著性;P值,03-01 统计与因果推断
+指标口径,metric definition,口径;计算方式;完播定义,03-04 指标口径与度量
+复盘,review,归因;四数;复盘表,03-05 复盘与归因方法
+看哪几个数,key metrics,四数;5秒完播;评论数;私信数,04-015 缺口；用户点名缺口词
+停更,stop posting,停更触发;暂停更新;停下来不发,04-017 缺口；用户点名缺口词
+发布时间,posting schedule,发布节奏;固定时间;想起来就发,04-013 缺口
+发布频率,posting frequency,发布节奏;更新频率,03-015 缺口
+搬运,reposting,复制;信息网络传播;侵权,06-013 缺口
+用户访谈,user interview,深访;开放问题;访谈提纲,04-01 用户访谈与观察
+需求识别,Jobs to be Done,待办任务;真实需求;使用场景,04-02 需求识别与JTBD
+决策链,decision chain,采购流程;决策人;影响者,04-03 B2B采购决策链
+竞争格局,competitive landscape,赛道结构;竞争对手;市场份额,04-05 赛道结构与竞争格局
+市场调研,market research,行业数据;市场规模;调研报告,04-07 市场调研与行业数据
+消费者行为,consumer behavior,决策旅程;购买动机;触点,04-08 消费者行为与决策旅程
+小号,small account,粉丝量;账号体量;值得学的,07-005 缺口
+对标账号,benchmark account,拆解;对标;账号档案,04-10 对标拆解
+靠什么赚钱,monetization,变现;变现方式;盈利模式,07-003 缺口
+转化漏斗,conversion funnel,转化路径;漏斗;环节流失,05-02 转化路径与漏斗设计
+方案书,proposal,报价单;方案呈现;提案,05-04 方案书与报价呈现
+需求转译,requirements translation,需求翻译;需求拆解;把需求变成方案,05-05 需求转译
+客户成功,customer success,转介绍;续费;复购,05-08 客户成功与转介绍
+私域,private domain,微信;社群;朋友圈,05-09 私域承接与微信运营
+私信承接,direct message funnel,私信话术;承接;引导私信,05-10 私信承接
+置顶评论,pinned comment,置顶自评;接话;二选一,09-006 缺口；用户点名缺口词
+接话,reply prompt,置顶自评;评论区互动;回复,09-流量承接
+拒绝,declining,婉拒;推荐给别人;做不了,09-008 缺口
+追问,follow-up,跟进;三天后;追单,09-003 缺口
+预算有限,limited budget,议价;价格锚定;让步,10-012 缺口
+成交,closing,成交话术;逼单;异议处理,05-11 成交与异议
+完成的定义,Definition of Done,DoD;验收标准;算做完,05-06 交付与验收；用户点名缺口词
+可交付增量,Increment,增量;产品目标;可交付,11-020 缺口；用户点名缺口词
+留底,retention of copies,留存复制品;技术资料;保密义务,11-014 缺口；用户点名缺口词
+扯皮,dispute,验收争议;责任划分;返工,11-005 缺口
+推荐机制,recommendation,流量池;推荐算法;分发,06-01 推荐机制
+流量池,traffic pool,推荐;层层推;播放量,08-003 缺口
+冷启动,cold start,新号;养号;起量,06-02 冷启动与账号权重
+限流,throttling,降权;播放量低;被限流,08-016 缺口
+搜索,search,关键词;搜索流量;搜索排名,06-03 搜索与关键词
+投放,paid ads,ROI;广告投放;千川,06-04 投放与ROI
+截流,interception,矩阵;评论区截流;同行流量,06-05 截流与矩阵
+跨平台迁移,cross-platform,平移;改写;平台差异,06-06 跨平台迁移与改写
+搬到视频号,cross-platform migration,平移;平台差异;分发逻辑,08-008 缺口
+养号,account warming,新号;权重;冷启动,06-02 冷启动与账号权重
+起量,ramp-up,冷启动;播放量;涨粉,08-007 缺口
+商业模式,business model,变现;盈利模式;靠什么赚钱,07-01 商业模式设计
+成本结构,cost structure,毛利;固定成本;可变成本,07-03 成本与税务
+现金流,cash flow,回款;账期;经营核算,07-05 经营核算与现金流
+外包,outsourcing,产能;合作;交付能力,07-04 外包与产能
+招人,hiring,一人公司;协作;外包,07-06 一人公司的协作与招人
+产能上限,capacity,外包;产能;交付能力,07-04 外包与产能
+个人信息,personal information,个保法;处理个人信息;同意,08-02 个保法与数据安全
+敏感个人信息,sensitive personal information,生物识别信息;人脸;单独同意,08-02 个保法与数据安全；用户点名缺口词
+客户的脸,face image,敏感个人信息;生物识别信息;单独同意,06-016 缺口
+聊天记录,chat records,个人信息;截图;同意,06-002 缺口
+下架,takedown,违法信息;删除;处置,06-020 缺口
+违法信息,illegal content,生态治理;删除;下架,08-04 平台规则与舆情
+平台规则,platform rules,社区公约;自律公约;违规处置,08-04 平台规则与舆情
+社区公约,community guidelines,平台规则;自律公约,08-05 平台经营合规
+消费者权益,consumer protection,七日无理由;退款;消费者权益保护法,08-06 消费者保护
+明码标价,clear price marking,价格欺诈;促销;价格法,08-07 价格与促销合规
+发布前审,pre-publish review,违规判定;审核;发布前检查,08-08 违规判定与发布前审
+会被罚,penalty,罚款;法律责任;处罚,08 合规
+FDE,forward deployed engineer,技术图谱;驻场;交付型工程,09-01 FDE技术图谱
+工具选型,tooling,工具生态;替代方案;成本,09-04 工具生态与成本
+模型能力,LLM capability,模型边界;上下文;token 成本,09-05 AI模型能力与成本边界
+利他,altruism,价值前置;先给;无条件给,99-01 利他与价值前置
+心理阻抗,reactance,逆反;说服反噬;逼太紧,99-02 心理阻抗与说服反噬
+不能往外说,what not to say,对外只说;能说什么;三类话,01-014 缺口
+下结论,conclusion,四问;下结论前的四问;反例,01-019 缺口
+手上根本没有,not available,未获取;数据不存在;无数据支撑,02-006 缺口
+找不到位置,orphan,孤岛;未归位;不硬塞,02-015 缺口
+主线,main line,总纲;装配图;分篇,03-006 缺口
+第一层,layer one,层级;六层;漏斗,03-007 缺口
+问了价,quoted price,报价;成交;没下文,03-009 缺口
+互相打架,conflict,耦合;冲突;取舍,03-019 缺口
+大词,generic category word,品类词;标题;泛词,04-011 缺口
+停下来不发,stop posting,停更;停更触发;暂停更新,04-017 缺口；用户点名缺口词
+四数,four metrics,5秒完播;完播率;评论数;私信数,04-015 缺口；用户点名缺口词
+不标广告,unlabeled ad,可识别性;显著标明广告;广告标识,06-006 缺口
+经验推断,experience-based inference,推断;无数据支撑;判断,02-001 缺口
+还是空的,still empty,覆盖矩阵;空缺;空白,02-003 缺口
+有出处,sourced,可引用;出处;转述,02-007 缺口
+已覆盖,covered,覆盖状态;部分覆盖;空缺,03-017 缺口
+公开视频,public video,公开内容边界;对外内容;能讲什么,05-003 缺口
+引导私聊,direct message call,私信话术;引导语;结尾引导,05-013 缺口
+往微信上引,off-platform diversion,导流;站外引流;私域,06-004 缺口
+最爆,top performing,爆款;高播放;最高赞,07-006 缺口
+不露脸,no face,人设;出镜;口播,07-013 缺口
+把内容推出去,distribution,分发;推荐;平台差异,08-006 缺口
+带到私信,direct message funnel,私信承接;导流;评论区,09-004 缺口
+问在吗,opening message,开场;私信话术;开场白,09-012 缺口
+什么时候付款,payment deadline,付款期限;账期;违约,11-004 缺口
+工期,construction period,工期;顺延;违约,11-008 缺口
+才算正常,benchmark,完播口径;行业基准;对照,12-004 缺口
+跟谁比,benchmark,行业基准;对照;同类账号,12-011 缺口
+十几条,small sample,样本量;可比性;30天,12-010 缺口
+没人问价,zero sample,零样本;样本里没有;没观察到,12-015 缺口
+粉丝越多,more followers,自变量跨度;相关性;样本量,12-016 缺口
+DoD,Definition of Done,完成的定义;验收标准;算做完,11-001 反向映射
+Increment,Increment,增量;可交付;产品目标,11-020 反向映射

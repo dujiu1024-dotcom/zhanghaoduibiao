@@ -50,7 +50,11 @@ SECONDHAND = set()
 SECONDHAND_MARK = "读书笔记（二手）"
 
 # 相关性下限（可调）：向量相似度 = 1 - cosine 距离；字面覆盖率 = 命中字组 IDF 占查询总 IDF 的比例
-SIM_FLOOR = float(os.environ.get("RAG_SIM_FLOOR", "0.60"))
+# 240 题实测定档（2026-11-15，同一天同版本串行跑完）：
+#   0.60+动态覆盖率 → R@5 56.2 / R@10 63.8 / 负集硬答 47/60
+#   0.66+字面 0.50  → R@5 51.1 / R@10 51.5 / 负集硬答  8/60  ← 当前（硬答<20% 且 R@5≥50% 唯一达标）
+#   0.70+字面 0.60  → R@5 45.1 / R@10 47.2 / 负集硬答  0/60（R@5 跌破 50%，不采用）
+SIM_FLOOR = float(os.environ.get("RAG_SIM_FLOOR", "0.66"))
 # 跨语言命中只在融合分上打 9 折，不做一级排序键：库内 96.9% 是外文段，
 # 把 cross 提到一级会变成「整库多数语料系统降级」。能不能引原文留在展示层标注。
 CROSS_PENALTY = float(os.environ.get("RAG_CROSS_PENALTY", "0.9"))
@@ -63,11 +67,11 @@ COVERAGE_FLOOR = float(os.environ.get("RAG_COVERAGE_FLOOR", "0.32"))
 # 等于对外文「猜得更敢下结论」。实测 Q8：英文书 0.583 靠 0.58 压线进榜，把相似度更高（0.611）的中文笔记挤出前三。
 # 升「高置信」必须另有一条证据：术语扩写同指一篇，或该文档本身含中文段（见 search / cmd_search）。
 # 回答闸门：字面路单独成答，要求覆盖率更高、且问句里未登录字组的 IDF 占比不能过高
-ANSWER_MIN_COVERAGE = float(os.environ.get("RAG_ANSWER_MIN_COVERAGE", "0.40"))
+ANSWER_MIN_COVERAGE = float(os.environ.get("RAG_ANSWER_MIN_COVERAGE", "0.50"))
 # 双轨：默认「低置信也返回」，只有 RAG_STRICT=1 时才维持旧行为（不过线即空）
 STRICT_ANSWER = os.environ.get("RAG_STRICT", "0") == "1"
-# 短问句放宽覆盖率门槛的总开关；设 0 可复现旧行为（统一 0.40）
-SHORT_RELAX = os.environ.get("RAG_SHORT_RELAX", "1") == "1"
+# 短问句放宽覆盖率门槛的总开关；默认关闭（B 档实测用的是统一 0.50，不放松短问句）
+SHORT_RELAX = os.environ.get("RAG_SHORT_RELAX", "0") == "1"
 # 实体闸门（默认关）：问句里识别出的实体词，必须至少一个出现在命中段里，否则不算 answered。
 # 只改判定，不改任何门槛数值、不改排序、不改命中集合。
 ENTITY_GATE = os.environ.get("RAG_ENTITY_GATE", "0") == "1"
