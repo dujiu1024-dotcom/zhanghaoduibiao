@@ -65,19 +65,27 @@
   "input_artifacts": [
     {
       "path": "2026-11-16/a-01-inventory/outputs/盘点报告.md",
-      "role": "A-01 只读盘点"
+      "role": "A-01 只读盘点；原始文件仅在本机工作区，未纳入公开仓库",
+      "availability": "local_only_not_archived_in_public_repository",
+      "integrity_reference": "原始文件未随 PR 提交；相关结论摘要见 01-A02环境冻结报告.md，原始文件无法由仓库审查者独立复算哈希。"
     },
     {
       "path": "2026-11-16/a-02-env-freeze/outputs/A-02-环境冻结报告.md",
-      "role": "A-02 环境冻结"
+      "role": "A-02 环境冻结原始输出；原始文件仅在本机工作区，未纳入公开仓库",
+      "availability": "local_only_not_archived_in_public_repository",
+      "integrity_reference": "脱敏整理版本见 01-A02环境冻结报告.md；原始输出目录未随 PR 提交，原始文件无法由仓库审查者独立复算哈希。"
     },
     {
       "path": "08-验收与案例/批次A-环境配置快照模板.json",
-      "role": "模板"
+      "role": "模板",
+      "availability": "tracked_in_main",
+      "integrity_reference": "可从 main 分支对应仓库路径读取。"
     },
     {
       "path": "08-验收与案例/批次A-run-manifest模板.json",
-      "role": "模板"
+      "role": "模板",
+      "availability": "tracked_in_main",
+      "integrity_reference": "可从 main 分支对应仓库路径读取。"
     }
   ],
   "artifacts": [
