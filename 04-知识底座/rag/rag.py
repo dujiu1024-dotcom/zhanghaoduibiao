@@ -1180,7 +1180,9 @@ def search(conn, query, k=5, quality="", mode="hybrid", sim_floor=None, source="
     tags, qtopics = ([], [])
     if mode in ("tag", "literal+tag", "hybrid"):
         tags, qtopics = tag_search(conn, query, pool, quality)
-    vecs = vector_search(conn, query, pool, quality, sim_floor) if mode == "hybrid" else []
+    # mode="vector" 是单路诊断模式：只走向量、不掺字面与标签，用于对照/校准。
+    # 此前的条件只写了 "hybrid"，导致 CLI 声明过的 --mode vector 三路全关、恒返回空。
+    vecs = vector_search(conn, query, pool, quality, sim_floor) if mode in ("hybrid", "vector") else []
     vec_conf = [v for v in vecs if not v.get("cross")]
     best_cov = max((l["coverage"] for l in lit), default=None)
     oov = oov_idf_ratio(conn, query)
@@ -1778,7 +1780,9 @@ def main():
     p.add_argument("query")
     p.add_argument("-k", type=int, default=5)
     p.add_argument("--quality", default="", help="质量档过滤：可引用 / 仅参考 / 仅参考·可转述，可逗号多选")
-    p.add_argument("--mode", default="hybrid", choices=["literal", "tag", "literal+tag", "hybrid", "vector"])
+    p.add_argument("--mode", default="hybrid", choices=["literal", "tag", "literal+tag", "hybrid", "vector"],
+                   help="检索通路。hybrid=字面+标签+向量（默认）；vector 为单路诊断模式，只走向量、不掺字面与标签，"
+                        "用于对照与阈值校准，不作生产成答口径")
     p.add_argument("--sim-floor", type=float, default=None,
                    help=f"向量相似度下限（默认 {SIM_FLOOR}，也可用环境变量 RAG_SIM_FLOOR）")
     p.add_argument("--json", action="store_true")
