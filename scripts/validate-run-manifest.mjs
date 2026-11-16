@@ -37,7 +37,7 @@ const validBlocked = {
 };
 
 const validDeferred = {
-  ...validBlocked,
+  ...validPassed,
   run_id: "S8-20261116-SYSTEM-004",
   status: "passed_with_deferred_conditions",
   blockers: [],
@@ -69,6 +69,14 @@ const cases = [
   }, false],
   ["completed_with_blockers without blockers", blockedWithoutBlockers, false],
   ["passed_with_deferred_conditions without deferred conditions", { ...validDeferred, deferred_conditions: [] }, false],
+  ["passed_with_deferred_conditions with artifact missing sha256", {
+    ...validDeferred,
+    artifacts: [{ path: "evidence/output.json", artifact_type: "report" }]
+  }, false],
+  ["passed_with_deferred_conditions with input artifact missing artifact_type", {
+    ...validDeferred,
+    input_artifacts: [{ path: "evidence/input.json", sha256: "c".repeat(64) }]
+  }, false],
   ["completed_with_blockers with empty blockers", {
     ...validBlocked,
     blockers: []
