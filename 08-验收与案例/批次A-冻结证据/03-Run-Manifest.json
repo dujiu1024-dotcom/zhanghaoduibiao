@@ -5,8 +5,8 @@
   "run_scope": "批次 A：环境与配置冻结证据归档（只读采集；不含批次 B-E 运行测试）",
   "started_at": "2026-11-16T10:00:00+08:00",
   "finished_at": "2026-11-16T10:20:00+08:00",
-  "revised_at": "2026-11-16T10:40:00+08:00",
-  "revision_note": "A-04 用户裁决落档：仅修正状态与口径，未重新采集环境；model_display_status、blockers、ANSWER_MIN_COVERAGE 冻结说明、Top-K 冻结说明已更新",
+  "revised_at": "2026-11-16T11:44:00+08:00",
+  "revision_note": "A-05 用户裁决补充：A3.2 接受 unknown_not_exposed 作为最终冻结状态并解除该项阻塞；A6.3 确认本地存放、用户本人保管，具体目录待登记；未重新采集环境",
   "status": "completed_with_blockers",
   "repository_commit": "88a31efa7deac7a53d8d646471e0e2adc7e4b753",
   "linked_environment_snapshot": "S8-20261116-A02-FREEZE-001",
@@ -44,7 +44,23 @@
       "EMBED_DIM": 1024,
       "EMBED_BATCH": 32
     },
-    "top_k_freeze_rule": "U11 按入口冻结，不适用全局唯一值：CLI/API 默认 5；check_recall 常规 10、深诊断 50；retrieval_diag 5/50；batch6_rank_diag 10；audit_a/check_gate/batch6_failed_list 5。10/50 属验收/诊断脚本，不得冒充生产检索默认值。"
+    "top_k_freeze_rule": "U11 按入口冻结，不适用全局唯一值：CLI/API 默认 5；check_recall 常规 10、深诊断 50；retrieval_diag 5/50；batch6_rank_diag 10；audit_a/check_gate/batch6_failed_list 5。10/50 属验收/诊断脚本，不得冒充生产检索默认值。",
+    "model_parameters_acceptance": {
+      "status": "user_accepted_unknown_not_exposed",
+      "accepted_at": "2026-11-16",
+      "accepted_by": "用户",
+      "parameters": [
+        "temperature",
+        "top_p",
+        "max_output_tokens",
+        "thinking_budget",
+        "context_window_effective"
+      ],
+      "note": "用户接受未知状态作为本批次最终冻结结果；实际参数值仍不可读，不使用默认值代填"
+    },
+    "reference_materials_location_type": "local",
+    "reference_materials_path": "待用户提供具体目录",
+    "reference_materials_custodian": "用户本人"
   },
   "input_artifacts": [
     {
@@ -118,8 +134,7 @@
     "db_segments": 536707
   },
   "blockers": [
-    "A3.2：模型推理参数 unknown_not_exposed（温度/top_p/最大输出/思考档位/上下文均不可读）",
-    "A6.3：参考要点与反证注入材料的具体位置与保管人尚未登记（U8：用户保管，批次 D 盲测准备前登记）"
+    "A6.3：参考要点与反证注入材料已确认本地存放、用户本人保管；具体目录/可定位路径尚未登记（U8，批次 D 盲测准备前登记）"
   ],
   "followup_risks": [
     "知识正文与当前 kbase.db 无完整可恢复备份——批次 C 迁移/重建/写库前高风险前置条件（U4）",
@@ -128,5 +143,5 @@
     "metadata schema 与切段策略无版本号——已记 NO_VERSION_DECLARED",
     "48 个未跟踪文件已分类，U3 裁决不删除/移动/重命名/清理"
   ],
-  "notes": "A-04 修订后 blockers 仅 2 项；其余事项已按用户裁决（U3/U4/U7/U10）转为后续风险或现状。scores 不适用留空。本 Manifest 不代表批次 A 通过，状态为 completed_with_blockers。"
+  "notes": "A-05 用户裁决后 blockers 仅 1 项（A6.3）。A3.2 五项推理参数仍为 unknown_not_exposed，用户已接受该未知状态作为本批次最终冻结结果；不代表参数实际值已知或已验证。scores 不适用留空。本 Manifest 不代表批次 A 通过，状态为 completed_with_blockers。"
 }
