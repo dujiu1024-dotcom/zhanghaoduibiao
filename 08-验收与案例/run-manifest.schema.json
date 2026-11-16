@@ -260,6 +260,10 @@
             "minItems": 1,
             "items": {
               "type": "object",
+              "properties": {
+                "sha256": {},
+                "artifact_type": {}
+              },
               "required": [
                 "sha256",
                 "artifact_type"
