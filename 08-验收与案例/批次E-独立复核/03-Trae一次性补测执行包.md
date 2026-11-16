@@ -97,7 +97,12 @@ git log -1 --oneline
 
 ## 3. 批次 C1：本机只读补充采集
 
-仅在仓库工作区干净、且已拉取上述最新 main 后执行。所有命令必须只读；不得使用 SQLite 普通读写连接打开数据库。
+仅在仓库工作区干净、且已拉取上述最新 main 后执行。所有命令必须只读；不得使用 SQLite 普通读写连接打开数据库。C1 输出先保存到仓库外的临时目录，避免混入批次 B 证据分支：
+
+```bash
+C1_OUT="${TMPDIR:-/tmp}/stage8-c1-readonly-followup-20261116"
+mkdir -p "$C1_OUT"
+```
 
 ### 3.1 采集配置和候选文件清单
 
@@ -185,7 +190,7 @@ work/cases/stage8-c1-readonly-followup-20261116/
 
 只提交脱敏后的输入输出和证据索引；不得提交本机绝对路径、令牌、客户隐私、数据库文件、metadata.csv 原件或盲测参考材料。
 
-完成后按批次拆成两个独立分支和两个 Draft PR，不要混合批次：
+完成后按批次拆成两个独立分支和两个 Draft PR。**C1 证据在 PR A 完成前必须留在仓库外的 `$C1_OUT`，不要提前复制到仓库。**
 
 **PR A：批次 B 证据**
 ```bash
@@ -199,10 +204,15 @@ git push -u origin evidence/stage8-batch-b-rerun-20261116
 创建 Draft PR，关联 Issues #27、#30、#9。
 
 **PR B：批次 C1 只读取证**
+先确认 PR A 已提交且工作区干净，再执行：
+
 ```bash
 git switch main
 git status --short
+git pull --ff-only origin main
 git switch -c evidence/stage8-c1-readonly-followup-20261116
+mkdir -p work/cases/stage8-c1-readonly-followup-20261116
+cp -R "$C1_OUT/." work/cases/stage8-c1-readonly-followup-20261116/
 git add work/cases/stage8-c1-readonly-followup-20261116/
 git diff --cached --stat
 git commit -m "docs(stage8): add C1 readonly follow-up evidence"
@@ -210,7 +220,7 @@ git push -u origin evidence/stage8-c1-readonly-followup-20261116
 ```
 创建独立 Draft PR，关联 Issues #28、#30、#9。
 
-两次切换前均必须确认工作区干净。若第一支分支提交后仍有未提交文件，先停止并报告；不得把 B 证据带入 C1 分支。不要使用 `git add .`，不要把 C1 文件、源码审计报告或代码改动混入 B-08 原始运行证据 PR。
+每次切换分支前必须确认工作区干净；若输出非空，停止并报告，不得 stash/reset/clean。PR A 只包含批次 B 文件；PR B 只包含 C1 只读证据。不要使用 `git add .`，不要把 C1 文件、源码审计报告或代码改动混入 B-08 原始运行证据 PR。
 ## 5. 本轮明确不启动的工作
 
 ### C2 备份与隔离恢复
