@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """13-三源齐备度：77 细类 × 书/摘要/论文法规/经验。以落盘与入库为准。"""
 import csv, os, sqlite3, collections
+from pathlib import Path
 
 BASE = '04-知识底座/'
 meta = list(csv.DictReader(open(BASE + 'knowledge/sources/metadata.csv', encoding='utf-8-sig')))
@@ -9,7 +10,7 @@ exp = list(csv.DictReader(open(BASE + 'experience/experience.csv', encoding='utf
 DB = os.path.abspath(os.path.expanduser(os.environ.get("KBASE_DB", BASE + "rag/kbase.db")))
 if not os.path.exists(DB):
     raise SystemExit(f"数据库不存在，拒绝自动创建：{DB}")
-db = sqlite3.connect("file:" + DB.replace("?", "%3f") + "?mode=ro", uri=True)
+db = sqlite3.connect(Path(DB).as_uri() + "?mode=ro", uri=True)
 
 # 段数：按 source_path 统计
 seg = collections.Counter()
