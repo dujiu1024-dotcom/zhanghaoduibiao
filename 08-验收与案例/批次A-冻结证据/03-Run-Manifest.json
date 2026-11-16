@@ -1,0 +1,156 @@
+{
+  "run_id": "S8-20261116-A02-ENV-FREEZE-001",
+  "stage": 8,
+  "run_type": "system",
+  "run_scope": "批次 A：环境与配置冻结证据归档（只读采集；不含批次 B-E 运行测试）",
+  "started_at": "2026-11-16T10:00:00+08:00",
+  "finished_at": "2026-11-16T10:20:00+08:00",
+  "revised_at": "2026-11-16T14:00:00+08:00",
+  "revision_note": "A-06 用户裁决：A6.3 拆分为 A6.3a 与 A6.3b；A6.3a（外部位置已指定为用户电脑桌面 Desktop、保管人为用户本人）通过；A6.3b（专用目录创建及盲测材料实际存放）延期至批次 D 启动前确认；不阻挡批次 B/C",
+  "status": "passed_with_deferred_conditions",
+  "repository_commit": "88a31efa7deac7a53d8d646471e0e2adc7e4b753",
+  "linked_environment_snapshot": "S8-20261116-A02-FREEZE-001",
+  "environment": {
+    "trae_version": "3.4.20 (Build 3.4.20)",
+    "model": "DeepSeek-V4.1-Flash",
+    "model_display_status": "user_confirmed_ui",
+    "model_parameters": {},
+    "model_parameters_unavailable": [
+      "temperature",
+      "top_p",
+      "max_output_tokens",
+      "thinking_budget",
+      "context_window_effective"
+    ],
+    "workspace_trust": "trusted",
+    "rules_version": "无版本号；清单哈希 0b311fa80fa79604f4bfa3324e6c82ee9e24008ac8db1916f80a161af97c6544",
+    "subagent_version": "无版本号；同上清单哈希",
+    "skills_version": "无版本号；同上清单哈希",
+    "mcp_configuration_version": "项目级无 MCP 配置",
+    "knowledge_snapshot": "A02-KB-20261116（954 文件 / 799,938,738 字节 / 清单哈希 0bd939951acf25474f91c063969e0343cd2914cf7d8b16384abd60a304862de2）",
+    "rag_code_sha": "48a3890875143cb209114c3c0cbe5fae3b7b7bfb2c3615fe4dcb330140c8c051",
+    "rag_parameters": {
+      "SIM_FLOOR": 0.66,
+      "CROSS_PENALTY": 0.9,
+      "POOL_MIN": 50,
+      "COVERAGE_FLOOR": 0.32,
+      "ANSWER_MIN_COVERAGE": 0.5,
+      "ANSWER_MIN_COVERAGE_freeze_rule": "U5 按运行分支冻结：SHORT_RELAX=0 → 0.50（源码默认，当前 shell 可观测）；SHORT_RELAX=1 → 动态 0.22/0.30/0.36/0.40；RAG_ANSWER_MIN_COVERAGE 环境变量可覆盖；rag/README.md 的 0.40 为历史文档口径",
+      "STRICT_ANSWER": false,
+      "SHORT_RELAX": false,
+      "ENTITY_GATE": false,
+      "OOV_FLOOR": 0.5,
+      "EMBED_MODEL": "bge-m3",
+      "EMBED_DIM": 1024,
+      "EMBED_BATCH": 32
+    },
+    "top_k_freeze_rule": "U11 按入口冻结，不适用全局唯一值：CLI/API 默认 5；check_recall 常规 10、深诊断 50；retrieval_diag 5/50；batch6_rank_diag 10；audit_a/check_gate/batch6_failed_list 5。10/50 属验收/诊断脚本，不得冒充生产检索默认值。",
+    "model_parameters_acceptance": {
+      "status": "user_accepted_unknown_not_exposed",
+      "accepted_at": "2026-11-16",
+      "accepted_by": "用户",
+      "parameters": [
+        "temperature",
+        "top_p",
+        "max_output_tokens",
+        "thinking_budget",
+        "context_window_effective"
+      ],
+      "note": "用户接受未知状态作为本批次最终冻结结果；实际参数值仍不可读，不使用默认值代填"
+    },
+    "reference_materials_location_type": "external_to_test_workspace_user_desktop_selected",
+    "reference_materials_path": "用户电脑桌面（Desktop）；专用目录及盲测材料实际存放状态延期至批次 D 启动前确认（A6.3b）",
+    "reference_materials_custodian": "用户本人"
+  },
+  "input_artifacts": [
+    {
+      "path": "2026-11-16/a-01-inventory/outputs/盘点报告.md",
+      "role": "A-01 只读盘点；原始文件仅在本机工作区，未纳入公开仓库",
+      "availability": "local_only_not_archived_in_public_repository",
+      "integrity_reference": "原始文件未随 PR 提交；相关结论摘要见 01-A02环境冻结报告.md，原始文件无法由仓库审查者独立复算哈希。"
+    },
+    {
+      "path": "2026-11-16/a-02-env-freeze/outputs/A-02-环境冻结报告.md",
+      "role": "A-02 环境冻结原始输出；原始文件仅在本机工作区，未纳入公开仓库",
+      "availability": "local_only_not_archived_in_public_repository",
+      "integrity_reference": "脱敏整理版本见 01-A02环境冻结报告.md；原始输出目录未随 PR 提交，原始文件无法由仓库审查者独立复算哈希。"
+    },
+    {
+      "path": "08-验收与案例/批次A-环境配置快照模板.json",
+      "role": "模板",
+      "availability": "tracked_in_main",
+      "integrity_reference": "可从 main 分支对应仓库路径读取。"
+    },
+    {
+      "path": "08-验收与案例/批次A-run-manifest模板.json",
+      "role": "模板",
+      "availability": "tracked_in_main",
+      "integrity_reference": "可从 main 分支对应仓库路径读取。"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "08-验收与案例/批次A-冻结证据/README.md"
+    },
+    {
+      "path": "08-验收与案例/批次A-冻结证据/01-A02环境冻结报告.md"
+    },
+    {
+      "path": "08-验收与案例/批次A-冻结证据/02-环境配置快照.json"
+    },
+    {
+      "path": "08-验收与案例/批次A-冻结证据/03-Run-Manifest.json"
+    },
+    {
+      "path": "08-验收与案例/批次A-冻结证据/04-Git工作区冻结清单.csv"
+    },
+    {
+      "path": "08-验收与案例/批次A-冻结证据/05-RAG基线与差异核验.md"
+    },
+    {
+      "path": "08-验收与案例/批次A-冻结证据/06-知识库快照清单.csv"
+    },
+    {
+      "path": "08-验收与案例/批次A-冻结证据/07-案例资产清单.csv"
+    },
+    {
+      "path": "08-验收与案例/批次A-冻结证据/08-待用户确认事项.md"
+    },
+    {
+      "path": "08-验收与案例/批次A-冻结证据/09-批次A验收自审表.md"
+    },
+    {
+      "path": "08-验收与案例/批次A-冻结证据/evidence/文件哈希与证据索引.md"
+    }
+  ],
+  "scores": {
+    "expert_scores": {},
+    "controller_score": null,
+    "veto_count": null,
+    "decision": "pending",
+    "note": "环境冻结阶段无评分对象，不适用"
+  },
+  "defect_issue_urls": [],
+  "counts": {
+    "untracked_files": 48,
+    "knowledge_files": 954,
+    "knowledge_content_files": 952,
+    "metadata_records": 776,
+    "question_bank": 240,
+    "negative_set": 60,
+    "db_docs": 807,
+    "db_segments": 536707
+  },
+  "blockers": [],
+  "followup_risks": [
+    "知识正文与当前 kbase.db 无完整可恢复备份——批次 C 迁移/重建/写库前高风险前置条件（U4）",
+    "kbase.db 结构与 HEAD rag.py 不一致，rebuild 不可完全复现",
+    "B/C/D/E 知识层未建立——只记现状，不构成本批次失败（U7）",
+    "metadata schema 与切段策略无版本号——已记 NO_VERSION_DECLARED",
+    "48 个未跟踪文件已分类，U3 裁决不删除/移动/重命名/清理"
+  ],
+  "notes": "A-06 用户裁决后，批次 A 验收状态为 passed_with_deferred_conditions：A6.3a 已通过；A6.3b 为批次 D 的启动前置条件，不阻挡批次 B/C。A3.2 五项推理参数仍为 unknown_not_exposed，用户接受该未知状态作为冻结例外，不代表实际参数值已知或已验证。A-01/A-02 原始输入的本机来源可追溯性限制继续按 input_artifacts 明示。",
+  "deferred_conditions": [
+    "A6.3b：批次 D 启动前，由用户确认桌面专用目录已创建且盲测参考要点与反证注入材料已实际存入；材料始终不得进入被测工作区、项目仓库或知识库。"
+  ]
+}
