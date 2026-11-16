@@ -172,7 +172,12 @@ work/cases/stage8-batch-b-rerun-20261116/
   B6-industry-competition-analysis/
   B7-performance-attribution-review/
   B8-strategic-planning/
-  C1-readonly-followup/
+  SHA256SUMS.txt
+
+work/cases/stage8-c1-readonly-followup-20261116/
+  00-候选数据库清单.md
+  01-进程与文件句柄.md
+  02-元数据与SHA256.md
   SHA256SUMS.txt
 ```
 
