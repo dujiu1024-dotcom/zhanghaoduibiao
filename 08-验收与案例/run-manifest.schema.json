@@ -277,7 +277,11 @@
               "required": [
                 "sha256",
                 "artifact_type"
-              ]
+              ],
+              "properties": {
+                "sha256": {},
+                "artifact_type": {}
+              }
             }
           },
           "blockers": {
