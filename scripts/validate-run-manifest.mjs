@@ -77,6 +77,18 @@ const cases = [
     ...validDeferred,
     input_artifacts: [{ path: "evidence/input.json", sha256: "c".repeat(64) }]
   }, false],
+  ["passed_with_deferred_conditions with input artifact missing sha256", {
+    ...validDeferred,
+    input_artifacts: [{ path: "evidence/input.json", artifact_type: "input" }]
+  }, false],
+  ["passed_with_deferred_conditions with malformed artifact sha256", {
+    ...validDeferred,
+    artifacts: [{ path: "evidence/output.json", sha256: "not-a-sha256", artifact_type: "report" }]
+  }, false],
+  ["passed_with_deferred_conditions with invalid artifact_type", {
+    ...validDeferred,
+    artifacts: [{ path: "evidence/output.json", sha256: "d".repeat(64), artifact_type: "unknown" }]
+  }, false],
   ["completed_with_blockers with empty blockers", {
     ...validBlocked,
     blockers: []
