@@ -58,9 +58,9 @@
       ],
       "note": "用户接受未知状态作为本批次最终冻结结果；实际参数值仍不可读，不使用默认值代填"
     },
-    "reference_materials_location_type": "external_to_test_workspace_required_not_yet_registered",
-    "reference_materials_path": "尚未创建或登记；待用户提供具体目录；材料实际存放状态未确认",
-    "reference_materials_custodian": "用户本人（指定保管人；材料实际存放状态待确认）"
+    "reference_materials_location_type": "external_to_test_workspace_user_desktop_selected_actual_directory_pending",
+    "reference_materials_path": "用户已指定电脑桌面（Desktop）作为被测工作区之外的外部保管位置；桌面专用目录是否创建、参考材料是否已实际存入尚未确认（按 U8，批次 D 盲测准备前确认）",
+    "reference_materials_custodian": "用户本人（已指定保管人；目录及材料实际落地状态待确认）"
   },
   "input_artifacts": [
     {
