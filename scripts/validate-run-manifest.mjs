@@ -6,7 +6,18 @@ const schemaPath = "08-验收与案例/run-manifest.schema.json";
 const schema = JSON.parse(fs.readFileSync(schemaPath, "utf8"));
 const ajv = new Ajv2020({ allErrors: true, strict: true });
 addFormats(ajv);
-const validate = ajv.compile(schema);
+const validateSchema = ajv.compile(schema);
+
+// JSON Schema validates each field's shape. This cross-field invariant ensures
+// the CASE-xx segment embedded in run_id agrees with the explicit case_id.
+function validateManifest(data) {
+  if (!validateSchema(data)) return false;
+  if (data.run_type === "case") {
+    const match = /^S8-[0-9]{8}-(CASE-0[1-5])-[0-9]{3}$/.exec(data.run_id);
+    return Boolean(match && match[1] === data.case_id);
+  }
+  return true;
+}
 
 const validPassed = {
   run_id: "S8-20261116-SYSTEM-001",
@@ -67,15 +78,23 @@ const validCase = {
 const { blockers: _ignored, ...blockedWithoutBlockers } = validBlocked;
 const cases = [
   ["valid passed manifest", validPassed, true],
-  ["valid case manifest with case_id and hashed input", validCase, true],
+  ["valid case manifest with matching case_id and hashed input", validCase, true],
   ["case manifest without case_id", { ...validCase, case_id: undefined }, false],
   ["case manifest without input_artifacts", { ...validCase, input_artifacts: undefined }, false],
   ["case manifest with unhashed input", {
     ...validCase,
     input_artifacts: [{ path: "evidence/input.md", artifact_type: "input" }]
   }, false],
+  ["case manifest with case_id/run_id mismatch", {
+    ...validCase,
+    case_id: "CASE-02"
+  }, false],
+  ["case manifest with run_id case segment mismatch", {
+    ...validCase,
+    run_id: "S8-20261117-CASE-02-001"
+  }, false],
   ["valid completed_with_blockers manifest with legacy path artifact", validBlocked, true],
-  ["valid not_started template", validNotStarted, true],
+  ["valid not_started manifest", validNotStarted, true],
   ["valid passed_with_deferred_conditions manifest", validDeferred, true],
   ["passed with no artifacts", { ...validPassed, artifacts: [] }, false],
   ["passed with artifact missing sha256", {
@@ -96,15 +115,18 @@ const cases = [
 
 let failed = false;
 for (const [name, data, expected] of cases) {
-  const actual = validate(data);
+  const actual = validateManifest(data);
   if (actual !== expected) {
     failed = true;
     console.error(`FAIL: ${name}; expected valid=${expected}`);
-    if (!actual) console.error(validate.errors);
+    if (!validateSchema(data)) console.error(validateSchema.errors);
+    else if (data.run_type === "case") {
+      console.error(`case_id ${data.case_id} does not match run_id ${data.run_id}`);
+    }
   } else {
     console.log(`PASS: ${name}`);
   }
 }
 
 if (failed) process.exit(1);
-console.log(`All ${cases.length} Draft 2020-12 schema checks passed.`);
+console.log(`All ${cases.length} schema and cross-field checks passed.`);
