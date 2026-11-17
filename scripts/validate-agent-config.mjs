@@ -71,6 +71,12 @@ function checkSet(kind, names) {
       for (const required of ["work/cases/<case_id>/04-专家分析/", "禁止覆盖", "路径级 Write 沙箱"]) {
         if (!content.includes(required)) errors.push(`${path.relative(root, file)}: Write boundary missing ${required}`);
       }
+      if (content.includes("文件写入 `work/cases/<case_id>/` 中总控指定的位置")) {
+        errors.push(`${path.relative(root, file)}: ambiguous broad output path conflicts with the Write boundary`);
+      }
+      if (!content.includes("文件只写入 `work/cases/<case_id>/04-专家分析/`")) {
+        errors.push(`${path.relative(root, file)}: unified delivery gate must use the restricted expert-output directory`);
+      }
       if (content.includes("accepted") && !content.includes("专家不得设置 `accepted`")) {
         errors.push(`${path.relative(root, file)}: accepted-state boundary is not explicit`);
       }
@@ -84,13 +90,73 @@ function checkSet(kind, names) {
 checkSet("agents", expectedAgents);
 checkSet("skills", expectedSkills);
 
+const setupPackageFiles = [
+  "待配置Agent/商业操盘手/01-总控Agent身份与系统提示词.md",
+  "待配置Agent/商业操盘手/02-强制工作流程.md",
+  "待配置Agent/商业操盘手/03-权限与审批规则.md",
+  "待配置Agent/商业操盘手/04-六类专家配置对照.md",
+  "待配置Agent/商业操盘手/README-配置说明.md"
+];
+for (const relativePath of setupPackageFiles) {
+  const file = path.join(root, relativePath);
+  if (!fs.existsSync(file)) {
+    errors.push(`missing setup package file: ${relativePath}`);
+    continue;
+  }
+  const content = fs.readFileSync(file, "utf8");
+  if (!content.includes("专家只能新建总控派单明确指定的独立交付文件")) {
+    errors.push(`${relativePath}: missing expert Write boundary`);
+  }
+  if (!content.includes("Write 不是路径级沙箱")) {
+    errors.push(`${relativePath}: must state that Write is not a path sandbox`);
+  }
+}
+
+function extractSection(content, startHeading, endHeading) {
+  const start = content.indexOf(startHeading);
+  if (start < 0) return "";
+  const bodyStart = start + startHeading.length;
+  const end = content.indexOf(endHeading, bodyStart);
+  return end < 0 ? content.slice(bodyStart) : content.slice(bodyStart, end);
+}
+
+function checkRoutingTable(section, expectedNames, label) {
+  if (!section) {
+    errors.push(`routing document missing ${label} table section`);
+    return;
+  }
+  const rows = section.split(/\r?\n/)
+    .filter(line => line.trim().startsWith("|") && line.trim().endsWith("|"))
+    .filter(line => expectedNames.some(name => line.split("|").slice(1, -1)
+      .some(cell => cell.trim().replace(/^`|`$/g, "") === name)));
+  const cells = rows.flatMap(line => line.split("|").slice(1, -1)
+    .map(cell => cell.trim().replace(/^`|`$/g, "")));
+  for (const name of expectedNames) {
+    const count = rows.filter(line => line.split("|").slice(1, -1)
+      .some(cell => cell.trim().replace(/^`|`$/g, "") === name)).length;
+    if (count < 1 || (label === "Skill" && count !== 1)) {
+      errors.push(`${label} routing table must contain ${label === "Skill" ? "exactly one" : "at least one"} row for ${name}; found ${count}`);
+    }
+  }
+  for (const cell of cells) {
+    if (/^[a-z][a-z0-9-]*$/.test(cell) && !expectedNames.includes(cell)) {
+      errors.push(`${label} routing table contains unexpected entry: ${cell}`);
+    }
+  }
+  if (rows.length !== expectedNames.length) {
+    errors.push(`${label} routing table expected ${expectedNames.length} rows, found ${rows.length}`);
+  }
+}
+
 const routingPath = path.join(root, "07-操盘手系统设计/Skill触发与路由边界.md");
 const agentsPath = path.join(root, "AGENTS.md");
 if (!fs.existsSync(routingPath)) errors.push("missing Skill routing boundary document");
 else {
   const routing = fs.readFileSync(routingPath, "utf8");
-  for (const name of expectedSkills) if (!routing.includes(name)) errors.push(`routing document missing Skill: ${name}`);
-  for (const name of expectedAgents) if (!routing.includes(name)) errors.push(`routing document missing Subagent: ${name}`);
+  const skillSection = extractSection(routing, "## 2. 十个 Skill 的主责与排除边界", "## 3. 常见重叠的裁决规则");
+  const agentSection = extractSection(routing, "## 4. Subagent 路由映射", "## 5. 调用与交付门禁");
+  checkRoutingTable(skillSection, expectedSkills, "Skill");
+  checkRoutingTable(agentSection, expectedAgents, "Subagent");
 }
 if (!fs.existsSync(agentsPath) || !fs.readFileSync(agentsPath, "utf8").includes("Skill触发与路由边界.md")) {
   errors.push("AGENTS.md must link the Skill routing boundary document");
