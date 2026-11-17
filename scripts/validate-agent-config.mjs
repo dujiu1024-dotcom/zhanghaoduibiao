@@ -98,17 +98,23 @@ function checkRoutingTable(section, expectedNames, label) {
     return;
   }
   const rows = section.split(/\r?\n/)
-    .filter(line => /^\|/.test(line) && /`[a-z][a-z0-9-]*`/.test(line));
-  const foundNames = rows.flatMap(line => [...line.matchAll(/`([a-z][a-z0-9-]*)`/g)].map(match => match[1]));
+    .filter(line => line.trim().startsWith("|") && line.trim().endsWith("|"));
+  const cells = rows.flatMap(line => line.split("|").slice(1, -1)
+    .map(cell => cell.trim().replace(/^`|`$/g, "")));
   for (const name of expectedNames) {
-    const count = rows.filter(line => line.includes(String.fromCharCode(96) + name + String.fromCharCode(96))).length;
-    if (count !== 1) errors.push(`${label} routing table must contain exactly one row for ${name}; found ${count}`);
+    const count = rows.filter(line => line.split("|").slice(1, -1)
+      .some(cell => cell.trim().replace(/^`|`$/g, "") === name)).length;
+    if (count < 1 || (label === "Skill" && count !== 1)) {
+      errors.push(`${label} routing table must contain ${label === "Skill" ? "exactly one" : "at least one"} row for ${name}; found ${count}`);
+    }
   }
-  for (const name of foundNames) {
-    if (!expectedNames.includes(name)) errors.push(`${label} routing table contains unexpected entry: ${name}`);
+  for (const cell of cells) {
+    if (/^[a-z][a-z0-9-]*$/.test(cell) && !expectedNames.includes(cell)) {
+      errors.push(`${label} routing table contains unexpected entry: ${cell}`);
+    }
   }
   if (rows.length !== expectedNames.length) {
-    errors.push(`${label} routing table expected ${expectedNames.length} entries, found ${rows.length}`);
+    errors.push(`${label} routing table expected ${expectedNames.length} rows, found ${rows.length}`);
   }
 }
 
