@@ -98,7 +98,7 @@ function checkRoutingTable(section, expectedNames, label) {
     return;
   }
   const names = section.split(/\r?\n/)
-    .map(line => /^\|\s*([a-z][a-z0-9-]*)\s*\|/.exec(line)?.[1])
+    .map(line => /^\|\s*`?([a-z][a-z0-9-]*)`?\s*\|/.exec(line)?.[1])
     .filter(Boolean);
   for (const name of expectedNames) {
     const count = names.filter(value => value === name).length;
