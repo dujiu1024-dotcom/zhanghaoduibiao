@@ -84,13 +84,43 @@ function checkSet(kind, names) {
 checkSet("agents", expectedAgents);
 checkSet("skills", expectedSkills);
 
+function extractSection(content, startHeading, endHeading) {
+  const start = content.indexOf(startHeading);
+  if (start < 0) return "";
+  const bodyStart = start + startHeading.length;
+  const end = content.indexOf(endHeading, bodyStart);
+  return end < 0 ? content.slice(bodyStart) : content.slice(bodyStart, end);
+}
+
+function checkRoutingTable(section, expectedNames, label) {
+  if (!section) {
+    errors.push(`routing document missing ${label} table section`);
+    return;
+  }
+  const names = section.split(/\\r?\\n/)
+    .map(line => /^\\|\\s*([a-z][a-z0-9-]*)\\s*\\|/.exec(line)?.[1])
+    .filter(Boolean);
+  for (const name of expectedNames) {
+    const count = names.filter(value => value === name).length;
+    if (count !== 1) errors.push(`${label} routing table must contain exactly one row for ${name}; found ${count}`);
+  }
+  for (const name of names) {
+    if (!expectedNames.includes(name)) errors.push(`${label} routing table contains unexpected entry: ${name}`);
+  }
+  if (names.length !== expectedNames.length) {
+    errors.push(`${label} routing table expected ${expectedNames.length} entries, found ${names.length}`);
+  }
+}
+
 const routingPath = path.join(root, "07-操盘手系统设计/Skill触发与路由边界.md");
 const agentsPath = path.join(root, "AGENTS.md");
 if (!fs.existsSync(routingPath)) errors.push("missing Skill routing boundary document");
 else {
   const routing = fs.readFileSync(routingPath, "utf8");
-  for (const name of expectedSkills) if (!routing.includes(name)) errors.push(`routing document missing Skill: ${name}`);
-  for (const name of expectedAgents) if (!routing.includes(name)) errors.push(`routing document missing Subagent: ${name}`);
+  const skillSection = extractSection(routing, "## 2. 十个 Skill 的主责与排除边界", "## 3. 常见重叠的裁决规则");
+  const agentSection = extractSection(routing, "## 4. Subagent 路由映射", "## 5. 调用与交付门禁");
+  checkRoutingTable(skillSection, expectedSkills, "Skill");
+  checkRoutingTable(agentSection, expectedAgents, "Subagent");
 }
 if (!fs.existsSync(agentsPath) || !fs.readFileSync(agentsPath, "utf8").includes("Skill触发与路由边界.md")) {
   errors.push("AGENTS.md must link the Skill routing boundary document");
