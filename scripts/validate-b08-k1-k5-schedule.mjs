@@ -23,7 +23,7 @@ function longestPathRange(taskMap, endpoint) {
 
     const predecessorRanges = task.dependsOn.map(finishAt);
     const predecessorMax = predecessorRanges.length
-      ? Math.max(...predecessorRanges.map(range => range[endpoint]))
+      ? Math.max(...predecessorRanges)
       : 0;
     const result = predecessorMax + task[endpoint];
 
