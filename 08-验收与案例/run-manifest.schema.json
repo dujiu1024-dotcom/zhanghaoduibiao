@@ -267,6 +267,15 @@
           "input_artifacts"
         ],
         "properties": {
+          "case_id": {
+            "enum": [
+              "CASE-01",
+              "CASE-02",
+              "CASE-03",
+              "CASE-04",
+              "CASE-05"
+            ]
+          },
           "input_artifacts": {
             "type": "array",
             "minItems": 1,
