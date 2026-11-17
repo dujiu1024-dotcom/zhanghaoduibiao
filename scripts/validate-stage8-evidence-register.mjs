@@ -42,9 +42,14 @@ function repoFileExists(relativePath, sourceFile) {
 const manifests = [];
 for (const file of walk(manifestRoot)) {
   const data = JSON.parse(fs.readFileSync(file, "utf8"));
-  if (data && typeof data.run_id === "string") {
-    manifests.push({ file, data });
+  const relativeFile = path.relative(root, file).split(path.sep).join("/");
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    throw new Error(`${relativeFile}: manifest must contain a JSON object`);
   }
+  if (typeof data.run_id !== "string" || data.run_id.trim().length === 0) {
+    throw new Error(`${relativeFile}: manifest is missing a non-empty run_id`);
+  }
+  manifests.push({ file, data });
 }
 
 if (manifests.length === 0) {
