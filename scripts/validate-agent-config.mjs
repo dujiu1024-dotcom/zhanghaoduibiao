@@ -97,7 +97,7 @@ function checkRoutingTable(section, expectedNames, label) {
     errors.push(`routing document missing ${label} table section`);
     return;
   }
-  const names = section.split(/\\r?\\n/)
+  const names = section.split(/\r?\n/)
     .map(line => /^\\|\\s*([a-z][a-z0-9-]*)\\s*\\|/.exec(line)?.[1])
     .filter(Boolean);
   for (const name of expectedNames) {
