@@ -4,6 +4,9 @@ on:
   pull_request:
     paths:
       - ".trae/agents/**"
+      - ".trae/rules/00-commercial-constitution.md"
+      - "07-操盘手系统设计/专家交付契约.md"
+      - "07-操盘手系统设计/专家协作与黑板协议.md"
       - ".trae/skills/**"
       - "AGENTS.md"
       - "07-操盘手系统设计/Skill触发与路由边界.md"
