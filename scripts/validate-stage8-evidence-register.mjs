@@ -16,7 +16,7 @@ function walk(directory) {
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
     const fullPath = path.join(directory, entry.name);
     if (entry.isDirectory()) files.push(...walk(fullPath));
-    else if (entry.isFile() && entry.name.toLowerCase().includes("manifest") && entry.name.endsWith(".json")) {
+    else if (entry.isFile() && entry.name.toLowerCase().includes("manifest") && entry.name.endsWith(".json") && !entry.name.toLowerCase().endsWith(".schema.json")) {
       files.push(fullPath);
     }
   }
