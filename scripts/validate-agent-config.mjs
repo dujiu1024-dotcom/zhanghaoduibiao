@@ -71,6 +71,12 @@ function checkSet(kind, names) {
       for (const required of ["work/cases/<case_id>/04-专家分析/", "禁止覆盖", "路径级 Write 沙箱"]) {
         if (!content.includes(required)) errors.push(`${path.relative(root, file)}: Write boundary missing ${required}`);
       }
+      if (content.includes("文件写入 `work/cases/<case_id>/` 中总控指定的位置")) {
+        errors.push(`${path.relative(root, file)}: ambiguous broad output path conflicts with the Write boundary`);
+      }
+      if (!content.includes("文件只写入 `work/cases/<case_id>/04-专家分析/`")) {
+        errors.push(`${path.relative(root, file)}: unified delivery gate must use the restricted expert-output directory`);
+      }
       if (content.includes("accepted") && !content.includes("专家不得设置 `accepted`")) {
         errors.push(`${path.relative(root, file)}: accepted-state boundary is not explicit`);
       }
