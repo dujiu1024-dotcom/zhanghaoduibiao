@@ -253,6 +253,50 @@
     {
       "if": {
         "properties": {
+          "run_type": {
+            "const": "case"
+          }
+        },
+        "required": [
+          "run_type"
+        ]
+      },
+      "then": {
+        "required": [
+          "case_id",
+          "input_artifacts"
+        ],
+        "properties": {
+          "case_id": {
+            "enum": [
+              "CASE-01",
+              "CASE-02",
+              "CASE-03",
+              "CASE-04",
+              "CASE-05"
+            ]
+          },
+          "input_artifacts": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "sha256",
+                "artifact_type"
+              ],
+              "properties": {
+                "sha256": {},
+                "artifact_type": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
           "status": {
             "const": "passed"
           }

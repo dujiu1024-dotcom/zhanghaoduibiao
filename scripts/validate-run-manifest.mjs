@@ -52,9 +52,28 @@ const validNotStarted = {
   artifacts: []
 };
 
+const validCase = {
+  ...validPassed,
+  run_id: "S8-20261117-CASE-01-001",
+  run_type: "case",
+  case_id: "CASE-01",
+  input_artifacts: [{
+    path: "evidence/input.md",
+    sha256: "c".repeat(64),
+    artifact_type: "input"
+  }]
+};
+
 const { blockers: _ignored, ...blockedWithoutBlockers } = validBlocked;
 const cases = [
   ["valid passed manifest", validPassed, true],
+  ["valid case manifest with case_id and hashed input", validCase, true],
+  ["case manifest without case_id", { ...validCase, case_id: undefined }, false],
+  ["case manifest without input_artifacts", { ...validCase, input_artifacts: undefined }, false],
+  ["case manifest with unhashed input", {
+    ...validCase,
+    input_artifacts: [{ path: "evidence/input.md", artifact_type: "input" }]
+  }, false],
   ["valid completed_with_blockers manifest with legacy path artifact", validBlocked, true],
   ["valid not_started template", validNotStarted, true],
   ["valid passed_with_deferred_conditions manifest", validDeferred, true],
