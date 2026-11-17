@@ -101,7 +101,7 @@ function checkRoutingTable(section, expectedNames, label) {
     .filter(line => /^\|/.test(line) && /`[a-z][a-z0-9-]*`/.test(line));
   const foundNames = rows.flatMap(line => [...line.matchAll(/`([a-z][a-z0-9-]*)`/g)].map(match => match[1]));
   for (const name of expectedNames) {
-    const count = rows.filter(line => line.includes(```${name}```)).length;
+    const count = rows.filter(line => line.includes(String.fromCharCode(96) + name + String.fromCharCode(96))).length;
     if (count !== 1) errors.push(`${label} routing table must contain exactly one row for ${name}; found ${count}`);
   }
   for (const name of foundNames) {
