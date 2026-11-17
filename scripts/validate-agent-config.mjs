@@ -90,6 +90,28 @@ function checkSet(kind, names) {
 checkSet("agents", expectedAgents);
 checkSet("skills", expectedSkills);
 
+const setupPackageFiles = [
+  "待配置Agent/商业操盘手/01-总控Agent身份与系统提示词.md",
+  "待配置Agent/商业操盘手/02-强制工作流程.md",
+  "待配置Agent/商业操盘手/03-权限与审批规则.md",
+  "待配置Agent/商业操盘手/04-六类专家配置对照.md",
+  "待配置Agent/商业操盘手/README-配置说明.md"
+];
+for (const relativePath of setupPackageFiles) {
+  const file = path.join(root, relativePath);
+  if (!fs.existsSync(file)) {
+    errors.push(`missing setup package file: ${relativePath}`);
+    continue;
+  }
+  const content = fs.readFileSync(file, "utf8");
+  if (!content.includes("专家只能新建总控派单明确指定的独立交付文件")) {
+    errors.push(`${relativePath}: missing expert Write boundary`);
+  }
+  if (!content.includes("Write 不是路径级沙箱")) {
+    errors.push(`${relativePath}: must state that Write is not a path sandbox`);
+  }
+}
+
 function extractSection(content, startHeading, endHeading) {
   const start = content.indexOf(startHeading);
   if (start < 0) return "";
