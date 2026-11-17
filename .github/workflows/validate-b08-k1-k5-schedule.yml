@@ -1,0 +1,28 @@
+name: Validate B-08 K1-K5 schedule
+
+on:
+  pull_request:
+    paths:
+      - "scripts/validate-b08-k1-k5-schedule.mjs"
+      - "work/reviews/stage8-b08-k1-k5-schedule-errata-20261117.md"
+      - ".github/workflows/validate-b08-k1-k5-schedule.yml"
+  push:
+    branches: [main]
+    paths:
+      - "scripts/validate-b08-k1-k5-schedule.mjs"
+      - "work/reviews/stage8-b08-k1-k5-schedule-errata-20261117.md"
+      - ".github/workflows/validate-b08-k1-k5-schedule.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  schedule:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Recompute B-08 K1-K5 critical path
+        run: node scripts/validate-b08-k1-k5-schedule.mjs
