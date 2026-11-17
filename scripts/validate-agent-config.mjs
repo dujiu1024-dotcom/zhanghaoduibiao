@@ -97,18 +97,18 @@ function checkRoutingTable(section, expectedNames, label) {
     errors.push(`routing document missing ${label} table section`);
     return;
   }
-  const names = section.split(/\r?\n/)
-    .map(line => /^\|\s*`?([a-z][a-z0-9-]*)`?\s*\|/.exec(line)?.[1])
-    .filter(Boolean);
+  const rows = section.split(/\r?\n/)
+    .filter(line => /^\|/.test(line) && /`[a-z][a-z0-9-]*`/.test(line));
+  const foundNames = rows.flatMap(line => [...line.matchAll(/`([a-z][a-z0-9-]*)`/g)].map(match => match[1]));
   for (const name of expectedNames) {
-    const count = names.filter(value => value === name).length;
+    const count = rows.filter(line => line.includes(```${name}```)).length;
     if (count !== 1) errors.push(`${label} routing table must contain exactly one row for ${name}; found ${count}`);
   }
-  for (const name of names) {
+  for (const name of foundNames) {
     if (!expectedNames.includes(name)) errors.push(`${label} routing table contains unexpected entry: ${name}`);
   }
-  if (names.length !== expectedNames.length) {
-    errors.push(`${label} routing table expected ${expectedNames.length} entries, found ${names.length}`);
+  if (rows.length !== expectedNames.length) {
+    errors.push(`${label} routing table expected ${expectedNames.length} entries, found ${rows.length}`);
   }
 }
 
