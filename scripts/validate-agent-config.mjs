@@ -98,7 +98,9 @@ function checkRoutingTable(section, expectedNames, label) {
     return;
   }
   const rows = section.split(/\r?\n/)
-    .filter(line => line.trim().startsWith("|") && line.trim().endsWith("|"));
+    .filter(line => line.trim().startsWith("|") && line.trim().endsWith("|"))
+    .filter(line => expectedNames.some(name => line.split("|").slice(1, -1)
+      .some(cell => cell.trim().replace(/^`|`$/g, "") === name)));
   const cells = rows.flatMap(line => line.split("|").slice(1, -1)
     .map(cell => cell.trim().replace(/^`|`$/g, "")));
   for (const name of expectedNames) {
