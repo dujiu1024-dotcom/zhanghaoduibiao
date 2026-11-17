@@ -1,0 +1,34 @@
+name: Validate Trae Agent Configuration
+
+on:
+  pull_request:
+    paths:
+      - ".trae/agents/**"
+      - ".trae/skills/**"
+      - "AGENTS.md"
+      - "07-操盘手系统设计/Skill触发与路由边界.md"
+      - "scripts/validate-agent-config.mjs"
+      - ".github/workflows/validate-agent-config.yml"
+  push:
+    branches: [main]
+    paths:
+      - ".trae/agents/**"
+      - ".trae/skills/**"
+      - "AGENTS.md"
+      - "07-操盘手系统设计/Skill触发与路由边界.md"
+      - "scripts/validate-agent-config.mjs"
+      - ".github/workflows/validate-agent-config.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Validate Agent and Skill inventory, metadata, tools and routing
+        run: node scripts/validate-agent-config.mjs

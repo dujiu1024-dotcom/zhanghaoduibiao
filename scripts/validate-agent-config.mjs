@@ -1,0 +1,92 @@
+import fs from "node:fs";
+import path from "node:path";
+
+const root = process.cwd();
+const expectedAgents = [
+  "competition-expert",
+  "decision-challenger",
+  "marketing-expert",
+  "operations-expert",
+  "research-expert",
+  "strategy-expert"
+];
+const expectedSkills = [
+  "business-diagnosis",
+  "business-intake",
+  "business-model-analysis",
+  "commercial-decision-review",
+  "customer-marketing-strategy",
+  "execution-metrics-plan",
+  "financial-unit-economics",
+  "industry-competition-analysis",
+  "performance-attribution-review",
+  "strategic-planning"
+];
+const allowedTools = new Set(["Read", "Grep", "Glob", "Write", "WebSearch", "WebFetch"]);
+const errors = [];
+
+function frontmatter(file) {
+  const content = fs.readFileSync(file, "utf8");
+  const match = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/.exec(content);
+  if (!match) {
+    errors.push(`${path.relative(root, file)}: missing YAML frontmatter`);
+    return { content, fields: {} };
+  }
+  const fields = {};
+  for (const line of match[1].split(/\r?\n/)) {
+    const field = /^([a-zA-Z_][\w-]*):\s*(.*)$/.exec(line);
+    if (field) fields[field[1]] = field[2].trim();
+  }
+  return { content, fields };
+}
+
+function checkSet(kind, names) {
+  const directory = path.join(root, ".trae", kind);
+  const seen = new Set();
+  for (const name of names) {
+    const file = kind === "agents"
+      ? path.join(directory, `${name}.md`)
+      : path.join(directory, name, "SKILL.md");
+    if (!fs.existsSync(file)) {
+      errors.push(`missing expected ${kind} file: ${path.relative(root, file)}`);
+      continue;
+    }
+    const { content, fields } = frontmatter(file);
+    if (fields.name !== name) errors.push(`${path.relative(root, file)}: frontmatter name must equal ${name}`);
+    if (!fields.description) errors.push(`${path.relative(root, file)}: missing description`);
+    if (kind === "agents") {
+      if (!fields.tools) errors.push(`${path.relative(root, file)}: missing tools`);
+      else {
+        const tools = fields.tools.split(",").map(value => value.trim()).filter(Boolean);
+        for (const tool of tools) if (!allowedTools.has(tool)) errors.push(`${path.relative(root, file)}: tool not allowlisted: ${tool}`);
+      }
+      if (!content.includes("## 统一交付门禁（强制）")) errors.push(`${path.relative(root, file)}: missing shared delivery gate`);
+      if (content.includes("accepted") && !content.includes("专家不得设置 `accepted`")) {
+        errors.push(`${path.relative(root, file)}: accepted-state boundary is not explicit`);
+      }
+    }
+    seen.add(fields.name);
+    console.log(`PASS: ${path.relative(root, file)}`);
+  }
+  if (seen.size !== names.length) errors.push(`${kind}: expected ${names.length} unique named entries, found ${seen.size}`);
+}
+
+checkSet("agents", expectedAgents);
+checkSet("skills", expectedSkills);
+
+const routingPath = path.join(root, "07-操盘手系统设计/Skill触发与路由边界.md");
+const agentsPath = path.join(root, "AGENTS.md");
+if (!fs.existsSync(routingPath)) errors.push("missing Skill routing boundary document");
+else {
+  const routing = fs.readFileSync(routingPath, "utf8");
+  for (const name of expectedSkills) if (!routing.includes(name)) errors.push(`routing document missing Skill: ${name}`);
+  for (const name of expectedAgents) if (!routing.includes(name)) errors.push(`routing document missing Subagent: ${name}`);
+}
+if (!fs.existsSync(agentsPath) || !fs.readFileSync(agentsPath, "utf8").includes("Skill触发与路由边界.md")) {
+  errors.push("AGENTS.md must link the Skill routing boundary document");
+}
+if (errors.length) {
+  for (const error of errors) console.error(`FAIL: ${error}`);
+  process.exit(1);
+}
+console.log(`All ${expectedAgents.length} Subagents, ${expectedSkills.length} Skills and routing references passed static checks.`);
