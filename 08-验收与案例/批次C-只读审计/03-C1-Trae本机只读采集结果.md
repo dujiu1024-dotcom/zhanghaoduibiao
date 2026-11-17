@@ -18,7 +18,7 @@
 | Git HEAD | `086d4ac942540f02aeac8868a5b914247101b231` | `git rev-parse HEAD` |
 | Git 工作区 | 有 2 个未跟踪目录：`99-归档/真人IP存档-2026-11-16/`、`work/cases/b08-holobake-entry/` | `git status --short` |
 | sqlite-vec | 0.1.9 | `import sqlite_vec` + `pip list` |
-| 仓库根 | `/Users/longyi/project/账号对标` | `pwd` |
+| 仓库根 | `<REDACTED_LOCAL_REPO_ROOT>` | `pwd` |
 
 ---
 
@@ -321,3 +321,8 @@ A-E 五层物理目录不存在，rag.py 无层级权限隔离逻辑，SQLite do
 | 17:36 | 归档库伴随文件 + stat |
 | 17:37 | Glob 搜 A-E 物理目录（全部不存在） |
 | 17:40 | 报告撰写完成 |
+
+
+## 隐私脱敏说明
+
+为避免在公开仓库暴露本机用户名与绝对目录，原始本机仓库根路径已统一替换为 `<REDACTED_LOCAL_REPO_ROOT>`。仓库相对路径、命令名称及技术观察保持不变；该脱敏不补充或改变任何运行时证据。
