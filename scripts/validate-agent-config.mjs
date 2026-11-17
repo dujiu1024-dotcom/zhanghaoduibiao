@@ -22,7 +22,10 @@ const expectedSkills = [
   "performance-attribution-review",
   "strategic-planning"
 ];
-const allowedTools = new Set(["Read", "Grep", "Glob", "Write", "WebSearch", "WebFetch"]);
+const commonAgentTools = ["Read", "Grep", "Glob", "Write"];
+const expectedAgentTools = {
+  "research-expert": [...commonAgentTools, "WebSearch", "WebFetch"]
+};
 const errors = [];
 
 function frontmatter(file) {
@@ -58,9 +61,16 @@ function checkSet(kind, names) {
       if (!fields.tools) errors.push(`${path.relative(root, file)}: missing tools`);
       else {
         const tools = fields.tools.split(",").map(value => value.trim()).filter(Boolean);
-        for (const tool of tools) if (!allowedTools.has(tool)) errors.push(`${path.relative(root, file)}: tool not allowlisted: ${tool}`);
+        const expected = expectedAgentTools[name] ?? commonAgentTools;
+        if (tools.length !== expected.length || expected.some(tool => !tools.includes(tool))) {
+          errors.push(`${path.relative(root, file)}: tools must be exactly ${expected.join(", ")}; found ${tools.join(", ")}`);
+        }
       }
       if (!content.includes("## 统一交付门禁（强制）")) errors.push(`${path.relative(root, file)}: missing shared delivery gate`);
+      if (!content.includes("## Write 工具边界（强制）")) errors.push(`${path.relative(root, file)}: missing Write boundary`);
+      for (const required of ["work/cases/<case_id>/04-专家分析/", "禁止覆盖", "路径级 Write 沙箱"]) {
+        if (!content.includes(required)) errors.push(`${path.relative(root, file)}: Write boundary missing ${required}`);
+      }
       if (content.includes("accepted") && !content.includes("专家不得设置 `accepted`")) {
         errors.push(`${path.relative(root, file)}: accepted-state boundary is not explicit`);
       }
