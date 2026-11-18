@@ -182,22 +182,67 @@ def quality_tier(meta, doc, row):
     return "仅参考"
 
 
+def match_doc_by_title(row, docs):
+    """metadata.csv 里找不到时，直接对 DB docs 按标题/路径模糊匹配。
+
+    DB docs 没有题名字段，用 source_path 里的文件名做匹配。
+    返回 (source_path, quality) 或 None。
+    """
+    name = row.get("资料名称") or ""
+    # 把书名里的中英文、副标题、作者名都拆出来当关键词
+    name_key = norm_name(name)
+    segments = re.split(r"[/（(]|—|——|·|:|：|,|，", name)
+    keywords = [norm_name(s).strip() for s in segments if len(norm_name(s).strip()) >= 3]
+    # 对 DB docs 逐个检查
+    for src_path, doc in docs.items():
+        fname = norm_name(Path(src_path).stem)
+        if not fname or fname == "index":
+            continue
+        # 精确命中文件名
+        if fname == name_key:
+            return src_path, doc["quality"]
+        # 子串双向包含
+        if len(name_key) >= 4 and (name_key in fname or fname in name_key):
+            return src_path, doc["quality"]
+        # 关键词命中（文件名包含任一关键词）
+        for kw in keywords:
+            if kw and (kw in fname or fname in kw):
+                return src_path, doc["quality"]
+    return None
+
+
 def precheck(row, by_name, by_path, docs, stats):
     """判定到「要不要检索」为止。返回 (状态, 差在哪, 质量档, 相对路径, 问句)。
 
     'fail' = 已确定不合格，不消耗检索；'search' = 还需一次检索。
+
+    匹配顺序：metadata.csv 优先 → DB docs 直接匹配 → fail。
     """
     meta = match_meta(row, by_name, by_path)
-    if not meta:
-        return "fail", "只有书名", "排除", None, None
-    local = (meta.get("本地路径") or "").strip()
-    if not local:
-        return "fail", "没登记本地路径", "排除", None, None
-    path = PROJECT / "04-知识底座" / "knowledge" / "sources" / local
-    if not path.exists():
-        return "fail", "本地没文件", "排除", None, None
-    src = str(path.relative_to(PROJECT))
-    doc = docs.get(src)
+    src = None
+    if meta:
+        local = (meta.get("本地路径") or "").strip()
+        if not local:
+            return "fail", "没登记本地路径", "排除", None, None
+        path = PROJECT / "04-知识底座" / "knowledge" / "sources" / local
+        if not path.exists():
+            return "fail", "本地没文件", "排除", None, None
+        src = str(path.relative_to(PROJECT))
+        doc = docs.get(src)
+    else:
+        # fallback：直接匹配 DB docs（metadata.csv 不全时兜底）
+        matched = match_doc_by_title(row, docs)
+        if not matched:
+            return "fail", "只有书名", "排除", None, None
+        src, doc_quality = matched
+        doc = docs.get(src)
+        if not doc:
+            return "fail", "只有书名", "排除", None, None
+        doc = {"id": doc["id"], "quality": doc_quality}
+        # 构造最小 meta 让 quality_tier 能跑
+        meta = {"题名": row.get("资料名称", ""), "作者": row.get("作者或机构", ""),
+                "质量分级": doc_quality, "本地路径": "", "备注": "",
+                "真实性依据": row.get("真实性依据", "")}
     if not doc:
         return "fail", "没入库", "排除", None, None
     tier = quality_tier(meta, doc, row)
