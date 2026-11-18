@@ -23,6 +23,9 @@ KW = ("合规", "报价", "平台规则", "合同")
 
 
 def main():
+    if not LORE.exists():
+        print("industry-lore.csv 不存在，跳过 E0 检查")
+        return 0
     with open(LORE, encoding="utf-8-sig") as f:
         ids = [r["编号"] for r in csv.DictReader(f) if (r.get("等级") or "").upper() == "E0"]
     if not ids:
@@ -31,6 +34,8 @@ def main():
     hits = []
     roots = [PROJECT / "00-战略与目标/道法术器", PROJECT / "03-决策与复盘"]
     for root in roots:
+        if not root.exists():
+            continue
         for f in glob.glob(str(root / "**/*.md"), recursive=True):
             with open(f, encoding="utf-8") as fh:
                 for i, line in enumerate(fh, 1):

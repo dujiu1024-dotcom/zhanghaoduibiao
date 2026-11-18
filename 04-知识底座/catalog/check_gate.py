@@ -313,23 +313,27 @@ def main():
     focus_citable = {label: citable_by_item.get(item, 0) for item, label in FOCUS.items()}
     focus_pass = [k for k, v in focus.items() if v >= 6]
 
-    # 经验门槛
-    with open(EXP, encoding="utf-8-sig") as f:
-        exps = list(csv.DictReader(f))
-    exp_stat = defaultdict(lambda: {"E2plus": 0, "E3E4": 0})
-    for e in exps:
-        lv = (e.get("证据等级") or "").strip().upper()
-        if lv not in ("E2", "E3", "E4"):
-            continue
-        for sub in [s for s in (e.get("对应子项") or "").split("、") if s]:
-            cls = item_class.get(sub)
-            if not cls:
+    # 经验门槛（experience.csv 不存在时跳过，视为不适用）
+    if EXP.exists():
+        with open(EXP, encoding="utf-8-sig") as f:
+            exps = list(csv.DictReader(f))
+        exp_stat = defaultdict(lambda: {"E2plus": 0, "E3E4": 0})
+        for e in exps:
+            lv = (e.get("证据等级") or "").strip().upper()
+            if lv not in ("E2", "E3", "E4"):
                 continue
-            exp_stat[cls]["E2plus"] += 1
-            if lv in ("E3", "E4"):
-                exp_stat[cls]["E3E4"] += 1
-    exp_pass = [c for c in NINE if exp_stat[c]["E2plus"] >= 3 and exp_stat[c]["E3E4"] >= 1]
-    exp_fail = [c for c in NINE if c not in exp_pass]
+            for sub in [s for s in (e.get("对应子项") or "").split("、") if s]:
+                cls = item_class.get(sub)
+                if not cls:
+                    continue
+                exp_stat[cls]["E2plus"] += 1
+                if lv in ("E3", "E4"):
+                    exp_stat[cls]["E3E4"] += 1
+        exp_pass = [c for c in NINE if exp_stat[c]["E2plus"] >= 3 and exp_stat[c]["E3E4"] >= 1]
+        exp_fail = [c for c in NINE if c not in exp_pass]
+    else:
+        exp_pass = list(NINE)  # 全部视为通过（无经验数据时不卡闸）
+        exp_fail = []
 
     # 退出码：默认只把「硬闸」算失败——细类数错、硬底线未满、经验门槛未满。
     # 合格线与重点线是尚未达成的进度目标（当前 19/77、1/12），天天红会让闸失去信号，

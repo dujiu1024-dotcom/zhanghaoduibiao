@@ -34,7 +34,9 @@ HERE = Path(__file__).resolve().parent
 PROJ = HERE.parent
 OUT = HERE / "checks"
 PY = sys.executable
-RAG_PY = PROJ / "04-知识底座" / "rag" / ".venv" / "bin" / "python"
+RAG_PY = str(PROJ / "04-知识底座" / "rag" / ".venv" / "bin" / "python")
+if not Path(RAG_PY).exists():
+    RAG_PY = PY  # fallback：无专用 venv 时用系统 Python
 
 # counts: (键名, 正则, 方向)  方向 up=越大越好 / down=越小越好 / none=只记录
 CHECKS = [

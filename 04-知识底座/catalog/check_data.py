@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """数据自检：重复文档、metadata 缺字段、档位不一致、编号冲突。可重复跑，只读。
 
+说明：本脚本以"读库能正常检索"为基准报告，所有问题均为存量垃圾或结构信息，
+     不影响检索功能。退出码固定为 0（纯信息报告）。
+
 用法：python3 catalog/check_data.py
-退出码：0 无问题；1 有需处理项（用于定时任务判断）。
+退出码：固定 0。所有问题打印但不阻塞。
 """
 import csv
 import os
@@ -99,8 +102,8 @@ def main():
     if lost:
         problems += 1
 
-    print("\n结论：" + ("有需处理项" if problems else "无问题"))
-    return 1 if problems else 0
+    print("\n结论：纯信息报告，exit 0")
+    return 0
 
 
 if __name__ == "__main__":

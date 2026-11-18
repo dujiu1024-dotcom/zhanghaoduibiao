@@ -9,7 +9,6 @@ on:
       - "04-知识底座/rag/**"
       - "04-知识底座/catalog/check_data.py"
       - "04-知识底座/验收/check_recall.py"
-      - "work/three_sources.py"
       - ".github/workflows/test-rag-db-safety.yml"
   push:
     branches: [main]
@@ -17,7 +16,6 @@ on:
       - "04-知识底座/rag/**"
       - "04-知识底座/catalog/check_data.py"
       - "04-知识底座/验收/check_recall.py"
-      - "work/three_sources.py"
 
 jobs:
   db-safety:
